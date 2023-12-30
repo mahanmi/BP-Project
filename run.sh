@@ -5,7 +5,6 @@
 #  rm -rf build
 #  mkdir build
 #fi
-cd /Users/mahan/Documents/VS\ Code/C++/SDL
 make_output=$(make)
 if [ $? -ne 0 ]; then
   echo "\033[31mError occurred during make. Stopping script.\033[0m"
