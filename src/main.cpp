@@ -1,14 +1,4 @@
-#include <iostream>
-#include <SDL2/SDL.h>
-#include <SDL2/SDL_image.h>
-#include <SDL2/SDL_ttf.h>
-#include <SDL2/SDL2_framerate.h>
-#include <SDL2/SDL2_gfxPrimitives.h>
-#include <SDL2/SDL2_imageFilter.h>
-#include <SDL2/SDL2_rotozoom.h>
-#include <string>
-
-using namespace std;
+#include <myheader.h>
 
 void rect(SDL_Renderer *Renderer, int x, int y, int w, int h, int R, int G, int B, int fill_boolian);
 void help(SDL_Renderer *Renderer, double x_ball, double y_ball, int dx, bool clicked);
