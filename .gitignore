@@ -35,4 +35,5 @@
 build/
 .vscode/
 
-# mahan files
+# SDL_Headers
+SDL_Headers.h
