@@ -3,7 +3,7 @@ BUILD_DIR = build
 CC = g++
 SRC_FILES = $(wildcard $(SRC_DIR)/*.cpp)
 OBJ_NAMES = $(patsubst $(SRC_DIR)/%.cpp,%,$(SRC_FILES))
-INCLUDE_PATHS = -Iinc
+INCLUDE_PATHS = -Iinclude
 LIBRARY_PATHS = -Llib/SDL2 -Llib/SDL2_image -Llib/SDL2_mixer -Llib/SDL2_ttf -Llib/SDL2_gfx
 COMPILER_FLAGS = -std=c++11 -Wall -o0 -g
 LINKER_FLAGS = -lSDL2 -lSDL2_image -lSDL2_mixer -lSDL2_ttf -lSDL2_gfx
