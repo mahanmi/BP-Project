@@ -32,7 +32,9 @@
 *.app
 
 # Folder
+build/
 .vscode/
+
 
 # mahan files
 *.sh
