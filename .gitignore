@@ -34,6 +34,7 @@
 # Folder
 build/
 .vscode/
+lib/
 
 # SDL_Headers
-src/*.h
+src/SDL_Headers.h
