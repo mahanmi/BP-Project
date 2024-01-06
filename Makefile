@@ -1,10 +1,11 @@
-SRC_DIR = src
 BUILD_DIR = build
 CC = g++
+SRC_DIR ?= src
 SRC_FILES = $(wildcard $(SRC_DIR)/*.cpp)
 OBJ_NAMES = $(patsubst $(SRC_DIR)/%.cpp,%,$(SRC_FILES))
-INCLUDE_PATHS = -Iinclude
-LIBRARY_PATHS = -Llib/SDL2 -Llib/SDL2_image -Llib/SDL2_mixer -Llib/SDL2_ttf -Llib/SDL2_gfx
+INCLUDE_PATHS = -I/Users/mahan/Documents/VS\ Code/C++/SDL/include
+LIB_DIR = /Users/mahan/Documents/VS\ Code/C++/SDL/lib
+LIBRARY_PATHS = -L${LIB_DIR}/SDL2 -L${LIB_DIR}/SDL2_image -L${LIB_DIR}/SDL2_mixer -L${LIB_DIR}/SDL2_ttf -L${LIB_DIR}/SDL2_gfx
 COMPILER_FLAGS = -std=c++11 -Wall -o0 -g
 LINKER_FLAGS = -lSDL2 -lSDL2_image -lSDL2_mixer -lSDL2_ttf -lSDL2_gfx
 
