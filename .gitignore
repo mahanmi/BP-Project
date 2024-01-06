@@ -38,3 +38,7 @@ lib/
 
 # SDL_Headers
 src/SDL_Headers.h
+
+# Makefile
+Makefile
+```
