@@ -51,6 +51,8 @@ int main(int argc, char const *argv[])
         if (key == SDLK_ESCAPE)
           running = false;
       }
+      if (event.type == SDL_QUIT)
+        running = false;
     }
   }
   return 0;
