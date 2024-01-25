@@ -1,12 +1,14 @@
 #ifndef gameMenu_hpp
 #include "SDL_Headers.h"
+#include <unistd.h>
 
 struct button
 {
-  int x, y, w, h;
+  int w, h, x, y;
   int red, green, blue, alpha;
-  bool isClicked;
+  bool wasClicked;
   bool wasHovered;
+  SDL_Texture *image, *hoveredImage, *clickedImage;
 };
 
 bool isHovered(SDL_Event event, int x, int y, int w, int h, bool &wasHovered)
@@ -28,14 +30,19 @@ bool isHovered(SDL_Event event, int x, int y, int w, int h, bool &wasHovered)
   return false;
 }
 
-bool isClicked(SDL_Event event, int x, int y, int w, int h)
+bool isClicked(SDL_Event event, int x, int y, int w, int h, bool &wasClicked)
 {
+  if (wasClicked)
+  {
+    return true;
+  }
   if (event.type == SDL_MOUSEBUTTONDOWN)
   {
     if (event.button.button == SDL_BUTTON_LEFT)
     {
       if (event.button.x >= x && event.button.x <= x + w && event.button.y >= y && event.button.y <= y + h)
       {
+        wasClicked = true;
         return true;
       }
     }
@@ -45,20 +52,20 @@ bool isClicked(SDL_Event event, int x, int y, int w, int h)
 
 void drawButton(SDL_Renderer *renderer, button &b, SDL_Event event)
 {
+  SDL_Rect rect = {b.x, b.y, b.w, b.h};
   if (isHovered(event, b.x, b.y, b.w, b.h, b.wasHovered))
   {
-    SDL_SetRenderDrawColor(renderer, 0, 255, 0, b.alpha);
-    if (isClicked(event, b.x, b.y, b.w, b.h))
+    SDL_RenderCopy(renderer, b.hoveredImage, NULL, &rect);
+    if (isClicked(event, b.x, b.y, b.w, b.h, b.wasClicked))
     {
-      b.isClicked = true;
+      SDL_RenderCopy(renderer, b.clickedImage, NULL, &rect);
     }
   }
   else
   {
-    SDL_SetRenderDrawColor(renderer, b.red, b.green, b.blue, b.alpha);
+    b.wasClicked = false;
+    SDL_RenderCopy(renderer, b.image, NULL, &rect);
   }
-  SDL_Rect rect = {b.x, b.y, b.w, b.h};
-  SDL_RenderFillRect(renderer, &rect);
 }
 
 #endif // !gameMenu_hpp
