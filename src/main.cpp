@@ -17,60 +17,112 @@ bool init()
   //  if (!(TTF_Init()))
   //    std::cout << "TTF_init has failed. Error: " << SDL_GetError() << std::endl;
   Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048);
+  cout << "Game Started" << endl;
   return true;
 }
 
 bool SDLinit = init();
 
-const int WIDTH = 750, HIGHT = 1000;
+bool quitGame(SDL_Event event)
+{
+  if (event.type == SDL_QUIT)
+    return true;
+  if (event.type == SDL_KEYDOWN)
+  {
+    int key = event.key.keysym.sym;
+    if (key == SDLK_ESCAPE)
+      return true;
+  }
+  return false;
+}
+
+void quit(bool &running)
+{
+  running = false;
+  Mix_Quit();
+  TTF_Quit();
+  IMG_Quit();
+  SDL_Quit();
+  cout << "Game Exited" << endl;
+}
+
+const int WIDTH = 625, HIGHT = 1000;
 
 SDL_Window *window = SDL_CreateWindow("Bouncing Balls Game", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, WIDTH, HIGHT, SDL_WINDOW_SHOWN);
 SDL_Renderer *renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
+SDL_Event event;
 
 SDL_Texture *Background = IMG_LoadTexture(renderer, "assets/BG.png");
+SDL_Texture *StartScreen = IMG_LoadTexture(renderer, "assets/StartingScreen.png");
 
 int main(int argc, char const *argv[])
 {
-  // initializeSDL
   if (!SDLinit)
     return 1;
 
-  cout << "Game Started" << endl;
   bool running = true;
-  SDL_Event event;
 
-  button playButton = {
-      500,
-      100,
-      123,
-      172,
+  button play = {
+      387,
+      87,
+      113,
+      370,
       0,
       0,
       0,
       255,
+      6,
       false,
       false,
       IMG_LoadTexture(renderer, "assets/PlayButton.png"),
       IMG_LoadTexture(renderer, "assets/PlayButtonHovered.png"),
       IMG_LoadTexture(renderer, "assets/PlayButtonClicked.png")};
+  button leaderboard = {
+      387,
+      87,
+      113,
+      537,
+      0,
+      0,
+      0,
+      255,
+      6,
+      false,
+      false,
+      IMG_LoadTexture(renderer, "assets/LeaderboardButton.png"),
+      IMG_LoadTexture(renderer, "assets/LeaderboardButtonHovered.png"),
+      IMG_LoadTexture(renderer, "assets/LeaderboardButtonClicked.png")};
+  button settings = {
+      387,
+      87,
+      113,
+      704,
+      0,
+      0,
+      0,
+      255,
+      6,
+      false,
+      false,
+      IMG_LoadTexture(renderer, "assets/SettingsButton.png"),
+      IMG_LoadTexture(renderer, "assets/SettingsButtonHovered.png"),
+      IMG_LoadTexture(renderer, "assets/SettingsButtonClicked.png")};
+
+  showStartScreen(renderer, StartScreen, event);
 
   while (running)
   {
-    SDL_RenderCopy(renderer, Background, NULL, NULL);
-    drawButton(renderer, playButton, event);
-    SDL_RenderPresent(renderer);
-    SDL_Delay(1000 / 60);
-    SDL_RenderClear(renderer);
-    if (SDL_PollEvent(&event))
+    while (SDL_PollEvent(&event))
     {
-      if (event.type == SDL_KEYDOWN)
-      {
-        int key = event.key.keysym.sym;
-        if (key == SDLK_ESCAPE)
-          running = false;
-      }
-      if (event.type == SDL_QUIT)
-        running = false;
+      if (quitGame(event))
+        quit(running);
+      SDL_RenderCopy(renderer, Background, NULL, NULL);
+      drawButton(renderer, play, event);
+      drawButton(renderer, leaderboard, event);
+      drawButton(renderer, settings, event);
+      SDL_RenderPresent(renderer);
+      SDL_Delay(1000 / 60);
+      SDL_RenderClear(renderer);
     }
   }
   return 0;

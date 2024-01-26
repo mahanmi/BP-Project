@@ -6,6 +6,7 @@ struct button
 {
   int w, h, x, y;
   int red, green, blue, alpha;
+  int stroke;
   bool wasClicked;
   bool wasHovered;
   SDL_Texture *image, *hoveredImage, *clickedImage;
@@ -52,9 +53,9 @@ bool isClicked(SDL_Event event, int x, int y, int w, int h, bool &wasClicked)
 
 void drawButton(SDL_Renderer *renderer, button &b, SDL_Event event)
 {
-  SDL_Rect rect = {b.x, b.y, b.w, b.h};
   if (isHovered(event, b.x, b.y, b.w, b.h, b.wasHovered))
   {
+    SDL_Rect rect = {b.x - b.stroke, b.y - b.stroke, b.w + 2 * b.stroke, b.h + 2 * b.stroke};
     SDL_RenderCopy(renderer, b.hoveredImage, NULL, &rect);
     if (isClicked(event, b.x, b.y, b.w, b.h, b.wasClicked))
     {
@@ -63,8 +64,20 @@ void drawButton(SDL_Renderer *renderer, button &b, SDL_Event event)
   }
   else
   {
+    SDL_Rect rect = {b.x, b.y, b.w, b.h};
     b.wasClicked = false;
     SDL_RenderCopy(renderer, b.image, NULL, &rect);
+  }
+}
+
+void showStartScreen(SDL_Renderer *renderer, SDL_Texture *StartScreen, SDL_Event event)
+{
+  if (SDL_PollEvent(&event))
+  {
+    SDL_RenderCopy(renderer, StartScreen, NULL, NULL);
+    SDL_RenderPresent(renderer);
+    SDL_Delay(4000);
+    SDL_RenderClear(renderer);
   }
 }
 
