@@ -1,7 +1,6 @@
 #ifndef gameMenu_hpp
+#define gameMenu_hpp
 #include "SDL_Headers.h"
-#include <unistd.h>
-
 struct button
 {
   int w, h, x, y;
