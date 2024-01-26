@@ -7,7 +7,6 @@
 
 #include "gameMenu.hpp"
 #include "leaderboard.hpp"
-#include "game.hpp"
 
 using namespace std;
 
@@ -59,7 +58,6 @@ void render(SDL_Renderer *renderer)
 }
 
 const int WIDTH = 625, HIGHT = 1000;
-
 SDL_Window *window = SDL_CreateWindow("Bouncing Balls Game", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, WIDTH, HIGHT, SDL_WINDOW_SHOWN);
 SDL_Renderer *renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
 SDL_Event event;
@@ -129,7 +127,6 @@ int main(int argc, char const *argv[])
 
   vector<player> players;
   getLeaderboard(players);
-  printPlayers(players);
 
   showStartScreen(renderer, StartScreen, event);
 
