@@ -35,6 +35,7 @@
 build/
 .vscode/
 lib/
+include/
 
 # SDL_Headers
 src/SDL_Headers.h
