@@ -1,0 +1,5 @@
+arman 100 99 10
+mahan 90 110 40
+mirj 0 0 0
+mobin 50 10 70
+navid 99 99 99
