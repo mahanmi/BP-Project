@@ -106,8 +106,6 @@ void showStartScreen(SDL_Renderer *renderer, SDL_Texture *StartScreen, SDL_Event
   {
     SDL_RenderCopy(renderer, StartScreen, NULL, NULL);
     SDL_RenderPresent(renderer);
-    SDL_Delay(4000);
-    SDL_RenderClear(renderer);
   }
 }
 
