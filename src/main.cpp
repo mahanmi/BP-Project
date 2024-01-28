@@ -7,6 +7,7 @@
 
 #include "gameMenu.hpp"
 #include "leaderboard.hpp"
+#include "settings.hpp"
 
 using namespace std;
 
@@ -40,15 +41,23 @@ SDL_Event event;
 SDL_Texture *Background = IMG_LoadTexture(renderer, "assets/Menu/BG.png");
 SDL_Texture *StartScreen = IMG_LoadTexture(renderer, "assets/Menu/StartingScreen.png");
 
-Mix_Chunk *click = Mix_LoadWAV("/Users/mahan/Documents/Github/BP-Project/assets/Sounds/click.mp3");
-Mix_Chunk *hover = Mix_LoadWAV("/Users/mahan/Documents/Github/BP-Project/assets/Sounds/hover.mp3");
+int musicIndex = 1;
 
-TTF_Font *font45 = TTF_OpenFont("assets/Fonts/Poppins-Bold.ttf", 45);
+vector<music> musicList = {{"Off", ""}, {"Piano", "assets/Sounds/pianoMusic.mp3"}, {"Bache Nane", "assets/Sounds/MohsenLorestani-BacheNane.mp3"}};
+
+Mix_Music *musicSound = Mix_LoadMUS(musicList[musicIndex].path.c_str());
+Mix_Chunk *click = Mix_LoadWAV("assets/Sounds/click.mp3");
+Mix_Chunk *hover = Mix_LoadWAV("assets/Sounds/hover.mp3");
+
+TTF_Font *Leaderboard = TTF_OpenFont("assets/Fonts/Poppins-Bold.ttf", 45);
+TTF_Font *Settings = TTF_OpenFont("assets/Fonts/Digitalt.ttf", 38);
 
 int main(int argc, char const *argv[])
 {
   if (!SDLinit)
     return 1;
+
+  showStartScreen(renderer, StartScreen, event);
 
   int theme = 0;
 
@@ -56,6 +65,8 @@ int main(int argc, char const *argv[])
   Mix_Volume(-1, volume);
 
   bool running = true;
+
+  Mix_PlayMusic(musicSound, -1);
 
   button close = {55, 58, 20, 20, 0, 0, 0, 0, 0, false, false, IMG_LoadTexture(renderer, "assets/Menu/close.png"), IMG_LoadTexture(renderer, "assets/Menu/closeHovered.png"), 0, hover, click};
   button back = {55, 58, 20, 20, 0, 0, 0, 0, 0, false, false, IMG_LoadTexture(renderer, "assets/Menu/Back.png"), IMG_LoadTexture(renderer, "assets/Menu/BackHovered.png"), 0, hover, click};
@@ -98,10 +109,7 @@ int main(int argc, char const *argv[])
   button classic = {151, 54, 234, 291, 0, 0, 0, 0, 0, true, false, IMG_LoadTexture(renderer, "assets/Leaderboard/LeaderboardClassic.png"), 0, 0, 0, click};
   button infinite = {151, 54, 405, 291, 0, 0, 0, 0, 0, false, false, IMG_LoadTexture(renderer, "assets/Leaderboard/LeaderboardInfinite.png"), 0, 0, 0, click};
 
-  vector<player> players;
-  getLeaderboard(players);
-
-  showStartScreen(renderer, StartScreen, event);
+  SDL_Delay(1000);
 
   while (running)
   {
@@ -121,6 +129,8 @@ int main(int argc, char const *argv[])
       if (leaderboard.wasClicked)
       {
         string sort;
+        vector<player> players;
+        getLeaderboard(players);
         while (leaderboard.wasClicked)
         {
           if (classic.wasClicked)
@@ -149,7 +159,7 @@ int main(int argc, char const *argv[])
                 classic.wasClicked = false, timer.wasClicked = true;
               if (isClicked(event, infinite.x, infinite.y, infinite.w, infinite.h, infinite.wasClicked, infinite.clickSound))
                 classic.wasClicked = false, infinite.wasClicked = true;
-              drawLeaderboard(players, renderer, classic.image, font45, sort);
+              drawLeaderboard(players, renderer, classic.image, Leaderboard, sort);
               drawButton(renderer, back, event);
               render(renderer);
             }
@@ -180,7 +190,7 @@ int main(int argc, char const *argv[])
                 timer.wasClicked = false, classic.wasClicked = true;
               if (isClicked(event, infinite.x, infinite.y, infinite.w, infinite.h, infinite.wasClicked, infinite.clickSound))
                 timer.wasClicked = false, infinite.wasClicked = true;
-              drawLeaderboard(players, renderer, timer.image, font45, sort);
+              drawLeaderboard(players, renderer, timer.image, Leaderboard, sort);
               drawButton(renderer, back, event);
               render(renderer);
             }
@@ -211,7 +221,7 @@ int main(int argc, char const *argv[])
                 infinite.wasClicked = false, classic.wasClicked = true;
               if (isClicked(event, timer.x, timer.y, timer.w, timer.h, timer.wasClicked, timer.clickSound))
                 infinite.wasClicked = false, timer.wasClicked = true;
-              drawLeaderboard(players, renderer, infinite.image, font45, sort);
+              drawLeaderboard(players, renderer, infinite.image, Leaderboard, sort);
               drawButton(renderer, back, event);
               render(renderer);
             }
@@ -229,8 +239,8 @@ int main(int argc, char const *argv[])
             {39, 46, 530, 226, 0, 0, 0, 0, 0, false, false, IMG_LoadTexture(renderer, "assets/Settings/R-SFX.png"), IMG_LoadTexture(renderer, "assets/Settings/R-SFXHovered.png"), 0, hover, click},
             {39, 46, 218, 324, 0, 0, 0, 0, 0, false, false, IMG_LoadTexture(renderer, "assets/Settings/L-Music.png"), IMG_LoadTexture(renderer, "assets/Settings/L-MusicHovered.png"), 0, hover, click},
             {39, 46, 530, 324, 0, 0, 0, 0, 0, false, false, IMG_LoadTexture(renderer, "assets/Settings/R-Music.png"), IMG_LoadTexture(renderer, "assets/Settings/R-MusicHovered.png"), 0, hover, click},
-            {58, 68, 109, 663, 0, 0, 0, 0, 0, false, false, IMG_LoadTexture(renderer, "assets/Settings/L-THEME.png"), IMG_LoadTexture(renderer, "assets/Settings/L-THEMEHovered.png"), 0, hover, click},
-            {58, 68, 512, 663, 0, 0, 0, 0, 0, false, false, IMG_LoadTexture(renderer, "assets/Settings/R-THEME.png"), IMG_LoadTexture(renderer, "assets/Settings/R-THEMEHovered.png"), 0, hover, click},
+            {58, 68, 90, 663, 0, 0, 0, 0, 0, false, false, IMG_LoadTexture(renderer, "assets/Settings/L-THEME.png"), IMG_LoadTexture(renderer, "assets/Settings/L-THEMEHovered.png"), 0, hover, click},
+            {58, 68, 480, 663, 0, 0, 0, 0, 0, false, false, IMG_LoadTexture(renderer, "assets/Settings/R-THEME.png"), IMG_LoadTexture(renderer, "assets/Settings/R-THEMEHovered.png"), 0, hover, click},
         };
 
         vector<SDL_Texture *> themes = {IMG_LoadTexture(renderer, "assets/Settings/Theme1.png"), IMG_LoadTexture(renderer, "assets/Settings/Theme2.png"), IMG_LoadTexture(renderer, "assets/Settings/Theme3.png")};
@@ -266,17 +276,28 @@ int main(int argc, char const *argv[])
             {
               volume += 20;
               Mix_Volume(-1, volume);
+              Mix_VolumeMusic(MIX_MAX_VOLUME * volume / 100);
               adjustButtons[1].wasClicked = false;
             }
             else if (adjustButtons[0].wasClicked && volume > 0)
             {
               volume -= 20;
               Mix_Volume(-1, volume);
+              Mix_VolumeMusic(MIX_MAX_VOLUME * volume / 100);
               adjustButtons[0].wasClicked = false;
             }
 
-            SDL_Rect volumeBar = {273, 225, 222, 43};
+            SDL_Rect volumeBar = {285, 225, 222, 43};
             SDL_RenderCopy(renderer, soundBar[volume / 20], 0, &volumeBar);
+
+            setMusic(renderer, adjustButtons[3].wasClicked, adjustButtons[2].wasClicked, musicList, musicIndex, musicSound, Settings, 285, 323);
+
+            if (adjustButtons[3].wasClicked || adjustButtons[2].wasClicked)
+            {
+              Mix_PlayMusic(musicSound, -1);
+              adjustButtons[3].wasClicked = false;
+              adjustButtons[2].wasClicked = false;
+            }
 
             if (adjustButtons[5].wasClicked)
             {
