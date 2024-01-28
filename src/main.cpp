@@ -118,101 +118,103 @@ int main(int argc, char const *argv[])
       /* while (play.wasClicked)
       {
       } */
-      while (leaderboard.wasClicked)
+      if (leaderboard.wasClicked)
       {
         string sort;
-        back.wasClicked = false;
-        if (classic.wasClicked)
+        while (leaderboard.wasClicked)
         {
-          sortPlayersBasedOnClassicScore(players);
-          sort = "Classic";
-        }
-        while (classic.wasClicked && leaderboard.wasClicked)
-        {
-          while (SDL_PollEvent(&event))
+          if (classic.wasClicked)
           {
-            if (quitGame(event))
-            {
-              leaderboard.wasClicked = false;
-              quit(running);
-              break;
-            }
-
-            if (goBack(event) || back.wasClicked)
-            {
-              leaderboard.wasClicked = false;
-              break;
-            }
-
-            if (isClicked(event, timer.x, timer.y, timer.w, timer.h, timer.wasClicked, timer.clickSound))
-              classic.wasClicked = false, timer.wasClicked = true;
-            if (isClicked(event, infinite.x, infinite.y, infinite.w, infinite.h, infinite.wasClicked, infinite.clickSound))
-              classic.wasClicked = false, infinite.wasClicked = true;
-            drawLeaderboard(players, renderer, classic.image, font45, sort);
-            drawButton(renderer, back, event);
-            render(renderer);
+            sortPlayersBasedOnClassicScore(players);
+            sort = "Classic";
           }
-        }
-        if (timer.wasClicked)
-        {
-          sortPlayersBasedOnTimerScore(players);
-          sort = "Timer";
-        }
-        while (timer.wasClicked && leaderboard.wasClicked)
-        {
-          while (SDL_PollEvent(&event))
+          while (classic.wasClicked && leaderboard.wasClicked)
           {
-            if (quitGame(event))
+            while (SDL_PollEvent(&event) && leaderboard.wasClicked)
             {
-              leaderboard.wasClicked = false;
-              quit(running);
-              break;
-            }
+              if (quitGame(event))
+              {
+                leaderboard.wasClicked = false;
+                quit(running);
+                break;
+              }
 
-            if (goBack(event) || back.wasClicked)
-            {
-              leaderboard.wasClicked = false;
-              break;
-            }
+              if (goBack(event) || back.wasClicked)
+              {
+                leaderboard.wasClicked = false;
+                break;
+              }
 
-            if (isClicked(event, classic.x, classic.y, classic.w, classic.h, classic.wasClicked, classic.clickSound))
-              timer.wasClicked = false, classic.wasClicked = true;
-            if (isClicked(event, infinite.x, infinite.y, infinite.w, infinite.h, infinite.wasClicked, infinite.clickSound))
-              timer.wasClicked = false, infinite.wasClicked = true;
-            drawLeaderboard(players, renderer, timer.image, font45, sort);
-            drawButton(renderer, back, event);
-            render(renderer);
+              if (isClicked(event, timer.x, timer.y, timer.w, timer.h, timer.wasClicked, timer.clickSound))
+                classic.wasClicked = false, timer.wasClicked = true;
+              if (isClicked(event, infinite.x, infinite.y, infinite.w, infinite.h, infinite.wasClicked, infinite.clickSound))
+                classic.wasClicked = false, infinite.wasClicked = true;
+              drawLeaderboard(players, renderer, classic.image, font45, sort);
+              drawButton(renderer, back, event);
+              render(renderer);
+            }
           }
-        }
-        if (infinite.wasClicked)
-        {
-          sortPlayersBasedOnInfiniteScore(players);
-          sort = "Infinite";
-        }
-        while (infinite.wasClicked && leaderboard.wasClicked)
-        {
-          while (SDL_PollEvent(&event))
+          if (timer.wasClicked)
           {
-            if (quitGame(event))
+            sortPlayersBasedOnTimerScore(players);
+            sort = "Timer";
+          }
+          while (timer.wasClicked && leaderboard.wasClicked)
+          {
+            while (SDL_PollEvent(&event) && leaderboard.wasClicked)
             {
-              leaderboard.wasClicked = false;
-              quit(running);
-              break;
-            }
+              if (quitGame(event))
+              {
+                leaderboard.wasClicked = false;
+                quit(running);
+                break;
+              }
 
-            if (goBack(event) || back.wasClicked)
+              if (goBack(event) || back.wasClicked)
+              {
+                leaderboard.wasClicked = false;
+                break;
+              }
+
+              if (isClicked(event, classic.x, classic.y, classic.w, classic.h, classic.wasClicked, classic.clickSound))
+                timer.wasClicked = false, classic.wasClicked = true;
+              if (isClicked(event, infinite.x, infinite.y, infinite.w, infinite.h, infinite.wasClicked, infinite.clickSound))
+                timer.wasClicked = false, infinite.wasClicked = true;
+              drawLeaderboard(players, renderer, timer.image, font45, sort);
+              drawButton(renderer, back, event);
+              render(renderer);
+            }
+          }
+          if (infinite.wasClicked)
+          {
+            sortPlayersBasedOnInfiniteScore(players);
+            sort = "Infinite";
+          }
+          while (infinite.wasClicked && leaderboard.wasClicked)
+          {
+            while (SDL_PollEvent(&event) && leaderboard.wasClicked)
             {
-              leaderboard.wasClicked = false;
-              break;
-            }
+              if (quitGame(event))
+              {
+                leaderboard.wasClicked = false;
+                quit(running);
+                break;
+              }
 
-            if (isClicked(event, classic.x, classic.y, classic.w, classic.h, classic.wasClicked, classic.clickSound))
-              infinite.wasClicked = false, classic.wasClicked = true;
-            if (isClicked(event, timer.x, timer.y, timer.w, timer.h, timer.wasClicked, timer.clickSound))
-              infinite.wasClicked = false, timer.wasClicked = true;
-            drawLeaderboard(players, renderer, infinite.image, font45, sort);
-            drawButton(renderer, back, event);
-            render(renderer);
+              if (goBack(event) || back.wasClicked)
+              {
+                leaderboard.wasClicked = false;
+                break;
+              }
+
+              if (isClicked(event, classic.x, classic.y, classic.w, classic.h, classic.wasClicked, classic.clickSound))
+                infinite.wasClicked = false, classic.wasClicked = true;
+              if (isClicked(event, timer.x, timer.y, timer.w, timer.h, timer.wasClicked, timer.clickSound))
+                infinite.wasClicked = false, timer.wasClicked = true;
+              drawLeaderboard(players, renderer, infinite.image, font45, sort);
+              drawButton(renderer, back, event);
+              render(renderer);
+            }
           }
         }
       }
@@ -220,7 +222,6 @@ int main(int argc, char const *argv[])
       if (settings.wasClicked)
       {
         SDL_Texture *SettingsBG = IMG_LoadTexture(renderer, "assets/Settings/Settings.png");
-        back.wasClicked = false;
         vector<SDL_Texture *> soundBar = {IMG_LoadTexture(renderer, "assets/Settings/sound0.png"), IMG_LoadTexture(renderer, "assets/Settings/sound20.png"), IMG_LoadTexture(renderer, "assets/Settings/sound40.png"), IMG_LoadTexture(renderer, "assets/Settings/sound60.png"), IMG_LoadTexture(renderer, "assets/Settings/sound80.png"), IMG_LoadTexture(renderer, "assets/Settings/sound100.png")};
 
         vector<button> adjustButtons = {
@@ -237,7 +238,7 @@ int main(int argc, char const *argv[])
         while (settings.wasClicked)
         {
 
-          while (SDL_PollEvent(&event))
+          while (SDL_PollEvent(&event) && settings.wasClicked)
           {
             if (quitGame(event))
             {
@@ -298,6 +299,17 @@ int main(int argc, char const *argv[])
             render(renderer);
           }
         }
+      }
+
+      if (back.wasClicked)
+      {
+        SDL_RenderCopy(renderer, Background, 0, 0);
+        drawButton(renderer, play, event);
+        drawButton(renderer, leaderboard, event);
+        drawButton(renderer, settings, event);
+        drawButton(renderer, close, event);
+        SDL_RenderPresent(renderer);
+        back.wasClicked = false;
       }
     }
   }
