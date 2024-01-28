@@ -1,6 +1,9 @@
 #ifndef gameMenu_hpp
 #define gameMenu_hpp
 #include "SDL_Headers.h"
+
+using namespace std;
+
 struct button
 {
   int w, h, x, y;
@@ -9,9 +12,35 @@ struct button
   bool wasClicked;
   bool wasHovered;
   SDL_Texture *image, *hoveredImage, *clickedImage;
+  Mix_Chunk *hoverSound, *clickSound;
 };
 
-bool isHovered(SDL_Event event, int x, int y, int w, int h, bool &wasHovered)
+bool quitGame(SDL_Event event)
+{
+  if (event.type == SDL_QUIT)
+    return true;
+  return false;
+}
+
+bool goBack(SDL_Event event)
+{
+  if (event.type == SDL_KEYDOWN)
+    if (event.key.keysym.sym == SDLK_ESCAPE)
+      return true;
+  return false;
+}
+
+void quit(bool &running)
+{
+  running = false;
+  Mix_Quit();
+  TTF_Quit();
+  IMG_Quit();
+  SDL_Quit();
+  cout << "Game Exited" << endl;
+}
+
+bool isHovered(SDL_Event event, int x, int y, int w, int h, bool &wasHovered, Mix_Chunk *hover)
 {
   if (event.motion.x != 0 && event.motion.y != 0 && !(event.motion.x >= x && event.motion.x <= x + w && event.motion.y >= y && event.motion.y <= y + h))
   {
@@ -24,13 +53,14 @@ bool isHovered(SDL_Event event, int x, int y, int w, int h, bool &wasHovered)
   }
   else if (event.motion.x >= x && event.motion.x <= x + w && event.motion.y >= y && event.motion.y <= y + h)
   {
+    Mix_PlayChannel(-1, hover, 0);
     wasHovered = true;
     return true;
   }
   return false;
 }
 
-bool isClicked(SDL_Event event, int x, int y, int w, int h, bool &wasClicked)
+bool isClicked(SDL_Event event, int x, int y, int w, int h, bool &wasClicked, Mix_Chunk *click)
 {
   if (wasClicked)
   {
@@ -42,6 +72,7 @@ bool isClicked(SDL_Event event, int x, int y, int w, int h, bool &wasClicked)
     {
       if (event.button.x >= x && event.button.x <= x + w && event.button.y >= y && event.button.y <= y + h)
       {
+        Mix_PlayChannel(-1, click, 0);
         wasClicked = true;
         return true;
       }
@@ -52,11 +83,11 @@ bool isClicked(SDL_Event event, int x, int y, int w, int h, bool &wasClicked)
 
 void drawButton(SDL_Renderer *renderer, button &b, SDL_Event event)
 {
-  if (isHovered(event, b.x, b.y, b.w, b.h, b.wasHovered))
+  if (isHovered(event, b.x, b.y, b.w, b.h, b.wasHovered, b.hoverSound))
   {
     SDL_Rect rect = {b.x - b.stroke, b.y - b.stroke, b.w + 2 * b.stroke, b.h + 2 * b.stroke};
     SDL_RenderCopy(renderer, b.hoveredImage, NULL, &rect);
-    if (isClicked(event, b.x, b.y, b.w, b.h, b.wasClicked))
+    if (isClicked(event, b.x, b.y, b.w, b.h, b.wasClicked, b.clickSound))
     {
       SDL_RenderCopy(renderer, b.clickedImage, NULL, &rect);
     }
