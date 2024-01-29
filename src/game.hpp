@@ -218,9 +218,9 @@ void initial_crash_ball(SDL_Renderer *Renderer)
             break;
         }
         }
-        is_crash_ball_crashed = false;
-        is_crash_ball_moved = false;
     }
+    is_crash_ball_crashed = false;
+    is_crash_ball_moved = false;
 }
 
 void isConnected(int i, int j)
@@ -364,8 +364,8 @@ void crashed_ball(SDL_Renderer *Renderer)
                     if (!is_crash_ball_crashed)
                     {
                         is_crash_ball_moved = true;
-                        dx *= ((x_mouse - crash_ball.x) / sqrt(pow(x_mouse - crash_ball.x, 2) + pow(y_mouse - crash_ball.y, 2)));
-                        dy *= ((y_mouse - crash_ball.y) / sqrt(pow(x_mouse - crash_ball.x, 2) + pow(y_mouse - crash_ball.y, 2)));
+                        dx = d * ((x_mouse - crash_ball.x) / sqrt(pow(x_mouse - crash_ball.x, 2) + pow(y_mouse - crash_ball.y, 2)));
+                        dy = d * ((y_mouse - crash_ball.y) / sqrt(pow(x_mouse - crash_ball.x, 2) + pow(y_mouse - crash_ball.y, 2)));
                     }
                 }
             }
@@ -375,7 +375,7 @@ void crashed_ball(SDL_Renderer *Renderer)
 
 void connectedToRoof(int i, int j)
 {
-    if (i < 0 || i >= lines + stick || j < 0 || j >= columns)
+    if (i < 0 || i >= lines || j < 0 || j >= columns + stick)
     {
         return;
     }

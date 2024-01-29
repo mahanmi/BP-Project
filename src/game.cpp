@@ -32,8 +32,8 @@ int length_crash_balls = 0;
 int x_mouse;
 int y_mouse;
 
-int dx = 20;
-int dy = 20;
+int d = 20;
+int dx, dy;
 float dy_initial = 1;
 int ballRadius = 25;
 int lines = 6;
