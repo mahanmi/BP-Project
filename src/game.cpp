@@ -13,7 +13,7 @@ struct ball
 {
     int color;
     float x, y;
-    bool isEmpty;
+    bool isEmpty, shootFall;
 };
 
 vector<vector<ball>> balls;
@@ -62,8 +62,8 @@ int main(int argv, char **args)
     window_color(m_renderer, 0, 0, 0);
 
     initial_ball();
-    for(int i=0; i<number_of_lines; i++)
-        for(int j=0; j<n_colum; j++)
+    for (int i = 0; i < number_of_lines; i++)
+        for (int j = 0; j < n_colum; j++)
             balls[i][j].isEmpty = false;
     initial_crash_ball();
     draw_ball(m_renderer);
@@ -83,27 +83,24 @@ int main(int argv, char **args)
             {
                 switch (event->key.keysym.sym)
                 {
-                    case SDLK_ESCAPE:
-                    {
-                        SDL_DestroyWindow(m_window);
-                        SDL_DestroyRenderer(m_renderer);
-                        IMG_Quit();
-                        SDL_Quit();
-                        return 0;
-                    }
+                case SDLK_ESCAPE:
+                {
+                    SDL_DestroyWindow(m_window);
+                    SDL_DestroyRenderer(m_renderer);
+                    IMG_Quit();
+                    SDL_Quit();
+                    return 0;
+                }
                 }
             }
             if (event->type != SDL_KEYDOWN)
             {
                 x_mouse = event->button.x;
                 y_mouse = event->button.y;
-                if (event->type == SDL_MOUSEBUTTONDOWN)
-                {
-                }
             }
         }
         SDL_RenderPresent(m_renderer);
-        SDL_Delay(16);
+        SDL_Delay(1000 / 60);
     }
 }
 
@@ -132,12 +129,12 @@ void initial_ball()
     balls.resize(number_of_lines);
 
     int x_center = rad_ball;
-    int y_center = rad_ball;
+    int y_center = 7 * rad_ball;
 
     struct ball new_ball;
     for (int i = 0; i < number_of_lines; i++)
     {
-        for (int j = 0; j < n_colum; j++)
+        for (int j = 0; j < n_colum + n_stick; j++)
         {
             new_ball.x = x_center;
             new_ball.y = y_center;
@@ -146,69 +143,69 @@ void initial_ball()
             {
                 switch (rand() % 6)
                 {
-                    case 0:
-                    {
-                        new_ball.color = 3; //yellow & blue
-                        break;
-                    }
-                    case 1:
-                    {
-                        new_ball.color = 5; //yellow & green
-                        break;
-                    }
-                    case 2:
-                    {
-                        new_ball.color = 9; //yellow & red
-                        break;
-                    }
-                    case 3:
-                    {
-                        new_ball.color = 6; //blue & green
-                        break;
-                    }
-                    case 4:
-                    {
-                        new_ball.color = 10; //blue & red
-                        break;
-                    }
-                    case 5:
-                    {
-                        new_ball.color = 12; //green & red
-                        break;
-                    }
+                case 0:
+                {
+                    new_ball.color = 3; // yellow & blue
+                    break;
                 }
-
+                case 1:
+                {
+                    new_ball.color = 5; // yellow & green
+                    break;
+                }
+                case 2:
+                {
+                    new_ball.color = 9; // yellow & red
+                    break;
+                }
+                case 3:
+                {
+                    new_ball.color = 6; // blue & green
+                    break;
+                }
+                case 4:
+                {
+                    new_ball.color = 10; // blue & red
+                    break;
+                }
+                case 5:
+                {
+                    new_ball.color = 12; // green & red
+                    break;
+                }
+                }
             }
             else if (rand_col % 4 == 0)
             {
-                new_ball.color = 1; //yellow
+                new_ball.color = 1; // yellow
             }
             if (rand_col == 21)
             {
-                new_ball.color = 7; //black
+                new_ball.color = 7; // black
             }
             else if (rand_col % 4 == 1)
             {
-                new_ball.color = 2; //blue
+                new_ball.color = 2; // blue
             }
             if (rand_col % 4 == 2)
             {
-                new_ball.color = 4; //green
+                new_ball.color = 4; // green
             }
             if (rand_col % 4 == 3)
             {
-                new_ball.color = 8; //red
+                new_ball.color = 8; // red
             }
 
             balls[i].push_back(new_ball);
-            x_center += 2*rad_ball;
-        }
-        x_center = rad_ball;
-        y_center += 2 * rad_ball;
-    }
-    for (int i = 0; i < number_of_lines; i++)
-        for (int j = 0; j < n_colum ; j++)
+            x_center += 2 * rad_ball;
             balls[i][j].y += dy_initial;
+        }
+        if (i % 2 == 0)
+            x_center = 2 * rad_ball;
+        else
+            x_center = rad_ball;
+        y_center -= 2 * rad_ball;
+    }
 }
 
 void initial_crash_ball()
@@ -222,26 +219,26 @@ void initial_crash_ball()
     {
         switch (rand() % 4)
         {
-            case 0:
-            {
-                crash_ball.color = 1;
-                break;
-            }
-            case 1:
-            {
-                crash_ball.color = 2;
-                break;
-            }
-            case 2:
-            {
-                crash_ball.color = 4;
-                break;
-            }
-            case 3:
-            {
-                crash_ball.color = 8;
-                break;
-            }
+        case 0:
+        {
+            crash_ball.color = 1;
+            break;
+        }
+        case 1:
+        {
+            crash_ball.color = 2;
+            break;
+        }
+        case 2:
+        {
+            crash_ball.color = 4;
+            break;
+        }
+        case 3:
+        {
+            crash_ball.color = 8;
+            break;
+        }
         }
     }
     is_crash_ball_crashed = false;
@@ -254,7 +251,7 @@ void draw_ball(SDL_Renderer *Renderer)
     {
         for (int j = 0; j < n_colum + n_stick; j++)
         {
-            if(!balls[i][j].isEmpty)
+            if (!balls[i][j].isEmpty)
             {
                 filledCircleColor(Renderer, balls[i][j].x, balls[i][j].y, rad_ball, balls[i][j].color);
             }
@@ -287,12 +284,12 @@ void crashed_ball(SDL_Renderer *Renderer)
             {
                 for (int j = 0; j < n_colum; j++)
                 {
-                    if(!balls[i][j].isEmpty)
+                    if (!balls[i][j].isEmpty)
                     {
-                        if (pow(balls[i][j].x - crash_ball.x,2) + pow(balls[i][j].y - crash_ball.y,2) <= 2 * rad_ball)
+                        if (pow(balls[i][j].x - crash_ball.x, 2) + pow(balls[i][j].y - crash_ball.y, 2) < pow(2 * rad_ball, 2))
                         {
                             is_crash_ball_crashed = true;
-                            if(j>=n_colum/2)
+                            if (j >= n_colum / 2)
                                 crash_ball.x += int(crash_ball.x) % rad_ball;
                             else
                                 crash_ball.x -= int(crash_ball.x) % rad_ball;
@@ -303,11 +300,6 @@ void crashed_ball(SDL_Renderer *Renderer)
                             {
                                 balls[i][j].isEmpty = true;
                                 isConnected(i, j);
-                                length_crash_balls = crash_balls.size();
-                                for (int k = 0; k < length_crash_balls; k++)
-                                {
-                                    balls[i][j].isEmpty = true;
-                                }
                             }
                             else
                             {
@@ -324,26 +316,20 @@ void crashed_ball(SDL_Renderer *Renderer)
 
         if (SDL_PollEvent(event))
         {
-            if (event->type == SDL_KEYDOWN)
-            {
-                switch (event->key.keysym.sym)
-                {
-                    case SDLK_SPACE:
-                    {
-                        if (!is_crash_ball_crashed)
-                        {
-                            is_crash_ball_moved = true;
-                            dx = 10 * ((x_mouse - crash_ball.x) / sqrt(pow(x_mouse - crash_ball.x, 2) + pow(y_mouse - crash_ball.y, 2)));
-                            dy = 10 * ((y_mouse - crash_ball.y) / sqrt(pow(x_mouse - crash_ball.x, 2) + pow(y_mouse - crash_ball.y, 2)));
-                            break;
-                        }
-                    }
-                }
-            }
             if (event->type != SDL_KEYDOWN)
             {
                 x_mouse = event->button.x;
                 y_mouse = event->button.y;
+
+                if (event->type == SDL_MOUSEBUTTONDOWN)
+                {
+                    if (!is_crash_ball_crashed)
+                    {
+                        is_crash_ball_moved = true;
+                        dx = 10 * ((x_mouse - crash_ball.x) / sqrt(pow(x_mouse - crash_ball.x, 2) + pow(y_mouse - crash_ball.y, 2)));
+                        dy = 10 * ((y_mouse - crash_ball.y) / sqrt(pow(x_mouse - crash_ball.x, 2) + pow(y_mouse - crash_ball.y, 2)));
+                    }
+                }
             }
         }
     }
@@ -351,16 +337,49 @@ void crashed_ball(SDL_Renderer *Renderer)
 
 void isConnected(int i, int j)
 {
-    if (i < 0 || i >= number_of_lines + n_stick|| j < 0 || j >= n_colum)
+    if (i < 0 || i >= number_of_lines + n_stick || j < 0 || j >= n_colum)
     {
         return;
     }
     crash_balls.push_back(balls[i][j]);
+    balls[i][j].isEmpty = true;
 
-    for(int m=0; m<number_of_lines; m++)
-        for(int n=0; n<n_colum; n++)
-            if(!balls[m][n].isEmpty && balls[m][n].color != 7)
-                if(pow(balls[m][n].x - balls[i][j].x,2) + pow(balls[m][n].y - balls[i][j].y,2) <= 2*rad_ball)
-                    if(balls[i][j].color == balls[m][n].color || (balls[i][j].color == 1 && balls[m][n].color % 2 != 0) || (balls[i][j].color == 2 && (balls[m][n].color == 3 || balls[m][n].color == 6 || balls[m][n].color == 10)) || (balls[i][j].color == 4 && (balls[m][n].color == 5 || balls[m][n].color == 6 || balls[m][n].color == 12)) || (balls[i][j].color == 8 && (balls[m][n].color == 9 || balls[m][n].color == 10 || balls[m][n].color == 12)) || (balls[i][j].color == 3 && (balls[m][n].color == 1 || balls[m][n].color == 2)) || (balls[i][j].color == 5 && (balls[m][n].color == 1 || balls[m][n].color == 4)) || (balls[i][j].color == 9 && (balls[m][n].color == 1 || balls[m][n].color == 8)) || (balls[i][j].color == 6 && (balls[m][n].color == 2 || balls[m][n].color == 4)) || (balls[i][j].color == 10 && (balls[m][n].color == 2 || balls[m][n].color == 8)) || (balls[i][j].color == 12 && (balls[m][n].color == 4 || balls[m][n].color == 8)))
+    for (int m = 0; m < number_of_lines; m++)
+        for (int n = 0; n < n_colum; n++)
+            if (!balls[m][n].isEmpty && balls[m][n].color != 7)
+                if (pow(balls[m][n].x - balls[i][j].x, 2) + pow(balls[m][n].y - balls[i][j].y, 2) <= pow(2 * rad_ball, 2))
+                    if (balls[i][j].color == balls[m][n].color || (balls[i][j].color == 1 && balls[m][n].color % 2 != 0) || (balls[i][j].color == 2 && (balls[m][n].color == 3 || balls[m][n].color == 6 || balls[m][n].color == 10)) || (balls[i][j].color == 4 && (balls[m][n].color == 5 || balls[m][n].color == 6 || balls[m][n].color == 12)) || (balls[i][j].color == 8 && (balls[m][n].color == 9 || balls[m][n].color == 10 || balls[m][n].color == 12)) || (balls[i][j].color == 3 && (balls[m][n].color == 1 || balls[m][n].color == 2)) || (balls[i][j].color == 5 && (balls[m][n].color == 1 || balls[m][n].color == 4)) || (balls[i][j].color == 9 && (balls[m][n].color == 1 || balls[m][n].color == 8)) || (balls[i][j].color == 6 && (balls[m][n].color == 2 || balls[m][n].color == 4)) || (balls[i][j].color == 10 && (balls[m][n].color == 2 || balls[m][n].color == 8)) || (balls[i][j].color == 12 && (balls[m][n].color == 4 || balls[m][n].color == 8)))
                         isConnected(m, n);
+}
+
+void connectedToRoof(int i, int j)
+{
+    if (i < 0 || i >= number_of_lines + n_stick || j < 0 || j >= n_colum)
+    {
+        return;
+    }
+
+    if (!balls[i][j].isEmpty)
+    {
+        balls[i][j].shootFall = false;
+
+        if (i == 0)
+        {
+            return;
+        }
+
+        for (int m = 0; m < number_of_lines; m++)
+        {
+            for (int n = 0; n < n_colum; n++)
+            {
+                if (!balls[m][n].isEmpty)
+                {
+                    if (sqrt(pow(balls[m][n].x - balls[i][j].x, 2) + pow(balls[m][n].y - balls[i][j].y, 2) <= 2 * rad_ball))
+                    {
+                        connectedToRoof(m, n);
+                    }
+                }
+            }
+        }
+    }
 }
