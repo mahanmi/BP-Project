@@ -15,8 +15,14 @@ struct ball
     bool isEmpty, shootFall;
 };
 
+const int WIDTH = 625, HIGHT = 1000;
+SDL_Window *window = SDL_CreateWindow("Bouncing Balls Game", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, WIDTH, HIGHT, SDL_WINDOW_SHOWN);
+SDL_Renderer *renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
+SDL_Event event;
+
 vector<vector<ball>> balls;
-struct ball crash_ball;
+ball crash_ball;
+
 bool is_crash_ball_moved = false;
 bool is_crash_ball_crashed = false;
 
@@ -26,19 +32,16 @@ int length_crash_balls = 0;
 int x_mouse;
 int y_mouse;
 
-int W = 625;
-int H = 1000;
-
 int dx = 20;
 int dy = 20;
 float dy_initial = 0.1;
-int rad_ball = 25;
-int number_of_lines = 4;
-int n_colum = W / (2 * rad_ball);
-int n_stick = 0;
+int ballRadius = 25;
+int lines = 4;
+int columns = WIDTH / (2 * ballRadius);
+int stick = 0;
 
 void window_color(SDL_Renderer *Renderer, int R, int G, int B);
-void rect(SDL_Renderer *Renderer, int x, int y, int w, int h, int R, int G, int B, int fill_bool);
+void rect(SDL_Renderer *Renderer, int x, int y, int WIDTH, int HIGHT, int R, int G, int B, int fill_bool);
 void initial_ball();
 void draw_ball(SDL_Renderer *Renderer);
 void initial_crash_ball(SDL_Renderer *Renderer);
@@ -49,57 +52,47 @@ int main(int argv, char **args)
 {
     srand(time(0));
 
-    Uint32 SDL_flags = SDL_INIT_VIDEO | SDL_INIT_TIMER;
-    Uint32 WND_flags = SDL_WINDOW_SHOWN;
-    SDL_Window *m_window;
-    SDL_Renderer *m_renderer;
-    SDL_Init(SDL_flags);
-    SDL_CreateWindowAndRenderer(W, H, WND_flags, &m_window, &m_renderer);
-    SDL_RaiseWindow(m_window);
-    SDL_DisplayMode DM;
-    SDL_GetCurrentDisplayMode(0, &DM);
-    window_color(m_renderer, 0, 0, 0);
+    window_color(renderer, 0, 0, 0);
 
     initial_ball();
-    for (int i = 0; i < number_of_lines; i++)
-        for (int j = 0; j < n_colum; j++)
+    for (int i = 0; i < lines; i++)
+        for (int j = 0; j < columns; j++)
             balls[i][j].isEmpty = false;
-    initial_crash_ball(m_renderer);
-    draw_ball(m_renderer);
-    SDL_RenderPresent(m_renderer);
-
-    SDL_Event *event = new SDL_Event();
+    initial_crash_ball(renderer);
+    draw_ball(renderer);
+    SDL_RenderPresent(renderer);
 
     while (1)
     {
-        rect(m_renderer, 0, 0, W, H, 0, 0, 0, 1);
-        crashed_ball(m_renderer);
+        rect(renderer, 0, 0, WIDTH, HIGHT, 0, 0, 0, 1);
+        crashed_ball(renderer);
         initial_ball();
-        draw_ball(m_renderer);
-        if (SDL_PollEvent(event))
+        draw_ball(renderer);
+        if (SDL_PollEvent(&event))
         {
-            if (event->type == SDL_KEYDOWN)
+            if (event.type == SDL_KEYDOWN)
             {
-                switch (event->key.keysym.sym)
+                switch (event.key.keysym.sym)
                 {
                 case SDLK_ESCAPE:
                 {
-                    SDL_DestroyWindow(m_window);
-                    SDL_DestroyRenderer(m_renderer);
+                    SDL_DestroyWindow(window);
+                    SDL_DestroyRenderer(renderer);
                     IMG_Quit();
                     SDL_Quit();
                     return 0;
                 }
                 }
             }
-            if (event->type != SDL_KEYDOWN)
+            if (event.type != SDL_KEYDOWN)
             {
-                x_mouse = event->button.x;
-                y_mouse = event->button.y;
+                x_mouse = event.button.x;
+                y_mouse = event.button.y;
             }
         }
-        SDL_RenderPresent(m_renderer);
+        SDL_RenderPresent(renderer);
         SDL_Delay(1000 / 60);
+        SDL_RenderClear(renderer);
     }
 }
 
@@ -110,13 +103,13 @@ void window_color(SDL_Renderer *Renderer, int R, int G, int B)
     SDL_RenderPresent(Renderer);
 }
 
-void rect(SDL_Renderer *Renderer, int x, int y, int w, int h, int R, int G, int B, int fill_bool)
+void rect(SDL_Renderer *Renderer, int x, int y, int WIDTH, int HIGHT, int R, int G, int B, int fill_bool)
 {
     SDL_Rect rectangle;
     rectangle.x = x;
     rectangle.y = y;
-    rectangle.w = w;
-    rectangle.h = h;
+    rectangle.w = WIDTH;
+    rectangle.h = HIGHT;
     SDL_SetRenderDrawColor(Renderer, R, G, B, 255);
     if (fill_bool == 1)
         SDL_RenderFillRect(Renderer, &rectangle);
@@ -125,15 +118,15 @@ void rect(SDL_Renderer *Renderer, int x, int y, int w, int h, int R, int G, int 
 
 void initial_ball()
 {
-    balls.resize(number_of_lines);
+    balls.resize(lines);
 
-    int x_center = rad_ball;
-    int y_center = 7 * rad_ball;
+    int x_center = ballRadius;
+    int y_center = 7 * ballRadius;
 
     struct ball new_ball;
-    for (int i = 0; i < number_of_lines; i++)
+    for (int i = 0; i < lines; i++)
     {
-        for (int j = 0; j < n_colum + n_stick; j++)
+        for (int j = 0; j < columns + stick; j++)
         {
             new_ball.x = x_center;
             new_ball.y = y_center;
@@ -196,22 +189,22 @@ void initial_ball()
             }
 
             balls[i].push_back(new_ball);
-            x_center += 2 * rad_ball;
+            x_center += 2 * ballRadius;
             balls[i][j].y += dy_initial;
         }
         if (i % 2 == 0)
-            x_center = 2 * rad_ball;
+            x_center = 2 * ballRadius;
         else
-            x_center = rad_ball;
-        y_center -= 2 * rad_ball;
+            x_center = ballRadius;
+        y_center -= 2 * ballRadius;
     }
 }
 
 void initial_crash_ball(SDL_Renderer *Renderer)
 {
-    crash_ball.x = int(W / 2);
-    crash_ball.y = int(H - 100);
-    SDL_Rect Ball = {crash_ball.x - rad_ball, 300, 50, 50};
+    crash_ball.x = int(WIDTH / 2);
+    crash_ball.y = int(HIGHT - 100);
+    SDL_Rect Ball = {int(crash_ball.x - ballRadius), int(crash_ball.y - ballRadius), 50, 50};
 
     if (rand() % 10 == 0)
         crash_ball.color = 11;
@@ -252,14 +245,14 @@ void initial_crash_ball(SDL_Renderer *Renderer)
 
 void draw_ball(SDL_Renderer *Renderer)
 {
-    for (int i = 0; i < number_of_lines; i++)
+    for (int i = 0; i < lines; i++)
     {
-        for (int j = 0; j < n_colum + n_stick; j++)
+        for (int j = 0; j < columns + stick; j++)
         {
             if (!balls[i][j].isEmpty)
             {
                 int x_center = balls[i][j].x, y_center = balls[i][j].y;
-                SDL_Rect Ball = {x_center - rad_ball, y_center - rad_ball, 50, 50};
+                SDL_Rect Ball = {x_center - ballRadius, y_center - ballRadius, 50, 50};
                 switch (balls[i][j].color)
                 {
                 case 1:
@@ -317,9 +310,8 @@ void draw_ball(SDL_Renderer *Renderer)
 
 void crashed_ball(SDL_Renderer *Renderer)
 {
-    SDL_Event *event = new SDL_Event();
 
-    filledCircleColor(Renderer, crash_ball.x, crash_ball.y, rad_ball, crash_ball.color);
+    filledCircleColor(Renderer, crash_ball.x, crash_ball.y, ballRadius, crash_ball.color);
     if (!is_crash_ball_crashed)
     {
         if (!is_crash_ball_moved)
@@ -328,15 +320,15 @@ void crashed_ball(SDL_Renderer *Renderer)
         }
         else
         {
-            if (crash_ball.x > W || crash_ball.x < 0)
+            if (crash_ball.x > WIDTH || crash_ball.x < 0)
                 dx *= -1;
-            if (crash_ball.y > H || crash_ball.y < 0)
+            if (crash_ball.y > HIGHT || crash_ball.y < 0)
                 dy *= -1;
 
             crash_ball.x += dx;
             crash_ball.y += dy;
 
-            SDL_Rect Ball = {int(crash_ball.x - rad_ball), int(crash_ball.y - rad_ball), 50, 50};
+            SDL_Rect Ball = {int(crash_ball.x - ballRadius), int(crash_ball.y - ballRadius), 50, 50};
 
             switch (crash_ball.color)
             {
@@ -367,21 +359,21 @@ void crashed_ball(SDL_Renderer *Renderer)
             }
             }
 
-            for (int i = 0; i < number_of_lines; i++)
+            for (int i = 0; i < lines; i++)
             {
-                for (int j = 0; j < n_colum; j++)
+                for (int j = 0; j < columns; j++)
                 {
                     if (!balls[i][j].isEmpty)
                     {
-                        if (pow(balls[i][j].x - crash_ball.x, 2) + pow(balls[i][j].y - crash_ball.y, 2) < pow(2 * rad_ball, 2))
+                        if (pow(balls[i][j].x - crash_ball.x, 2) + pow(balls[i][j].y - crash_ball.y, 2) < pow(2 * ballRadius, 2))
                         {
                             is_crash_ball_crashed = true;
-                            if (j >= n_colum / 2)
-                                crash_ball.x += int(crash_ball.x) % rad_ball;
+                            if (j >= columns / 2)
+                                crash_ball.x += int(crash_ball.x) % ballRadius;
                             else
-                                crash_ball.x -= int(crash_ball.x) % rad_ball;
+                                crash_ball.x -= int(crash_ball.x) % ballRadius;
 
-                            crash_ball.y += int(crash_ball.y) % rad_ball;
+                            crash_ball.y += int(crash_ball.y) % ballRadius;
 
                             if ((crash_ball.color == 11 && balls[i][j].color != 7) || (crash_ball.color == 1 && balls[i][j].color % 2 != 0) || (crash_ball.color == 2 && (balls[i][j].color == 2 || balls[i][j].color == 3 || balls[i][j].color == 6 || balls[i][j].color == 10)) || (crash_ball.color == 4 && (balls[i][j].color == 4 || balls[i][j].color == 5 || balls[i][j].color == 6 || balls[i][j].color == 12)) || (crash_ball.color == 8 && (balls[i][j].color == 8 || balls[i][j].color == 9 || balls[i][j].color == 10 || balls[i][j].color == 12)))
                             {
@@ -390,7 +382,7 @@ void crashed_ball(SDL_Renderer *Renderer)
                             }
                             else
                             {
-                                n_stick++;
+                                stick++;
                                 crash_ball.isEmpty = false;
                                 initial_crash_ball(Renderer);
                             }
@@ -401,14 +393,14 @@ void crashed_ball(SDL_Renderer *Renderer)
             }
         }
 
-        if (SDL_PollEvent(event))
+        if (SDL_PollEvent(&event))
         {
-            if (event->type != SDL_KEYDOWN)
+            if (event.type != SDL_KEYDOWN)
             {
-                x_mouse = event->button.x;
-                y_mouse = event->button.y;
+                x_mouse = event.button.x;
+                y_mouse = event.button.y;
 
-                if (event->type == SDL_MOUSEBUTTONDOWN)
+                if (event.type == SDL_MOUSEBUTTONDOWN)
                 {
                     if (!is_crash_ball_crashed)
                     {
@@ -424,24 +416,24 @@ void crashed_ball(SDL_Renderer *Renderer)
 
 void isConnected(int i, int j)
 {
-    if (i < 0 || i >= number_of_lines + n_stick || j < 0 || j >= n_colum)
+    if (i < 0 || i >= lines + stick || j < 0 || j >= columns)
     {
         return;
     }
     crash_balls.push_back(balls[i][j]);
     balls[i][j].isEmpty = true;
 
-    for (int m = 0; m < number_of_lines; m++)
-        for (int n = 0; n < n_colum; n++)
+    for (int m = 0; m < lines; m++)
+        for (int n = 0; n < columns; n++)
             if (!balls[m][n].isEmpty && balls[m][n].color != 7)
-                if (pow(balls[m][n].x - balls[i][j].x, 2) + pow(balls[m][n].y - balls[i][j].y, 2) <= pow(2 * rad_ball, 2))
+                if (pow(balls[m][n].x - balls[i][j].x, 2) + pow(balls[m][n].y - balls[i][j].y, 2) <= pow(2 * ballRadius, 2))
                     if (balls[i][j].color == balls[m][n].color || (balls[i][j].color == 1 && balls[m][n].color % 2 != 0) || (balls[i][j].color == 2 && (balls[m][n].color == 3 || balls[m][n].color == 6 || balls[m][n].color == 10)) || (balls[i][j].color == 4 && (balls[m][n].color == 5 || balls[m][n].color == 6 || balls[m][n].color == 12)) || (balls[i][j].color == 8 && (balls[m][n].color == 9 || balls[m][n].color == 10 || balls[m][n].color == 12)) || (balls[i][j].color == 3 && (balls[m][n].color == 1 || balls[m][n].color == 2)) || (balls[i][j].color == 5 && (balls[m][n].color == 1 || balls[m][n].color == 4)) || (balls[i][j].color == 9 && (balls[m][n].color == 1 || balls[m][n].color == 8)) || (balls[i][j].color == 6 && (balls[m][n].color == 2 || balls[m][n].color == 4)) || (balls[i][j].color == 10 && (balls[m][n].color == 2 || balls[m][n].color == 8)) || (balls[i][j].color == 12 && (balls[m][n].color == 4 || balls[m][n].color == 8)))
                         isConnected(m, n);
 }
 
 void connectedToRoof(int i, int j)
 {
-    if (i < 0 || i >= number_of_lines + n_stick || j < 0 || j >= n_colum)
+    if (i < 0 || i >= lines + stick || j < 0 || j >= columns)
     {
         return;
     }
@@ -455,13 +447,13 @@ void connectedToRoof(int i, int j)
             return;
         }
 
-        for (int m = 0; m < number_of_lines; m++)
+        for (int m = 0; m < lines; m++)
         {
-            for (int n = 0; n < n_colum; n++)
+            for (int n = 0; n < columns; n++)
             {
                 if (!balls[m][n].isEmpty)
                 {
-                    if (sqrt(pow(balls[m][n].x - balls[i][j].x, 2) + pow(balls[m][n].y - balls[i][j].y, 2) <= 2 * rad_ball))
+                    if (sqrt(pow(balls[m][n].x - balls[i][j].x, 2) + pow(balls[m][n].y - balls[i][j].y, 2) <= 2 * ballRadius))
                     {
                         connectedToRoof(m, n);
                     }
