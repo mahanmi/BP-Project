@@ -333,7 +333,7 @@ void crashed_ball(SDL_Renderer *Renderer)
 
                             crash_ball.y += int(crash_ball.y) % ballRadius;
 
-                            if ((crash_ball.color == 11 && balls[i][j].color != 7) || (crash_ball.color == 1 && balls[i][j].color % 2 != 0) || (crash_ball.color == 2 && (balls[i][j].color == 2 || balls[i][j].color == 3 || balls[i][j].color == 6 || balls[i][j].color == 10)) || (crash_ball.color == 4 && (balls[i][j].color == 4 || balls[i][j].color == 5 || balls[i][j].color == 6 || balls[i][j].color == 12)) || (crash_ball.color == 8 && (balls[i][j].color == 8 || balls[i][j].color == 9 || balls[i][j].color == 10 || balls[i][j].color == 12)))
+                            if ((crash_ball.color == 11 && balls[i][j].color != 7) || (crash_ball.color == 1 && (balls[i][j].color % 2 != 0 && balls[i][j].color != 7)) || (crash_ball.color == 2 && (balls[i][j].color == 2 || balls[i][j].color == 3 || balls[i][j].color == 6 || balls[i][j].color == 10)) || (crash_ball.color == 4 && (balls[i][j].color == 4 || balls[i][j].color == 5 || balls[i][j].color == 6 || balls[i][j].color == 12)) || (crash_ball.color == 8 && (balls[i][j].color == 8 || balls[i][j].color == 9 || balls[i][j].color == 10 || balls[i][j].color == 12)))
                             {
                                 balls[i][j].isEmpty = true;
                                 isConnected(i, j);
