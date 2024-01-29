@@ -382,7 +382,7 @@ void connectedToRoof(int i, int j)
 
     if (!balls[i][j].isEmpty)
     {
-        balls[i][j].shootFall = false;
+        balls[i][j].shouldFall = false;
 
         if (i == 0)
         {

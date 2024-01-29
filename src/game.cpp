@@ -12,7 +12,7 @@ struct ball
 {
     int color;
     float x, y;
-    bool isEmpty, shootFall;
+    bool isEmpty, shouldFall;
 };
 
 const int WIDTH = 625, HIGHT = 1000;
