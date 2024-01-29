@@ -123,9 +123,40 @@ int main(int argc, char const *argv[])
       drawButton(renderer, settings, event);
       drawButton(renderer, close, event);
       render(renderer);
-      /* while (play.wasClicked)
+      if (play.wasClicked)
       {
-      } */
+        SDL_Texture *PlayBG = IMG_LoadTexture(renderer, "assets/GameMode/GameMode.png");
+        button timerGM = {151, 54, 63, 291, 0, 0, 0, 0, 0, false, false, IMG_LoadTexture(renderer, "assets/GameMode/Timer.png"), IMG_LoadTexture(renderer, "assets/GameMode/TimerHovered.png"), 0, hover, click};
+        button classicGM = {151, 54, 234, 291, 0, 0, 0, 0, 0, true, false, IMG_LoadTexture(renderer, "assets/GameMode/Classic.png"), IMG_LoadTexture(renderer, "assets/GameMode/ClassicHovered.png"), 0, hover, click};
+        button infiniteGM = {151, 54, 405, 291, 0, 0, 0, 0, 0, false, false, IMG_LoadTexture(renderer, "assets/GameMode/Infinite.png"), IMG_LoadTexture(renderer, "assets/GameMode/InfiniteHovered.png"), 0, hover, click};
+        button start = {198, 91, 219, 829, 0, 0, 0, 0, 5, false, false, IMG_LoadTexture(renderer, "assets/GameMode/startButton.png"), IMG_LoadTexture(renderer, "assets/GameMode/startButtonHover.png"), IMG_LoadTexture(renderer, "assets/GameMode/startButtonClick.png"), hover, click};
+
+        while (play.wasClicked)
+        {
+          while (SDL_PollEvent(&event) && play.wasClicked)
+          {
+            if (quitGame(event))
+            {
+              play.wasClicked = false;
+              quit(running);
+              break;
+            }
+            if (goBack(event) || back.wasClicked)
+            {
+              play.wasClicked = false;
+              break;
+            }
+            SDL_RenderCopy(renderer, PlayBG, 0, 0);
+            drawButton(renderer, timerGM, event);
+            drawButton(renderer, classicGM, event);
+            drawButton(renderer, infiniteGM, event);
+            drawButton(renderer, start, event);
+            drawButton(renderer, back, event);
+            render(renderer);
+          }
+        }
+      }
+     
       if (leaderboard.wasClicked)
       {
         string sort;
@@ -232,6 +263,7 @@ int main(int argc, char const *argv[])
       if (settings.wasClicked)
       {
         SDL_Texture *SettingsBG = IMG_LoadTexture(renderer, "assets/Settings/Settings.png");
+        
         vector<SDL_Texture *> soundBar = {IMG_LoadTexture(renderer, "assets/Settings/sound0.png"), IMG_LoadTexture(renderer, "assets/Settings/sound20.png"), IMG_LoadTexture(renderer, "assets/Settings/sound40.png"), IMG_LoadTexture(renderer, "assets/Settings/sound60.png"), IMG_LoadTexture(renderer, "assets/Settings/sound80.png"), IMG_LoadTexture(renderer, "assets/Settings/sound100.png")};
 
         vector<button> adjustButtons = {

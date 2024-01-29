@@ -18,14 +18,12 @@ void setMusic(SDL_Renderer *renderer, bool &next, bool &prev, vector<music> &mus
     {
       musicIndex++;
       musicIndex %= musicList.size();
-      // next = false;
     }
     else if (prev)
     {
       musicIndex--;
       if (musicIndex < 0)
         musicIndex = musicList.size() - 1;
-      // prev = false;
     }
     Mix_FreeMusic(music);
     music = Mix_LoadMUS(musicList[musicIndex].path.c_str());
