@@ -1,6 +1,5 @@
 #include <iostream>
 #include "SDL_Headers.h"
-#include <windows.h>
 #include <string>
 #include <cmath>
 #include <ctime>
@@ -253,7 +252,58 @@ void draw_ball(SDL_Renderer *Renderer)
         {
             if (!balls[i][j].isEmpty)
             {
-                filledCircleColor(Renderer, balls[i][j].x, balls[i][j].y, rad_ball, balls[i][j].color);
+                int x_center = balls[i][j].x, y_center = balls[i][j].y;
+                SDL_Rect Ball = {x_center - rad_ball, y_center - rad_ball, 50, 50};
+                switch (balls[i][j].color)
+                {
+                case 1:
+                    SDL_RenderCopy(Renderer, IMG_LoadTexture(Renderer, "assets/Game/Balls/1.png"), NULL, &Ball);
+                    break;
+
+                case 2:
+                    SDL_RenderCopy(Renderer, IMG_LoadTexture(Renderer, "assets/Game/Balls/2.png"), NULL, &Ball);
+                    break;
+
+                case 3:
+                    SDL_RenderCopy(Renderer, IMG_LoadTexture(Renderer, "assets/Game/Balls/3.png"), NULL, &Ball);
+                    break;
+
+                case 4:
+                    SDL_RenderCopy(Renderer, IMG_LoadTexture(Renderer, "assets/Game/Balls/4.png"), NULL, &Ball);
+                    break;
+
+                case 5:
+                    SDL_RenderCopy(Renderer, IMG_LoadTexture(Renderer, "assets/Game/Balls/5.png"), NULL, &Ball);
+                    break;
+
+                case 6:
+                    SDL_RenderCopy(Renderer, IMG_LoadTexture(Renderer, "assets/Game/Balls/6.png"), NULL, &Ball);
+                    break;
+
+                case 7:
+                    SDL_RenderCopy(Renderer, IMG_LoadTexture(Renderer, "assets/Game/Balls/7.png"), NULL, &Ball);
+                    break;
+
+                case 8:
+                    SDL_RenderCopy(Renderer, IMG_LoadTexture(Renderer, "assets/Game/Balls/8.png"), NULL, &Ball);
+                    break;
+
+                case 9:
+                    SDL_RenderCopy(Renderer, IMG_LoadTexture(Renderer, "assets/Game/Balls/9.png"), NULL, &Ball);
+                    break;
+
+                case 10:
+                    SDL_RenderCopy(Renderer, IMG_LoadTexture(Renderer, "assets/Game/Balls/10.png"), NULL, &Ball);
+                    break;
+
+                case 11:
+                    SDL_RenderCopy(Renderer, IMG_LoadTexture(Renderer, "assets/Game/Balls/11.png"), NULL, &Ball);
+                    break;
+
+                case 12:
+                    SDL_RenderCopy(Renderer, IMG_LoadTexture(Renderer, "assets/Game/Balls/12.png"), NULL, &Ball);
+                    break;
+                }
             }
         }
     }
