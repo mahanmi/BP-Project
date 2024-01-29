@@ -86,10 +86,13 @@ void drawButton(SDL_Renderer *renderer, button &b, SDL_Event event)
   if (isHovered(event, b.x, b.y, b.w, b.h, b.wasHovered, b.hoverSound))
   {
     SDL_Rect rect = {b.x - b.stroke, b.y - b.stroke, b.w + 2 * b.stroke, b.h + 2 * b.stroke};
-    SDL_RenderCopy(renderer, b.hoveredImage, NULL, &rect);
     if (isClicked(event, b.x, b.y, b.w, b.h, b.wasClicked, b.clickSound))
     {
       SDL_RenderCopy(renderer, b.clickedImage, NULL, &rect);
+    }
+    else
+    {
+      SDL_RenderCopy(renderer, b.hoveredImage, NULL, &rect);
     }
   }
   else
