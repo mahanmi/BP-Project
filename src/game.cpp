@@ -201,7 +201,7 @@ void initial_ball()
             }
 
             balls[i].push_back(new_ball);
-            balls[i][j].x += 2*rad_ball;
+            x_center += 2*rad_ball;
         }
         x_center = rad_ball;
         y_center += 2 * rad_ball;
