@@ -34,7 +34,7 @@ int y_mouse;
 
 int d = 20;
 int dx, dy;
-float dy_initial = 1;
+float dy_initial = 0.25;
 int ballRadius = 25;
 int lines = 6;
 int columns = WIDTH / (2 * ballRadius);
