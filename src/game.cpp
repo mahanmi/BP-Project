@@ -41,7 +41,7 @@ void window_color(SDL_Renderer *Renderer, int R, int G, int B);
 void rect(SDL_Renderer *Renderer, int x, int y, int w, int h, int R, int G, int B, int fill_bool);
 void initial_ball();
 void draw_ball(SDL_Renderer *Renderer);
-void initial_crash_ball();
+void initial_crash_ball(SDL_Renderer *Renderer);
 void crashed_ball(SDL_Renderer *Renderer);
 void isConnected(int i, int j);
 
@@ -64,7 +64,7 @@ int main(int argv, char **args)
     for (int i = 0; i < number_of_lines; i++)
         for (int j = 0; j < n_colum; j++)
             balls[i][j].isEmpty = false;
-    initial_crash_ball();
+    initial_crash_ball(m_renderer);
     draw_ball(m_renderer);
     SDL_RenderPresent(m_renderer);
 
@@ -207,41 +207,47 @@ void initial_ball()
     }
 }
 
-void initial_crash_ball()
+void initial_crash_ball(SDL_Renderer *Renderer)
 {
-    crash_ball.x = W / 2;
-    crash_ball.y = H - 100;
+    crash_ball.x = int(W / 2);
+    crash_ball.y = int(H - 100);
+    SDL_Rect Ball = {crash_ball.x - rad_ball, 300, 50, 50};
 
     if (rand() % 10 == 0)
         crash_ball.color = 11;
     else
     {
-        switch (rand() % 4)
+        switch (rand() % 5)
         {
         case 0:
         {
-            crash_ball.color = 1;
+            SDL_RenderCopy(Renderer, IMG_LoadTexture(Renderer, "assets/Game/Balls/1.png"), NULL, &Ball);
             break;
         }
         case 1:
         {
-            crash_ball.color = 2;
+            SDL_RenderCopy(Renderer, IMG_LoadTexture(Renderer, "assets/Game/Balls/2.png"), NULL, &Ball);
             break;
         }
         case 2:
         {
-            crash_ball.color = 4;
+            SDL_RenderCopy(Renderer, IMG_LoadTexture(Renderer, "assets/Game/Balls/4.png"), NULL, &Ball);
             break;
         }
         case 3:
         {
-            crash_ball.color = 8;
+            SDL_RenderCopy(Renderer, IMG_LoadTexture(Renderer, "assets/Game/Balls/8.png"), NULL, &Ball);
+            break;
+        }
+        case 4:
+        {
+            SDL_RenderCopy(Renderer, IMG_LoadTexture(Renderer, "assets/Game/Balls/11.png"), NULL, &Ball);
             break;
         }
         }
+        is_crash_ball_crashed = false;
+        is_crash_ball_moved = false;
     }
-    is_crash_ball_crashed = false;
-    is_crash_ball_moved = false;
 }
 
 void draw_ball(SDL_Renderer *Renderer)
@@ -330,6 +336,37 @@ void crashed_ball(SDL_Renderer *Renderer)
             crash_ball.x += dx;
             crash_ball.y += dy;
 
+            SDL_Rect Ball = {int(crash_ball.x - rad_ball), int(crash_ball.y - rad_ball), 50, 50};
+
+            switch (crash_ball.color)
+            {
+            case 1:
+            {
+                SDL_RenderCopy(Renderer, IMG_LoadTexture(Renderer, "assets/Game/Balls/1.png"), NULL, &Ball);
+                break;
+            }
+            case 2:
+            {
+                SDL_RenderCopy(Renderer, IMG_LoadTexture(Renderer, "assets/Game/Balls/2.png"), NULL, &Ball);
+                break;
+            }
+            case 4:
+            {
+                SDL_RenderCopy(Renderer, IMG_LoadTexture(Renderer, "assets/Game/Balls/4.png"), NULL, &Ball);
+                break;
+            }
+            case 8:
+            {
+                SDL_RenderCopy(Renderer, IMG_LoadTexture(Renderer, "assets/Game/Balls/8.png"), NULL, &Ball);
+                break;
+            }
+            case 11:
+            {
+                SDL_RenderCopy(Renderer, IMG_LoadTexture(Renderer, "assets/Game/Balls/11.png"), NULL, &Ball);
+                break;
+            }
+            }
+
             for (int i = 0; i < number_of_lines; i++)
             {
                 for (int j = 0; j < n_colum; j++)
@@ -355,7 +392,7 @@ void crashed_ball(SDL_Renderer *Renderer)
                             {
                                 n_stick++;
                                 crash_ball.isEmpty = false;
-                                initial_crash_ball();
+                                initial_crash_ball(Renderer);
                             }
                             break;
                         }
