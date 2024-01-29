@@ -33,7 +33,7 @@ int dx = 20;
 int dy = 20;
 float dy_initial = 0.1;
 int rad_ball = 25;
-int number_of_lines = 4;
+int number_of_lines = 6;
 int n_colum = W / (2 * rad_ball);
 int n_stick = 0;
 
@@ -203,7 +203,7 @@ void initial_ball()
             x_center = 2 * rad_ball;
         else
             x_center = rad_ball;
-        y_center -= 2 * rad_ball;
+        y_center -= 1.72 * rad_ball;
     }
 }
 
@@ -211,37 +211,39 @@ void initial_crash_ball(SDL_Renderer *Renderer)
 {
     crash_ball.x = int(W / 2);
     crash_ball.y = int(H - 100);
-    SDL_Rect Ball = {crash_ball.x - rad_ball, 300, 50, 50};
+    SDL_Rect Ball = {int(crash_ball.x - rad_ball), int(crash_ball.y - rad_ball), 50, 50};
 
     if (rand() % 10 == 0)
+    {
         crash_ball.color = 11;
+        SDL_RenderCopy(Renderer, IMG_LoadTexture(Renderer, "assets/Game/Balls/11.png"), NULL, &Ball);
+    }
     else
     {
-        switch (rand() % 5)
+        switch (rand() % 4)
         {
         case 0:
         {
+            crash_ball.color = 1;
             SDL_RenderCopy(Renderer, IMG_LoadTexture(Renderer, "assets/Game/Balls/1.png"), NULL, &Ball);
             break;
         }
         case 1:
         {
+            crash_ball.color = 2;
             SDL_RenderCopy(Renderer, IMG_LoadTexture(Renderer, "assets/Game/Balls/2.png"), NULL, &Ball);
             break;
         }
         case 2:
         {
+            crash_ball.color = 4;
             SDL_RenderCopy(Renderer, IMG_LoadTexture(Renderer, "assets/Game/Balls/4.png"), NULL, &Ball);
             break;
         }
         case 3:
         {
+            crash_ball.color = 8;
             SDL_RenderCopy(Renderer, IMG_LoadTexture(Renderer, "assets/Game/Balls/8.png"), NULL, &Ball);
-            break;
-        }
-        case 4:
-        {
-            SDL_RenderCopy(Renderer, IMG_LoadTexture(Renderer, "assets/Game/Balls/11.png"), NULL, &Ball);
             break;
         }
         }
@@ -317,9 +319,37 @@ void draw_ball(SDL_Renderer *Renderer)
 
 void crashed_ball(SDL_Renderer *Renderer)
 {
+    SDL_Rect Ball = {int(crash_ball.x - rad_ball), int(crash_ball.y - rad_ball), 50, 50};
     SDL_Event *event = new SDL_Event();
+    switch (crash_ball.color)
+    {
+    case 1:
+    {
+        SDL_RenderCopy(Renderer, IMG_LoadTexture(Renderer, "assets/Game/Balls/1.png"), NULL, &Ball);
+        break;
+    }
+    case 2:
+    {
+        SDL_RenderCopy(Renderer, IMG_LoadTexture(Renderer, "assets/Game/Balls/2.png"), NULL, &Ball);
+        break;
+    }
+    case 4:
+    {
+        SDL_RenderCopy(Renderer, IMG_LoadTexture(Renderer, "assets/Game/Balls/4.png"), NULL, &Ball);
+        break;
+    }
+    case 8:
+    {
+        SDL_RenderCopy(Renderer, IMG_LoadTexture(Renderer, "assets/Game/Balls/8.png"), NULL, &Ball);
+        break;
+    }
+    case 11:
+    {
+        SDL_RenderCopy(Renderer, IMG_LoadTexture(Renderer, "assets/Game/Balls/11.png"), NULL, &Ball);
+        break;
+    }
+    }
 
-    filledCircleColor(Renderer, crash_ball.x, crash_ball.y, rad_ball, crash_ball.color);
     if (!is_crash_ball_crashed)
     {
         if (!is_crash_ball_moved)
@@ -335,8 +365,6 @@ void crashed_ball(SDL_Renderer *Renderer)
 
             crash_ball.x += dx;
             crash_ball.y += dy;
-
-            SDL_Rect Ball = {int(crash_ball.x - rad_ball), int(crash_ball.y - rad_ball), 50, 50};
 
             switch (crash_ball.color)
             {
@@ -369,7 +397,7 @@ void crashed_ball(SDL_Renderer *Renderer)
 
             for (int i = 0; i < number_of_lines; i++)
             {
-                for (int j = 0; j < n_colum; j++)
+                for (int j = 0; j < n_colum + n_stick; j++)
                 {
                     if (!balls[i][j].isEmpty)
                     {
@@ -387,6 +415,7 @@ void crashed_ball(SDL_Renderer *Renderer)
                             {
                                 balls[i][j].isEmpty = true;
                                 isConnected(i, j);
+                                initial_crash_ball(Renderer);
                             }
                             else
                             {
@@ -413,8 +442,8 @@ void crashed_ball(SDL_Renderer *Renderer)
                     if (!is_crash_ball_crashed)
                     {
                         is_crash_ball_moved = true;
-                        dx = 10 * ((x_mouse - crash_ball.x) / sqrt(pow(x_mouse - crash_ball.x, 2) + pow(y_mouse - crash_ball.y, 2)));
-                        dy = 10 * ((y_mouse - crash_ball.y) / sqrt(pow(x_mouse - crash_ball.x, 2) + pow(y_mouse - crash_ball.y, 2)));
+                        dx *= ((x_mouse - crash_ball.x) / sqrt(pow(x_mouse - crash_ball.x, 2) + pow(y_mouse - crash_ball.y, 2)));
+                        dy *= ((y_mouse - crash_ball.y) / sqrt(pow(x_mouse - crash_ball.x, 2) + pow(y_mouse - crash_ball.y, 2)));
                     }
                 }
             }
