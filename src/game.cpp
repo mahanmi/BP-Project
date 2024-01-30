@@ -12,7 +12,7 @@ struct ball
 {
     int color;
     float x, y;
-    bool isEmpty, shouldFall;
+    bool isEmpty, shouldStick;
 };
 
 const int WIDTH = 625, HIGHT = 1000;
@@ -87,5 +87,16 @@ int main(int argv, char **args)
         SDL_RenderPresent(renderer);
         SDL_Delay(1000 / 60);
         SDL_RenderClear(renderer);
+        for (int i = 0; i < lines; i++)
+        {
+            for (int j = 0; j < columns + stick; j++)
+            {
+                if (!shouldStick(i, j))
+                {
+                    cout << i << " " << j << " ShouldN't stick" << endl;
+                    balls[i][j].isEmpty = true;
+                }
+            }
+        }
     }
 }

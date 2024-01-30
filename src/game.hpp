@@ -9,6 +9,13 @@
 #include <cstdlib>
 #include <vector>
 
+bool areConnected(ball ball1, ball ball2)
+{
+    if (pow(ball1.x - ball2.x, 2) + pow(ball1.y - ball2.y, 2) <= pow(2 * ballRadius, 2))
+        return true;
+    return false;
+}
+
 void window_color(SDL_Renderer *Renderer, int R, int G, int B)
 {
     SDL_SetRenderDrawColor(Renderer, R, G, B, 255);
@@ -341,7 +348,7 @@ void crashed_ball(SDL_Renderer *Renderer)
                             }
                             else
                             {
-                                stick++;
+                                // stick++;
                                 crash_ball.isEmpty = false;
                                 initial_crash_ball(Renderer);
                             }
@@ -373,36 +380,122 @@ void crashed_ball(SDL_Renderer *Renderer)
     }
 }
 
-void connectedToRoof(int i, int j)
+bool shouldStick(int iBall, int jBall)
 {
-    if (i < 0 || i >= lines || j < 0 || j >= columns + stick)
+    if (iBall == lines - 1)
+        return true;
+    if (areConnected(balls[iBall][jBall], balls[iBall + 1][jBall]) && !balls[iBall + 1][jBall].isEmpty)
     {
-        return;
-    }
-
-    if (!balls[i][j].isEmpty)
-    {
-        balls[i][j].shouldFall = false;
-
-        if (i == 0)
+        if (balls[iBall + 1][jBall].shouldStick)
         {
-            return;
+            balls[iBall][jBall].shouldStick = true;
+            return true;
         }
-
-        for (int m = 0; m < lines; m++)
+        else if (shouldStick(iBall + 1, jBall))
         {
-            for (int n = 0; n < columns; n++)
+            balls[iBall][jBall].shouldStick = true;
+            return true;
+        }
+    }
+    if (areConnected(balls[iBall][jBall], balls[iBall + 1][jBall + 1]) && !balls[iBall + 1][jBall + 1].isEmpty)
+    {
+        if (balls[iBall + 1][jBall + 1].shouldStick)
+        {
+            balls[iBall][jBall].shouldStick = true;
+            return true;
+        }
+        else if (shouldStick(iBall + 1, jBall + 1))
+        {
+            balls[iBall][jBall].shouldStick = true;
+            return true;
+        }
+    }
+    if (areConnected(balls[iBall][jBall], balls[iBall][jBall + 1]) && !balls[iBall][jBall + 1].isEmpty)
+    {
+        if (balls[iBall][jBall + 1].shouldStick)
+        {
+            balls[iBall][jBall].shouldStick = true;
+            return true;
+        }
+        else if (shouldStick(iBall, jBall + 1))
+        {
+            balls[iBall][jBall].shouldStick = true;
+            return true;
+        }
+    }
+    if (iBall != 0)
+    {
+        if (areConnected(balls[iBall][jBall], balls[iBall - 1][jBall + 1]) && !balls[iBall - 1][jBall + 1].isEmpty)
+        {
+            if (balls[iBall - 1][jBall + 1].shouldStick)
             {
-                if (!balls[m][n].isEmpty)
-                {
-                    if (sqrt(pow(balls[m][n].x - balls[i][j].x, 2) + pow(balls[m][n].y - balls[i][j].y, 2) <= 2 * ballRadius))
-                    {
-                        connectedToRoof(m, n);
-                    }
-                }
+                balls[iBall][jBall].shouldStick = true;
+                return true;
+            }
+            else if (shouldStick(iBall - 1, jBall + 1))
+            {
+                balls[iBall][jBall].shouldStick = true;
+                return true;
+            }
+        }
+        if (areConnected(balls[iBall][jBall], balls[iBall - 1][jBall]) && !balls[iBall - 1][jBall].isEmpty)
+        {
+            if (balls[iBall - 1][jBall].shouldStick)
+            {
+                balls[iBall][jBall].shouldStick = true;
+                return true;
+            }
+            else if (shouldStick(iBall - 1, jBall))
+            {
+                balls[iBall][jBall].shouldStick = true;
+                return true;
             }
         }
     }
+    if (jBall != 0)
+    {
+        if (areConnected(balls[iBall][jBall], balls[iBall - 1][jBall - 1]) && !balls[iBall - 1][jBall - 1].isEmpty)
+        {
+            if (balls[iBall - 1][jBall - 1].shouldStick)
+            {
+                balls[iBall][jBall].shouldStick = true;
+                return true;
+            }
+            else if (shouldStick(iBall - 1, jBall - 1))
+            {
+                balls[iBall][jBall].shouldStick = true;
+                return true;
+            }
+        }
+        if (areConnected(balls[iBall][jBall], balls[iBall][jBall - 1]) && !balls[iBall][jBall - 1].isEmpty)
+        {
+            if (balls[iBall][jBall - 1].shouldStick)
+            {
+                balls[iBall][jBall].shouldStick = true;
+                return true;
+            }
+            else if (shouldStick(iBall, jBall - 1))
+            {
+                balls[iBall][jBall].shouldStick = true;
+                return true;
+            }
+        }
+        if (areConnected(balls[iBall][jBall], balls[iBall + 1][jBall - 1]) && !balls[iBall + 1][jBall - 1].isEmpty)
+        {
+            if (balls[iBall + 1][jBall - 1].shouldStick)
+            {
+                balls[iBall][jBall].shouldStick = true;
+                return true;
+            }
+            else if (shouldStick(iBall + 1, jBall - 1))
+            {
+                balls[iBall][jBall].shouldStick = true;
+                return true;
+            }
+        }
+    }
+
+    return false;
 }
 
 #endif // !game_hpp
