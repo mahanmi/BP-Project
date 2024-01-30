@@ -1,5 +1,6 @@
 #ifndef gameMenu_hpp
 #define gameMenu_hpp
+#include <iostream>
 #include "SDL_Headers.h"
 
 using namespace std;
