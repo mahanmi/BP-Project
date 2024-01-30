@@ -27,7 +27,6 @@ bool is_crash_ball_moved = false;
 bool is_crash_ball_crashed = false;
 
 vector<ball> crash_balls;
-int length_crash_balls = 0;
 
 int x_mouse;
 int y_mouse;
@@ -87,16 +86,5 @@ int main(int argv, char **args)
         SDL_RenderPresent(renderer);
         SDL_Delay(1000 / 60);
         SDL_RenderClear(renderer);
-        for (int i = 0; i < lines; i++)
-        {
-            for (int j = 0; j < columns + stick; j++)
-            {
-                if (!shouldStick(i, j))
-                {
-                    cout << i << " " << j << " ShouldN't stick" << endl;
-                    balls[i][j].isEmpty = true;
-                }
-            }
-        }
     }
 }

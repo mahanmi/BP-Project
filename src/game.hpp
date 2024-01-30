@@ -247,139 +247,6 @@ void isConnected(int i, int j)
                         isConnected(m, n);
 }
 
-void crashed_ball(SDL_Renderer *Renderer)
-{
-    SDL_Rect Ball = {int(crash_ball.x - ballRadius), int(crash_ball.y - ballRadius), 50, 50};
-    switch (crash_ball.color)
-    {
-    case 1:
-    {
-        SDL_RenderCopy(Renderer, IMG_LoadTexture(Renderer, "assets/Game/Balls/1.png"), NULL, &Ball);
-        break;
-    }
-    case 2:
-    {
-        SDL_RenderCopy(Renderer, IMG_LoadTexture(Renderer, "assets/Game/Balls/2.png"), NULL, &Ball);
-        break;
-    }
-    case 4:
-    {
-        SDL_RenderCopy(Renderer, IMG_LoadTexture(Renderer, "assets/Game/Balls/4.png"), NULL, &Ball);
-        break;
-    }
-    case 8:
-    {
-        SDL_RenderCopy(Renderer, IMG_LoadTexture(Renderer, "assets/Game/Balls/8.png"), NULL, &Ball);
-        break;
-    }
-    case 11:
-    {
-        SDL_RenderCopy(Renderer, IMG_LoadTexture(Renderer, "assets/Game/Balls/11.png"), NULL, &Ball);
-        break;
-    }
-    }
-
-    if (!is_crash_ball_crashed)
-    {
-        if (!is_crash_ball_moved)
-        {
-            aalineRGBA(Renderer, crash_ball.x, crash_ball.y, x_mouse, y_mouse, 255, 0, 0, 255);
-        }
-        else
-        {
-            if (crash_ball.x > WIDTH || crash_ball.x < 0)
-                dx *= -1;
-            if (crash_ball.y > HIGHT || crash_ball.y < 0)
-                dy *= -1;
-
-            crash_ball.x += dx;
-            crash_ball.y += dy;
-
-            switch (crash_ball.color)
-            {
-            case 1:
-            {
-                SDL_RenderCopy(Renderer, IMG_LoadTexture(Renderer, "assets/Game/Balls/1.png"), NULL, &Ball);
-                break;
-            }
-            case 2:
-            {
-                SDL_RenderCopy(Renderer, IMG_LoadTexture(Renderer, "assets/Game/Balls/2.png"), NULL, &Ball);
-                break;
-            }
-            case 4:
-            {
-                SDL_RenderCopy(Renderer, IMG_LoadTexture(Renderer, "assets/Game/Balls/4.png"), NULL, &Ball);
-                break;
-            }
-            case 8:
-            {
-                SDL_RenderCopy(Renderer, IMG_LoadTexture(Renderer, "assets/Game/Balls/8.png"), NULL, &Ball);
-                break;
-            }
-            case 11:
-            {
-                SDL_RenderCopy(Renderer, IMG_LoadTexture(Renderer, "assets/Game/Balls/11.png"), NULL, &Ball);
-                break;
-            }
-            }
-
-            for (int i = 0; i < lines; i++)
-            {
-                for (int j = 0; j < columns + stick; j++)
-                {
-                    if (!balls[i][j].isEmpty)
-                    {
-                        if (pow(balls[i][j].x - crash_ball.x, 2) + pow(balls[i][j].y - crash_ball.y, 2) < pow(2 * ballRadius, 2))
-                        {
-                            is_crash_ball_crashed = true;
-                            if (j >= columns / 2)
-                                crash_ball.x += int(crash_ball.x) % ballRadius;
-                            else
-                                crash_ball.x -= int(crash_ball.x) % ballRadius;
-
-                            crash_ball.y += int(crash_ball.y) % ballRadius;
-
-                            if ((crash_ball.color == 11 && balls[i][j].color != 7) || (crash_ball.color == 1 && (balls[i][j].color % 2 != 0 && balls[i][j].color != 7)) || (crash_ball.color == 2 && (balls[i][j].color == 2 || balls[i][j].color == 3 || balls[i][j].color == 6 || balls[i][j].color == 10)) || (crash_ball.color == 4 && (balls[i][j].color == 4 || balls[i][j].color == 5 || balls[i][j].color == 6 || balls[i][j].color == 12)) || (crash_ball.color == 8 && (balls[i][j].color == 8 || balls[i][j].color == 9 || balls[i][j].color == 10 || balls[i][j].color == 12)))
-                            {
-                                balls[i][j].isEmpty = true;
-                                isConnected(i, j);
-                                initial_crash_ball(Renderer);
-                            }
-                            else
-                            {
-                                // stick++;
-                                crash_ball.isEmpty = false;
-                                initial_crash_ball(Renderer);
-                            }
-                            break;
-                        }
-                    }
-                }
-            }
-        }
-
-        if (SDL_PollEvent(&event))
-        {
-            if (event.type != SDL_KEYDOWN)
-            {
-                x_mouse = event.button.x;
-                y_mouse = event.button.y;
-            }
-
-            if (event.type == SDL_MOUSEBUTTONDOWN || event.type == SDLK_SPACE)
-            {
-                if (!is_crash_ball_crashed)
-                {
-                    is_crash_ball_moved = true;
-                    dx = d * ((x_mouse - crash_ball.x) / sqrt(pow(x_mouse - crash_ball.x, 2) + pow(y_mouse - crash_ball.y, 2)));
-                    dy = d * ((y_mouse - crash_ball.y) / sqrt(pow(x_mouse - crash_ball.x, 2) + pow(y_mouse - crash_ball.y, 2)));
-                }
-            }
-        }
-    }
-}
-
 bool shouldStick(int iBall, int jBall)
 {
     if (iBall == lines - 1)
@@ -496,6 +363,150 @@ bool shouldStick(int iBall, int jBall)
     }
 
     return false;
+}
+
+void crashed_ball(SDL_Renderer *Renderer)
+{
+    SDL_Rect Ball = {int(crash_ball.x - ballRadius), int(crash_ball.y - ballRadius), 50, 50};
+    switch (crash_ball.color)
+    {
+    case 1:
+    {
+        SDL_RenderCopy(Renderer, IMG_LoadTexture(Renderer, "assets/Game/Balls/1.png"), NULL, &Ball);
+        break;
+    }
+    case 2:
+    {
+        SDL_RenderCopy(Renderer, IMG_LoadTexture(Renderer, "assets/Game/Balls/2.png"), NULL, &Ball);
+        break;
+    }
+    case 4:
+    {
+        SDL_RenderCopy(Renderer, IMG_LoadTexture(Renderer, "assets/Game/Balls/4.png"), NULL, &Ball);
+        break;
+    }
+    case 8:
+    {
+        SDL_RenderCopy(Renderer, IMG_LoadTexture(Renderer, "assets/Game/Balls/8.png"), NULL, &Ball);
+        break;
+    }
+    case 11:
+    {
+        SDL_RenderCopy(Renderer, IMG_LoadTexture(Renderer, "assets/Game/Balls/11.png"), NULL, &Ball);
+        break;
+    }
+    }
+
+    if (!is_crash_ball_crashed)
+    {
+        if (!is_crash_ball_moved)
+        {
+            aalineRGBA(Renderer, crash_ball.x, crash_ball.y, x_mouse, y_mouse, 255, 0, 0, 255);
+        }
+        else
+        {
+            if (crash_ball.x > WIDTH || crash_ball.x < 0)
+                dx *= -1;
+            if (crash_ball.y > HIGHT || crash_ball.y < 0)
+                dy *= -1;
+
+            crash_ball.x += dx;
+            crash_ball.y += dy;
+
+            switch (crash_ball.color)
+            {
+            case 1:
+            {
+                SDL_RenderCopy(Renderer, IMG_LoadTexture(Renderer, "assets/Game/Balls/1.png"), NULL, &Ball);
+                break;
+            }
+            case 2:
+            {
+                SDL_RenderCopy(Renderer, IMG_LoadTexture(Renderer, "assets/Game/Balls/2.png"), NULL, &Ball);
+                break;
+            }
+            case 4:
+            {
+                SDL_RenderCopy(Renderer, IMG_LoadTexture(Renderer, "assets/Game/Balls/4.png"), NULL, &Ball);
+                break;
+            }
+            case 8:
+            {
+                SDL_RenderCopy(Renderer, IMG_LoadTexture(Renderer, "assets/Game/Balls/8.png"), NULL, &Ball);
+                break;
+            }
+            case 11:
+            {
+                SDL_RenderCopy(Renderer, IMG_LoadTexture(Renderer, "assets/Game/Balls/11.png"), NULL, &Ball);
+                break;
+            }
+            }
+
+            for (int i = 0; i < lines; i++)
+            {
+                for (int j = 0; j < columns + stick; j++)
+                {
+                    if (!balls[i][j].isEmpty)
+                    {
+                        if (areConnected(crash_ball, balls[i][j]))
+                        {
+                            is_crash_ball_crashed = true;
+                            if (j >= columns / 2)
+                                crash_ball.x += int(crash_ball.x) % ballRadius;
+                            else
+                                crash_ball.x -= int(crash_ball.x) % ballRadius;
+
+                            crash_ball.y += int(crash_ball.y) % ballRadius;
+
+                            if ((crash_ball.color == 11 && balls[i][j].color != 7) || (crash_ball.color == 1 && (balls[i][j].color % 2 != 0 && balls[i][j].color != 7)) || (crash_ball.color == 2 && (balls[i][j].color == 2 || balls[i][j].color == 3 || balls[i][j].color == 6 || balls[i][j].color == 10)) || (crash_ball.color == 4 && (balls[i][j].color == 4 || balls[i][j].color == 5 || balls[i][j].color == 6 || balls[i][j].color == 12)) || (crash_ball.color == 8 && (balls[i][j].color == 8 || balls[i][j].color == 9 || balls[i][j].color == 10 || balls[i][j].color == 12)))
+                            {
+                                balls[i][j].isEmpty = true;
+                                isConnected(i, j);
+                                initial_crash_ball(Renderer);
+                            }
+                            else
+                            {
+                                // stick++;
+                                crash_ball.isEmpty = false;
+                                initial_crash_ball(Renderer);
+                            }
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+
+        if (SDL_PollEvent(&event))
+        {
+            if (event.type != SDL_KEYDOWN)
+            {
+                x_mouse = event.button.x;
+                y_mouse = event.button.y;
+            }
+
+            if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_SPACE)
+            {
+                if (!is_crash_ball_crashed)
+                {
+                    is_crash_ball_moved = true;
+                    dx = d * ((x_mouse - crash_ball.x) / sqrt(pow(x_mouse - crash_ball.x, 2) + pow(y_mouse - crash_ball.y, 2)));
+                    dy = d * ((y_mouse - crash_ball.y) / sqrt(pow(x_mouse - crash_ball.x, 2) + pow(y_mouse - crash_ball.y, 2)));
+                    for (int i = 0; i < lines; i++)
+                    {
+                        for (int j = 0; j < columns + stick; j++)
+                        {
+                            if (!shouldStick(i, j))
+                            {
+                                cout << i << " " << j << " ShouldN't stick" << endl;
+                                balls[i][j].isEmpty = true;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
 }
 
 #endif // !game_hpp
