@@ -18,7 +18,6 @@ bool areConnected(ball ball1, ball ball2)
 
 bool shouldStick(int iBall, int jBall)
 {
-
     if (iBall == lines - 1)
         return true;
 
@@ -28,7 +27,7 @@ bool shouldStick(int iBall, int jBall)
     if (iBall % 2 == 0)
     {
         if (iBall < lines - 1 && !balls[iBall + 1][jBall].isEmpty)
-            if (balls[iBall + 1][jBall].check != 0) // North East
+            if (balls[iBall + 1][jBall].check != 0) // North
             {
                 balls[iBall][jBall].check = balls[iBall + 1][jBall].check;
                 return true;
@@ -59,9 +58,9 @@ bool shouldStick(int iBall, int jBall)
             }
         }
 
-        /* if (iBall != 0 && !balls[iBall - 1][jBall].isEmpty)
+        if (iBall != 0 && !balls[iBall - 1][jBall].isEmpty)
         {
-            if (balls[iBall - 1][jBall].check != 0) // South East
+            if (balls[iBall - 1][jBall].check != 0) // South
             {
                 balls[iBall][jBall].check = balls[iBall - 1][jBall].check;
                 return true;
@@ -75,7 +74,7 @@ bool shouldStick(int iBall, int jBall)
                 balls[iBall][jBall].check = balls[iBall - 1][jBall - 1].check;
                 return true;
             }
-        } */
+        }
 
         // 2nd check
 
@@ -86,6 +85,7 @@ bool shouldStick(int iBall, int jBall)
             if (shouldStick(iBall + 1, jBall)) // North
             {
                 balls[iBall][jBall].check = 1;
+
                 return true;
             }
         }
@@ -94,6 +94,7 @@ bool shouldStick(int iBall, int jBall)
             if (shouldStick(iBall + 1, jBall - 1)) // North West
             {
                 balls[iBall][jBall].check = 1;
+
                 return true;
             }
         }
@@ -102,22 +103,7 @@ bool shouldStick(int iBall, int jBall)
             if (shouldStick(iBall, jBall - 1)) // West
             {
                 balls[iBall][jBall].check = 1;
-                return true;
-            }
-        }
-        if (jBall < columns - 1 && !balls[iBall][jBall + 1].isEmpty)
-        {
-            if (shouldStick(iBall, jBall + 1)) // East
-            {
-                balls[iBall][jBall].check = 1;
-                return true;
-            }
-        }
-        if (iBall != 0 && jBall < columns - 1 && !balls[iBall - 1][jBall - 1].isEmpty)
-        {
-            if (shouldStick(iBall - 1, jBall + 1)) // South East
-            {
-                balls[iBall][jBall].check = 1;
+
                 return true;
             }
         }
@@ -126,6 +112,25 @@ bool shouldStick(int iBall, int jBall)
             if (shouldStick(iBall - 1, jBall)) // South
             {
                 balls[iBall][jBall].check = 1;
+
+                return true;
+            }
+        }
+        if (jBall < columns - 1 && !balls[iBall][jBall + 1].isEmpty)
+        {
+            if (shouldStick(iBall, jBall + 1)) // East
+            {
+                balls[iBall][jBall].check = 1;
+
+                return true;
+            }
+        }
+        if (iBall != 0 && jBall < columns - 1 && !balls[iBall - 1][jBall - 1].isEmpty)
+        {
+            if (shouldStick(iBall - 1, jBall - 1)) // South West
+            {
+                balls[iBall][jBall].check = 1;
+
                 return true;
             }
         }
@@ -139,7 +144,7 @@ bool shouldStick(int iBall, int jBall)
                 balls[iBall][jBall].check = balls[iBall + 1][jBall].check;
                 return true;
             }
-        if (jBall != columns - 1 && iBall < lines - 1)
+        if (jBall != columns - 1 && iBall < lines - 1 && !balls[iBall + 1][jBall + 1].isEmpty)
             if (balls[iBall + 1][jBall + 1].check != 0) // North East
             {
                 balls[iBall][jBall].check = balls[iBall + 1][jBall + 1].check;
@@ -161,7 +166,7 @@ bool shouldStick(int iBall, int jBall)
                 return true;
             }
         }
-        /* if (iBall != 0 && !balls[iBall - 1][jBall].isEmpty)
+        if (iBall != 0 && !balls[iBall - 1][jBall].isEmpty)
         {
             if (balls[iBall - 1][jBall].check != 0) // South
             {
@@ -176,7 +181,7 @@ bool shouldStick(int iBall, int jBall)
                 balls[iBall][jBall].check = balls[iBall - 1][jBall - 1].check;
                 return true;
             }
-        } */
+        }
 
         // 2nd check
 
@@ -203,6 +208,16 @@ bool shouldStick(int iBall, int jBall)
             if (shouldStick(iBall, jBall + 1)) // East
             {
                 balls[iBall][jBall].check = 1;
+
+                return true;
+            }
+        }
+        if (iBall != 0 && !balls[iBall - 1][jBall].isEmpty)
+        {
+            if (shouldStick(iBall - 1, jBall)) // South
+            {
+                balls[iBall][jBall].check = 1;
+
                 return true;
             }
         }
@@ -446,23 +461,29 @@ void initial_crash_ball(SDL_Renderer *Renderer)
     }
     if (is_crash_ball_crashed)
     {
-        for (int i = 0; i < lines - 1; i++)
+        bool repeat = true;
+        while (repeat)
         {
-            for (int j = 0; j < columns + stick; j++)
+            repeat = false;
+            for (int i = 0; i < lines - 1; i++)
             {
-                balls[i][j].check = 0;
-            }
-        }
-        for (int i = 0; i < lines - 1; i++)
-        {
-            for (int j = 0; j < columns + stick; j++)
-            {
-                if (!balls[i][j].isEmpty)
+                for (int j = 0; j < columns + stick; j++)
                 {
-                    if (!shouldStick(i, j))
+                    balls[i][j].check = 0;
+                }
+            }
+            for (int i = lines - 1; i >= 0; i--)
+            {
+                for (int j = 0; j < columns + stick; j++)
+                {
+                    if (!balls[i][j].isEmpty)
                     {
-                        cout << i << " " << j << " ShouldN't stick" << endl;
-                        balls[i][j].isEmpty = true;
+                        if (!shouldStick(i, j))
+                        {
+                            cout << i << " " << j << " ShouldN't stick" << endl;
+                            balls[i][j].isEmpty = true;
+                            repeat = true;
+                        }
                     }
                 }
             }
