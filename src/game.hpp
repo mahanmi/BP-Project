@@ -365,15 +365,15 @@ void crashed_ball(SDL_Renderer *Renderer)
             {
                 x_mouse = event.button.x;
                 y_mouse = event.button.y;
+            }
 
-                if (event.type == SDL_MOUSEBUTTONDOWN)
+            if (event.type == SDL_MOUSEBUTTONDOWN || event.type == SDLK_SPACE)
+            {
+                if (!is_crash_ball_crashed)
                 {
-                    if (!is_crash_ball_crashed)
-                    {
-                        is_crash_ball_moved = true;
-                        dx = d * ((x_mouse - crash_ball.x) / sqrt(pow(x_mouse - crash_ball.x, 2) + pow(y_mouse - crash_ball.y, 2)));
-                        dy = d * ((y_mouse - crash_ball.y) / sqrt(pow(x_mouse - crash_ball.x, 2) + pow(y_mouse - crash_ball.y, 2)));
-                    }
+                    is_crash_ball_moved = true;
+                    dx = d * ((x_mouse - crash_ball.x) / sqrt(pow(x_mouse - crash_ball.x, 2) + pow(y_mouse - crash_ball.y, 2)));
+                    dy = d * ((y_mouse - crash_ball.y) / sqrt(pow(x_mouse - crash_ball.x, 2) + pow(y_mouse - crash_ball.y, 2)));
                 }
             }
         }
