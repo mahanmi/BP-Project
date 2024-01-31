@@ -10,7 +10,6 @@ using namespace std;
 
 struct ball
 {
-    // should add i & j
     int color;
     float x, y;
     bool isEmpty, shouldStick;
@@ -43,13 +42,15 @@ SDL_Rect Ball2 = {int(crash_balls[1].x - ballRadius), int(crash_balls[1].y - bal
 int x_mouse;
 int y_mouse;
 
+SDL_Texture *GameBG = IMG_LoadTexture(renderer, "assets/Game/GameBG2.png");
+
 #include "game.hpp"
 
 int main(int argv, char **args)
 {
     srand(time(0));
 
-    window_color(renderer, 0, 0, 0);
+    SDL_RenderCopy(renderer, GameBG, NULL, NULL);
 
     bool pause = false;
 
@@ -145,7 +146,8 @@ int main(int argv, char **args)
 
     while (1)
     {
-        rect(renderer, 0, 0, WIDTH, HIGHT, 0, 0, 0, 1);
+        SDL_RenderCopy(renderer, GameBG, NULL, NULL);
+
         crashed_ball(renderer);
         if (!pause)
             initial_ball();
