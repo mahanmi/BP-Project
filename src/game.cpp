@@ -10,7 +10,6 @@ using namespace std;
 
 struct ball
 {
-    // should add i & j
     int color;
     float x, y;
     bool isEmpty, shouldStick;
@@ -42,13 +41,15 @@ int lines = 6;
 int columns = WIDTH / (2 * ballRadius);
 int stick = 0;
 
+SDL_Texture *GameBG = IMG_LoadTexture(renderer, "assets/Game/GameBG2.png");
+
 #include "game.hpp"
 
 int main(int argv, char **args)
 {
     srand(time(0));
 
-    window_color(renderer, 0, 0, 0);
+    SDL_RenderCopy(renderer, GameBG, NULL, NULL);
 
     bool pause = false;
 
@@ -66,7 +67,8 @@ int main(int argv, char **args)
 
     while (1)
     {
-        rect(renderer, 0, 0, WIDTH, HIGHT, 0, 0, 0, 1);
+        SDL_RenderCopy(renderer, GameBG, NULL, NULL);
+
         crashed_ball(renderer);
         if (!pause)
             initial_ball();
