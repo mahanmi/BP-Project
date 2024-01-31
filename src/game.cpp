@@ -10,6 +10,7 @@ using namespace std;
 
 struct ball
 {
+    int i, j;
     int color;
     float x, y;
     bool isEmpty, shouldStick;

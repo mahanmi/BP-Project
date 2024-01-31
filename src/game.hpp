@@ -300,6 +300,8 @@ void initial_ball()
         {
             new_ball.x = x_center;
             new_ball.y = y_center;
+            new_ball.i = i;
+            new_ball.j = j;
             int rand_col = rand() % 22;
             if (rand_col == 20)
             {
@@ -664,7 +666,7 @@ void crashed_ball(SDL_Renderer *Renderer)
                 break;
             }
             }
-
+            bool shouldRemain = true;
             for (int i = 0; i < lines && !is_crash_ball_crashed; i++)
             {
                 for (int j = 0; j < columns + stick && !is_crash_ball_crashed; j++)
@@ -680,11 +682,20 @@ void crashed_ball(SDL_Renderer *Renderer)
                             if ((crash_balls[0].color == 11 && balls[i][j].color != 7) || (crash_balls[0].color == 1 && (balls[i][j].color % 2 != 0 && balls[i][j].color != 7)) || (crash_balls[0].color == 2 && (balls[i][j].color == 2 || balls[i][j].color == 3 || balls[i][j].color == 6 || balls[i][j].color == 10)) || (crash_balls[0].color == 4 && (balls[i][j].color == 4 || balls[i][j].color == 5 || balls[i][j].color == 6 || balls[i][j].color == 12)) || (crash_balls[0].color == 8 && (balls[i][j].color == 8 || balls[i][j].color == 9 || balls[i][j].color == 10 || balls[i][j].color == 12)))
                             {
                                 isConnected(i, j);
-                                crashed.push_back(crash_balls[0]);
+                                // crashed.push_back(crash_balls[0]);
+                                if (crashed.size() > 1)
+                                    shouldRemain = false;
+                                for (int k = crashed.size(); k > 0; k--)
+                                {
+                                    cout << crashed[k - 1].x << " " << crashed[k - 1].y << endl;
+                                    if (shouldRemain)
+                                        balls[crashed[k - 1].i][crashed[k - 1].j].isEmpty = false;
+                                    crashed.pop_back();
+                                }
                                 crash_balls[0].isEmpty = true;
                                 initial_crash_ball(Renderer);
                             }
-                            else
+                            else if (shouldRemain)
                             {
                                 // stick++
                                 initial_crash_ball(Renderer);
