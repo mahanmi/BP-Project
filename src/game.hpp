@@ -290,7 +290,7 @@ void initial_ball()
 {
     balls.resize(lines);
 
-    int x_center = ballRadius;
+    int x_center = 12 + ballRadius;
     int y_center = 7 * ballRadius;
 
     ball new_ball;
@@ -360,13 +360,10 @@ void initial_ball()
 
             balls[i].push_back(new_ball);
             x_center += 2 * ballRadius;
-            balls[i][j].y += dy_initial;
         }
-        if (i % 2 == 0)
-            x_center = 2 * ballRadius;
-        else
-            x_center = ballRadius;
-        y_center -= 1.72 * ballRadius;
+
+        x_center = ballRadius + 12;
+        y_center -= 2 * ballRadius;
     }
 }
 
@@ -379,7 +376,7 @@ void draw_ball(SDL_Renderer *Renderer)
             if (!balls[i][j].isEmpty)
             {
                 int x_center = balls[i][j].x, y_center = balls[i][j].y;
-                SDL_Rect Ball = {x_center - ballRadius, y_center - ballRadius, 50, 50};
+                SDL_Rect Ball = {x_center - ballRadius, y_center - ballRadius, 2 * ballRadius, 2 * ballRadius};
                 switch (balls[i][j].color)
                 {
                 case 1:
@@ -437,14 +434,15 @@ void draw_ball(SDL_Renderer *Renderer)
 
 void initial_crash_ball(SDL_Renderer *Renderer)
 {
-    crash_ball.x = int(WIDTH / 2);
-    crash_ball.y = int(HIGHT - 100);
-    SDL_Rect Ball = {int(crash_ball.x - ballRadius), int(crash_ball.y - ballRadius), 50, 50};
+    crash_balls[0].x = int(WIDTH / 2);
+    crash_balls[0].y = int(HIGHT - 100);
+    crash_balls[0].isEmpty = false;
+    crash_balls[0].color = crash_balls[1].color;
 
     if (rand() % 10 == 0)
     {
-        crash_ball.color = 11;
-        SDL_RenderCopy(Renderer, IMG_LoadTexture(Renderer, "assets/Game/Balls/11.png"), NULL, &Ball);
+        crash_balls[1].color = 11;
+        SDL_RenderCopy(Renderer, IMG_LoadTexture(Renderer, "assets/Game/Balls/11.png"), NULL, &Ball2);
     }
     else
     {
@@ -452,30 +450,60 @@ void initial_crash_ball(SDL_Renderer *Renderer)
         {
         case 0:
         {
-            crash_ball.color = 1;
-            SDL_RenderCopy(Renderer, IMG_LoadTexture(Renderer, "assets/Game/Balls/1.png"), NULL, &Ball);
+            crash_balls[1].color = 1;
+            SDL_RenderCopy(Renderer, IMG_LoadTexture(Renderer, "assets/Game/Balls/1.png"), NULL, &Ball2);
             break;
         }
         case 1:
         {
-            crash_ball.color = 2;
-            SDL_RenderCopy(Renderer, IMG_LoadTexture(Renderer, "assets/Game/Balls/2.png"), NULL, &Ball);
+            crash_balls[1].color = 2;
+            SDL_RenderCopy(Renderer, IMG_LoadTexture(Renderer, "assets/Game/Balls/2.png"), NULL, &Ball2);
             break;
         }
         case 2:
         {
-            crash_ball.color = 4;
-            SDL_RenderCopy(Renderer, IMG_LoadTexture(Renderer, "assets/Game/Balls/4.png"), NULL, &Ball);
+            crash_balls[1].color = 4;
+            SDL_RenderCopy(Renderer, IMG_LoadTexture(Renderer, "assets/Game/Balls/4.png"), NULL, &Ball2);
             break;
         }
         case 3:
         {
-            crash_ball.color = 8;
-            SDL_RenderCopy(Renderer, IMG_LoadTexture(Renderer, "assets/Game/Balls/8.png"), NULL, &Ball);
+            crash_balls[1].color = 8;
+            SDL_RenderCopy(Renderer, IMG_LoadTexture(Renderer, "assets/Game/Balls/8.png"), NULL, &Ball2);
             break;
         }
         }
     }
+
+    switch (crash_balls[0].color)
+    {
+    case 1:
+    {
+        SDL_RenderCopy(Renderer, IMG_LoadTexture(Renderer, "assets/Game/Balls/1.png"), NULL, &Ball);
+        break;
+    }
+    case 2:
+    {
+        SDL_RenderCopy(Renderer, IMG_LoadTexture(Renderer, "assets/Game/Balls/2.png"), NULL, &Ball);
+        break;
+    }
+    case 4:
+    {
+        SDL_RenderCopy(Renderer, IMG_LoadTexture(Renderer, "assets/Game/Balls/4.png"), NULL, &Ball);
+        break;
+    }
+    case 8:
+    {
+        SDL_RenderCopy(Renderer, IMG_LoadTexture(Renderer, "assets/Game/Balls/8.png"), NULL, &Ball);
+        break;
+    }
+    case 11:
+    {
+        SDL_RenderCopy(Renderer, IMG_LoadTexture(Renderer, "assets/Game/Balls/11.png"), NULL, &Ball);
+        break;
+    }
+    }
+
     if (is_crash_ball_crashed)
     {
         bool repeat = true;
@@ -512,25 +540,26 @@ void initial_crash_ball(SDL_Renderer *Renderer)
 
 void isConnected(int i, int j)
 {
-    if (i < 0 || i >= lines + stick || j < 0 || j >= columns)
-    {
+    if (i < 0 || i > lines || j < 0 || j > columns)
         return;
-    }
-    crash_balls.push_back(balls[i][j]);
+
+    crashed.push_back(balls[i][j]);
     balls[i][j].isEmpty = true;
 
     for (int m = 0; m < lines; m++)
         for (int n = 0; n < columns; n++)
             if (!balls[m][n].isEmpty && balls[m][n].color != 7)
-                if (pow(balls[m][n].x - balls[i][j].x, 2) + pow(balls[m][n].y - balls[i][j].y, 2) <= pow(2 * ballRadius, 2))
+                if (areConnected(balls[i][j], balls[m][n]))
                     if (balls[i][j].color == balls[m][n].color || (balls[i][j].color == 1 && balls[m][n].color % 2 != 0) || (balls[i][j].color == 2 && (balls[m][n].color == 3 || balls[m][n].color == 6 || balls[m][n].color == 10)) || (balls[i][j].color == 4 && (balls[m][n].color == 5 || balls[m][n].color == 6 || balls[m][n].color == 12)) || (balls[i][j].color == 8 && (balls[m][n].color == 9 || balls[m][n].color == 10 || balls[m][n].color == 12)) || (balls[i][j].color == 3 && (balls[m][n].color == 1 || balls[m][n].color == 2)) || (balls[i][j].color == 5 && (balls[m][n].color == 1 || balls[m][n].color == 4)) || (balls[i][j].color == 9 && (balls[m][n].color == 1 || balls[m][n].color == 8)) || (balls[i][j].color == 6 && (balls[m][n].color == 2 || balls[m][n].color == 4)) || (balls[i][j].color == 10 && (balls[m][n].color == 2 || balls[m][n].color == 8)) || (balls[i][j].color == 12 && (balls[m][n].color == 4 || balls[m][n].color == 8)))
                         isConnected(m, n);
+
+    return;
 }
 
 void crashed_ball(SDL_Renderer *Renderer)
 {
-    SDL_Rect Ball = {int(crash_ball.x - ballRadius), int(crash_ball.y - ballRadius), 50, 50};
-    switch (crash_ball.color)
+    SDL_Rect Ball = {int(crash_balls[0].x - ballRadius), int(crash_balls[0].y - ballRadius), 2 * ballRadius, 2 * ballRadius};
+    switch (crash_balls[0].color)
     {
     case 1:
     {
@@ -558,24 +587,53 @@ void crashed_ball(SDL_Renderer *Renderer)
         break;
     }
     }
+    SDL_Rect Ball2 = {int(crash_balls[1].x - ballRadius), int(crash_balls[1].y - ballRadius), 40, 40};
+    switch (crash_balls[1].color)
+    {
+    case 1:
+    {
+        SDL_RenderCopy(Renderer, IMG_LoadTexture(Renderer, "assets/Game/Balls/1.png"), NULL, &Ball2);
+        break;
+    }
+    case 2:
+    {
+        SDL_RenderCopy(Renderer, IMG_LoadTexture(Renderer, "assets/Game/Balls/2.png"), NULL, &Ball2);
+        break;
+    }
+    case 4:
+    {
+        SDL_RenderCopy(Renderer, IMG_LoadTexture(Renderer, "assets/Game/Balls/4.png"), NULL, &Ball2);
+        break;
+    }
+    case 8:
+    {
+        SDL_RenderCopy(Renderer, IMG_LoadTexture(Renderer, "assets/Game/Balls/8.png"), NULL, &Ball2);
+        break;
+    }
+    case 11:
+    {
+        SDL_RenderCopy(Renderer, IMG_LoadTexture(Renderer, "assets/Game/Balls/11.png"), NULL, &Ball2);
+        break;
+    }
+    }
 
     if (!is_crash_ball_crashed)
     {
         if (!is_crash_ball_moved)
         {
-            aalineRGBA(Renderer, crash_ball.x, crash_ball.y, x_mouse, y_mouse, 255, 0, 0, 255);
+            aalineRGBA(Renderer, crash_balls[0].x, crash_balls[0].y, x_mouse, y_mouse, 255, 0, 0, 255);
         }
         else
         {
-            if (crash_ball.x > WIDTH || crash_ball.x < 0)
+            if (crash_balls[0].x > WIDTH || crash_balls[0].x < 0)
                 dx *= -1;
-            if (crash_ball.y > HIGHT || crash_ball.y < 0)
+            if (crash_balls[0].y > HIGHT || crash_balls[0].y < 0)
                 dy *= -1;
 
-            crash_ball.x += dx;
-            crash_ball.y += dy;
+            crash_balls[0].x += dx;
+            crash_balls[0].y += dy;
 
-            switch (crash_ball.color)
+            switch (crash_balls[0].color)
             {
             case 1:
             {
@@ -610,28 +668,27 @@ void crashed_ball(SDL_Renderer *Renderer)
                 {
                     if (!balls[i][j].isEmpty)
                     {
-                        if (areConnected(crash_ball, balls[i][j]))
+                        if (areConnected(crash_balls[0], balls[i][j]))
                         {
+
                             is_crash_ball_crashed = true;
-                            if (j >= columns / 2)
-                                crash_ball.x += int(crash_ball.x) % ballRadius;
-                            else
-                                crash_ball.x -= int(crash_ball.x) % ballRadius;
+                            crash_balls[0].isEmpty = false;
 
-                            crash_ball.y += int(crash_ball.y) % ballRadius;
-
-                            if ((crash_ball.color == 11 && balls[i][j].color != 7) || (crash_ball.color == 1 && (balls[i][j].color % 2 != 0 && balls[i][j].color != 7)) || (crash_ball.color == 2 && (balls[i][j].color == 2 || balls[i][j].color == 3 || balls[i][j].color == 6 || balls[i][j].color == 10)) || (crash_ball.color == 4 && (balls[i][j].color == 4 || balls[i][j].color == 5 || balls[i][j].color == 6 || balls[i][j].color == 12)) || (crash_ball.color == 8 && (balls[i][j].color == 8 || balls[i][j].color == 9 || balls[i][j].color == 10 || balls[i][j].color == 12)))
+                            if ((crash_balls[0].color == 11 && balls[i][j].color != 7) || (crash_balls[0].color == 1 && (balls[i][j].color % 2 != 0 && balls[i][j].color != 7)) || (crash_balls[0].color == 2 && (balls[i][j].color == 2 || balls[i][j].color == 3 || balls[i][j].color == 6 || balls[i][j].color == 10)) || (crash_balls[0].color == 4 && (balls[i][j].color == 4 || balls[i][j].color == 5 || balls[i][j].color == 6 || balls[i][j].color == 12)) || (crash_balls[0].color == 8 && (balls[i][j].color == 8 || balls[i][j].color == 9 || balls[i][j].color == 10 || balls[i][j].color == 12)))
                             {
-                                balls[i][j].isEmpty = true;
                                 isConnected(i, j);
+                                crashed.push_back(crash_balls[0]);
+                                crash_balls[0].isEmpty = true;
                                 initial_crash_ball(Renderer);
                             }
                             else
                             {
-                                // stick++;
-                                crash_ball.isEmpty = false;
+                                // stick++
                                 initial_crash_ball(Renderer);
                             }
+                            for (int n = 0; n < lines; n++)
+                                for (int m = 0; m < columns; m++)
+                                    balls[n][m].y += 2 * ballRadius;
                         }
                     }
                 }
@@ -645,13 +702,13 @@ void crashed_ball(SDL_Renderer *Renderer)
                 x_mouse = event.button.x;
                 y_mouse = event.button.y;
             }
-            if ((event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_SPACE) || event.type == SDL_MOUSEBUTTONDOWN)
+            if (event.type == SDL_MOUSEBUTTONDOWN)
             {
                 if (!is_crash_ball_crashed)
                 {
                     is_crash_ball_moved = true;
-                    dx = d * ((x_mouse - crash_ball.x) / sqrt(pow(x_mouse - crash_ball.x, 2) + pow(y_mouse - crash_ball.y, 2)));
-                    dy = d * ((y_mouse - crash_ball.y) / sqrt(pow(x_mouse - crash_ball.x, 2) + pow(y_mouse - crash_ball.y, 2)));
+                    dx = d * ((x_mouse - crash_balls[0].x) / sqrt(pow(x_mouse - crash_balls[0].x, 2) + pow(y_mouse - crash_balls[0].y, 2)));
+                    dy = d * ((y_mouse - crash_balls[0].y) / sqrt(pow(x_mouse - crash_balls[0].x, 2) + pow(y_mouse - crash_balls[0].y, 2)));
                 }
             }
         }
