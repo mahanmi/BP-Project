@@ -290,7 +290,7 @@ void initial_ball()
 {
     balls.resize(lines);
 
-    int x_center = 12 + ballRadius;
+    int x_center = ballRadius;
     int y_center = 7 * ballRadius;
 
     ball new_ball;
@@ -360,10 +360,13 @@ void initial_ball()
 
             balls[i].push_back(new_ball);
             x_center += 2 * ballRadius;
+            balls[i][j].y += dy_initial;
         }
-
-        x_center = ballRadius + 12;
-        y_center -= 2 * ballRadius;
+        if (i % 2 == 0)
+            x_center = 2 * ballRadius;
+        else
+            x_center = ballRadius;
+        y_center -= 1.72 * ballRadius;
     }
 }
 
@@ -686,9 +689,6 @@ void crashed_ball(SDL_Renderer *Renderer)
                                 // stick++
                                 initial_crash_ball(Renderer);
                             }
-                            for (int n = 0; n < lines; n++)
-                                for (int m = 0; m < columns; m++)
-                                    balls[n][m].y += 2 * ballRadius;
                         }
                     }
                 }
