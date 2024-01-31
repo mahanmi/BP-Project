@@ -50,6 +50,8 @@ int main(int argv, char **args)
 
     window_color(renderer, 0, 0, 0);
 
+    bool pause = false;
+
     initial_ball();
     for (int j = 0; j < columns; j++)
         balls[lines - 1][j].isEmpty = false, balls[lines - 1][j].shouldStick = true, balls[lines - 1][j].check = 1;
@@ -66,7 +68,8 @@ int main(int argv, char **args)
     {
         rect(renderer, 0, 0, WIDTH, HIGHT, 0, 0, 0, 1);
         crashed_ball(renderer);
-        initial_ball();
+        if (!pause)
+            initial_ball();
         draw_ball(renderer);
         if (SDL_PollEvent(&event))
         {
@@ -81,6 +84,8 @@ int main(int argv, char **args)
                 SDL_Quit();
                 return 0;
             }
+            case SDLK_p:
+                pause = !pause;
             }
             if (event.button.x > 0 && event.button.x < WIDTH && event.button.y > 0 && event.button.y < HIGHT)
             {
@@ -88,7 +93,7 @@ int main(int argv, char **args)
                 y_mouse = event.button.y;
             }
         }
-        
+
         SDL_RenderPresent(renderer);
         SDL_Delay(1000 / 60);
         SDL_RenderClear(renderer);
