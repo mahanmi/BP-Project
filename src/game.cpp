@@ -36,7 +36,7 @@ bool is_crash_ball_crashed = false;
 
 vector<ball> crashed;
 
-ball crash_balls[3];
+ball crash_balls[2];
 SDL_Rect Ball = {int(crash_balls[0].x - ballRadius), int(crash_balls[0].y - ballRadius), 2 * ballRadius, 2 * ballRadius};
 SDL_Rect Ball2 = {int(crash_balls[1].x - ballRadius), int(crash_balls[1].y - ballRadius), 2 * ballRadius, 2 * ballRadius};
 
