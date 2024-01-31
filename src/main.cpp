@@ -51,6 +51,7 @@ Mix_Chunk *hover = Mix_LoadWAV("assets/Sounds/hover.mp3");
 
 TTF_Font *Leaderboard = TTF_OpenFont("assets/Fonts/Poppins-Bold.ttf", 45);
 TTF_Font *Settings = TTF_OpenFont("assets/Fonts/Digitalt.ttf", 38);
+TTF_Font *GM = TTF_OpenFont("assets/Fonts/Digitalt.ttf", 28);
 
 int main(int argc, char const *argv[])
 {
@@ -126,11 +127,10 @@ int main(int argc, char const *argv[])
       if (play.wasClicked)
       {
         SDL_Texture *PlayBG = IMG_LoadTexture(renderer, "assets/GameMode/GameMode.png");
-        button timerGM = {151, 54, 63, 291, 0, 0, 0, 0, 0, false, false, IMG_LoadTexture(renderer, "assets/GameMode/Timer.png"), IMG_LoadTexture(renderer, "assets/GameMode/TimerHovered.png"), 0, hover, click};
-        button classicGM = {151, 54, 234, 291, 0, 0, 0, 0, 0, true, false, IMG_LoadTexture(renderer, "assets/GameMode/Classic.png"), IMG_LoadTexture(renderer, "assets/GameMode/ClassicHovered.png"), 0, hover, click};
-        button infiniteGM = {151, 54, 405, 291, 0, 0, 0, 0, 0, false, false, IMG_LoadTexture(renderer, "assets/GameMode/Infinite.png"), IMG_LoadTexture(renderer, "assets/GameMode/InfiniteHovered.png"), 0, hover, click};
+        button timerGM = {142, 270, 64, 432, 0, 0, 0, 0, 0, false, false, IMG_LoadTexture(renderer, "assets/GameMode/Timer.png"), IMG_LoadTexture(renderer, "assets/GameMode/TimerHover.png"), IMG_LoadTexture(renderer, "assets/GameMode/timerSelected.png"), hover, click, false};
+        button classicGM = {142, 270, 243, 432, 0, 0, 0, 0, 0, true, false, IMG_LoadTexture(renderer, "assets/GameMode/Classic.png"), IMG_LoadTexture(renderer, "assets/GameMode/ClassicHover.png"), IMG_LoadTexture(renderer, "assets/GameMode/classicSelected.png"), hover, click, true};
+        button infiniteGM = {142, 270, 422, 432, 0, 0, 0, 0, 0, false, false, IMG_LoadTexture(renderer, "assets/GameMode/Infinite.png"), IMG_LoadTexture(renderer, "assets/GameMode/InfiniteHover.png"), IMG_LoadTexture(renderer, "assets/GameMode/InfiniteSelected.png"), hover, click, false};
         button start = {198, 91, 219, 829, 0, 0, 0, 0, 5, false, false, IMG_LoadTexture(renderer, "assets/GameMode/startButton.png"), IMG_LoadTexture(renderer, "assets/GameMode/startButtonHover.png"), IMG_LoadTexture(renderer, "assets/GameMode/startButtonClick.png"), hover, click};
-
         while (play.wasClicked)
         {
           while (SDL_PollEvent(&event) && play.wasClicked)
@@ -146,17 +146,145 @@ int main(int argc, char const *argv[])
               play.wasClicked = false;
               break;
             }
+
+            if (isClicked(event, timerGM.x, timerGM.y, timerGM.w, timerGM.h, timerGM.wasClicked, timerGM.clickSound))
+            {
+              timerGM.isSelected = true;
+              classicGM.isSelected = false;
+              infiniteGM.isSelected = false;
+            }
+            else if (isClicked(event, classicGM.x, classicGM.y, classicGM.w, classicGM.h, classicGM.wasClicked, classicGM.clickSound))
+            {
+              timerGM.isSelected = false;
+              classicGM.isSelected = true;
+              infiniteGM.isSelected = false;
+            }
+            else if (isClicked(event, infiniteGM.x, infiniteGM.y, infiniteGM.w, infiniteGM.h, infiniteGM.wasClicked, infiniteGM.clickSound))
+            {
+              timerGM.isSelected = false;
+              classicGM.isSelected = false;
+              infiniteGM.isSelected = true;
+            }
+
+            if (timerGM.isSelected)
+            {
+              timerGM.image = IMG_LoadTexture(renderer, "assets/GameMode/TimerSelected.png");
+              timerGM.hoveredImage = IMG_LoadTexture(renderer, "assets/GameMode/TimerSelected.png");
+              classicGM.image = IMG_LoadTexture(renderer, "assets/GameMode/Classic.png");
+              infiniteGM.image = IMG_LoadTexture(renderer, "assets/GameMode/Infinite.png");
+            }
+            else if (classicGM.isSelected)
+            {
+              timerGM.image = IMG_LoadTexture(renderer, "assets/GameMode/Timer.png");
+              classicGM.image = IMG_LoadTexture(renderer, "assets/GameMode/ClassicSelected.png");
+              classicGM.hoveredImage = IMG_LoadTexture(renderer, "assets/GameMode/ClassicSelected.png");
+              infiniteGM.image = IMG_LoadTexture(renderer, "assets/GameMode/Infinite.png");
+            }
+            else if (infiniteGM.isSelected)
+            {
+              timerGM.image = IMG_LoadTexture(renderer, "assets/GameMode/Timer.png");
+              classicGM.image = IMG_LoadTexture(renderer, "assets/GameMode/Classic.png");
+              infiniteGM.image = IMG_LoadTexture(renderer, "assets/GameMode/InfiniteSelected.png");
+              infiniteGM.hoveredImage = IMG_LoadTexture(renderer, "assets/GameMode/InfiniteSelected.png");
+            }
+
             SDL_RenderCopy(renderer, PlayBG, 0, 0);
+
             drawButton(renderer, timerGM, event);
             drawButton(renderer, classicGM, event);
             drawButton(renderer, infiniteGM, event);
             drawButton(renderer, start, event);
             drawButton(renderer, back, event);
             render(renderer);
+
+            if (start.wasClicked) // this should run the game
+            {
+              start.wasClicked = false;
+              SDL_RenderClear(renderer);
+
+              if (timerGM.isSelected)
+              {
+                while (timerGM.isSelected)
+                {
+                  while (SDL_PollEvent(&event) && timerGM.isSelected)
+                  {
+                    if (quitGame(event))
+                    {
+                      timerGM.isSelected = false;
+                      quit(running);
+                      break;
+                    }
+                    if (goBack(event) || back.wasClicked)
+                    {
+                      timerGM.isSelected = false;
+                      break;
+                    }
+                    SDL_RenderCopy(renderer, Background, 0, 0);
+                    drawButton(renderer, back, event);
+                    render(renderer);
+                  }
+                }
+              }
+              else if (classicGM.isSelected)
+              {
+                while (classicGM.isSelected)
+                {
+                  while (SDL_PollEvent(&event) && classicGM.isSelected)
+                  {
+                    if (quitGame(event))
+                    {
+                      classicGM.isSelected = false;
+                      quit(running);
+                      break;
+                    }
+                    if (goBack(event) || back.wasClicked)
+                    {
+                      classicGM.isSelected = false;
+                      break;
+                    }
+                    SDL_RenderCopy(renderer, Background, 0, 0);
+                    drawButton(renderer, back, event);
+                    render(renderer);
+                  }
+                }
+              }
+              else if (infiniteGM.isSelected)
+              {
+                while (infiniteGM.isSelected)
+                {
+                  while (SDL_PollEvent(&event) && infiniteGM.isSelected)
+                  {
+                    if (quitGame(event))
+                    {
+                      infiniteGM.isSelected = false;
+                      quit(running);
+                      break;
+                    }
+                    if (goBack(event) || back.wasClicked)
+                    {
+                      infiniteGM.isSelected = false;
+                      break;
+                    }
+                    SDL_RenderCopy(renderer, Background, 0, 0);
+                    drawButton(renderer, back, event);
+                    render(renderer);
+                  }
+                }
+              }
+
+              back.wasClicked = false;
+              SDL_RenderCopy(renderer, PlayBG, 0, 0);
+              drawButton(renderer, timerGM, event);
+              drawButton(renderer, classicGM, event);
+              drawButton(renderer, infiniteGM, event);
+              drawButton(renderer, start, event);
+              drawButton(renderer, back, event);
+              SDL_RenderPresent(renderer);
+            }
           }
         }
       }
-     
+
       if (leaderboard.wasClicked)
       {
         string sort;
@@ -263,7 +391,7 @@ int main(int argc, char const *argv[])
       if (settings.wasClicked)
       {
         SDL_Texture *SettingsBG = IMG_LoadTexture(renderer, "assets/Settings/Settings.png");
-        
+
         vector<SDL_Texture *> soundBar = {IMG_LoadTexture(renderer, "assets/Settings/sound0.png"), IMG_LoadTexture(renderer, "assets/Settings/sound20.png"), IMG_LoadTexture(renderer, "assets/Settings/sound40.png"), IMG_LoadTexture(renderer, "assets/Settings/sound60.png"), IMG_LoadTexture(renderer, "assets/Settings/sound80.png"), IMG_LoadTexture(renderer, "assets/Settings/sound100.png")};
 
         vector<button> adjustButtons = {

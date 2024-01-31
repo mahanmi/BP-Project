@@ -14,6 +14,7 @@ struct button
   bool wasHovered;
   SDL_Texture *image, *hoveredImage, *clickedImage;
   Mix_Chunk *hoverSound, *clickSound;
+  bool isSelected;
 };
 
 bool quitGame(SDL_Event event)
@@ -111,6 +112,18 @@ void showStartScreen(SDL_Renderer *renderer, SDL_Texture *StartScreen, SDL_Event
     SDL_RenderCopy(renderer, StartScreen, NULL, NULL);
     SDL_RenderPresent(renderer);
   }
+}
+
+void POS(string text, SDL_Renderer *renderer, TTF_Font *font, int x, int y, int size, int r, int g, int b) // Print On Screen
+{
+  Uint8 red = r, green = g, blue = b;
+  SDL_Color color = {red, green, blue};
+  SDL_Surface *surface = TTF_RenderText_Solid(font, text.c_str(), color);
+  SDL_Texture *texture = SDL_CreateTextureFromSurface(renderer, surface);
+  SDL_Rect rect = {x, y, static_cast<int>(size * text.length()), size};
+  SDL_RenderCopy(renderer, texture, NULL, &rect);
+  SDL_FreeSurface(surface);
+  SDL_DestroyTexture(texture);
 }
 
 #endif // !gameMenu_hpp
