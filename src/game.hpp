@@ -95,7 +95,7 @@ bool shouldStick(int iBall, int jBall)
                 return true;
             }
         }
-        if (jBall > 0 && iBall < lines - 1 && !balls[iBall + 1][jBall - 1].isEmpty)
+        if (iBall < lines - 1 && jBall > 0 && !balls[iBall + 1][jBall - 1].isEmpty)
         {
             if (shouldStick(iBall + 1, jBall - 1)) // North West
             {
@@ -151,14 +151,14 @@ bool shouldStick(int iBall, int jBall)
                 balls[iBall][jBall].check = balls[iBall + 1][jBall].check;
                 return true;
             }
-        if (jBall != columns - 1 && iBall < lines - 1 && !balls[iBall + 1][jBall + 1].isEmpty)
+        if (jBall < columns - 1 && iBall < lines - 1 && !balls[iBall + 1][jBall + 1].isEmpty)
             if (balls[iBall + 1][jBall + 1].check == 1) // North East
             {
                 cout << iBall << " " << jBall << "is connected to " << iBall + 1 << " " << jBall + 1 << endl;
                 balls[iBall][jBall].check = balls[iBall + 1][jBall + 1].check;
                 return true;
             }
-        if (jBall != columns - 1 && !balls[iBall][jBall + 1].isEmpty)
+        if (jBall < columns - 1 && !balls[iBall][jBall + 1].isEmpty)
         {
             if (balls[iBall][jBall + 1].check == 1) // East
             {
@@ -208,7 +208,7 @@ bool shouldStick(int iBall, int jBall)
                 return true;
             }
         }
-        if (jBall != columns - 1 && iBall < lines - 1 && !balls[iBall + 1][jBall + 1].isEmpty)
+        if (jBall < columns - 1 && iBall < lines - 1 && !balls[iBall + 1][jBall + 1].isEmpty)
         {
             if (shouldStick(iBall + 1, jBall + 1)) // North East
             {
@@ -217,7 +217,7 @@ bool shouldStick(int iBall, int jBall)
                 return true;
             }
         }
-        if (jBall != columns - 1 && !balls[iBall][jBall + 1].isEmpty)
+        if (jBall < columns - 1 && !balls[iBall][jBall + 1].isEmpty)
         {
             if (shouldStick(iBall, jBall + 1)) // East
             {
