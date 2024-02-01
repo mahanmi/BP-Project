@@ -33,7 +33,7 @@ bool shouldStick(int iBall, int jBall)
         {
             if (balls[iBall - 1][jBall].check == 1) // North *
             {
-                cout << iBall << " " << jBall << "is connected to " << iBall - 1 << " " << jBall << endl;
+                // cout << iBall << " " << jBall << "is connected to " << iBall - 1 << " " << jBall << endl;
                 balls[iBall][jBall].check = balls[iBall - 1][jBall].check;
                 return true;
             }
@@ -43,7 +43,7 @@ bool shouldStick(int iBall, int jBall)
         {
             if (balls[iBall - 1][jBall - 1].check == 1) // North West *
             {
-                cout << iBall << " " << jBall << "is connected to " << iBall - 1 << " " << jBall - 1 << endl;
+                // //cout << iBall << " " << jBall << "is connected to " << iBall - 1 << " " << jBall - 1 << endl;
                 balls[iBall][jBall].check = balls[iBall - 1][jBall - 1].check;
                 return true;
             }
@@ -53,7 +53,7 @@ bool shouldStick(int iBall, int jBall)
         {
             if (balls[iBall][jBall + 1].check == 1) // East *
             {
-                cout << iBall << " " << jBall << "is connected to " << iBall << " " << jBall + 1 << endl;
+                // //cout << iBall << " " << jBall << "is connected to " << iBall << " " << jBall + 1 << endl;
                 balls[iBall][jBall].check = balls[iBall][jBall + 1].check;
                 return true;
             }
@@ -63,7 +63,7 @@ bool shouldStick(int iBall, int jBall)
         {
             if (balls[iBall][jBall - 1].check == 1) // West *
             {
-                cout << iBall << " " << jBall << "is connected to " << iBall << " " << jBall - 1 << endl;
+                // //cout << iBall << " " << jBall << "is connected to " << iBall << " " << jBall - 1 << endl;
                 balls[iBall][jBall].check = balls[iBall][jBall - 1].check;
                 return true;
             }
@@ -72,7 +72,7 @@ bool shouldStick(int iBall, int jBall)
         if (iBall < lines - 1 && !balls[iBall + 1][jBall].isEmpty)
             if (balls[iBall + 1][jBall].check == 1) // South *
             {
-                cout << iBall << " " << jBall << "is connected to " << iBall + 1 << " " << jBall << endl;
+                // //cout << iBall << " " << jBall << "is connected to " << iBall + 1 << " " << jBall << endl;
                 balls[iBall][jBall].check = balls[iBall + 1][jBall].check;
                 return true;
             }
@@ -80,7 +80,7 @@ bool shouldStick(int iBall, int jBall)
         if (jBall > 0 && iBall < lines - 1 && !balls[iBall + 1][jBall - 1].isEmpty)
             if (balls[iBall + 1][jBall - 1].check == 1) // South West *
             {
-                cout << iBall << " " << jBall << "is connected to " << iBall + 1 << " " << jBall - 1 << endl;
+                // //cout << iBall << " " << jBall << "is connected to " << iBall + 1 << " " << jBall - 1 << endl;
                 balls[iBall][jBall].check = balls[iBall + 1][jBall - 1].check;
                 return true;
             }
@@ -93,7 +93,7 @@ bool shouldStick(int iBall, int jBall)
         {
             if (shouldStick(iBall - 1, jBall)) // North *
             {
-                cout << iBall << " " << jBall << "is connected to " << iBall - 1 << " " << jBall << endl;
+                // //cout << iBall << " " << jBall << "is connected to " << iBall - 1 << " " << jBall << endl;
                 balls[iBall][jBall].check = 1;
                 return true;
             }
@@ -104,7 +104,7 @@ bool shouldStick(int iBall, int jBall)
             if (shouldStick(iBall - 1, jBall - 1)) // North West *
 
             {
-                cout << iBall << " " << jBall << "is connected to " << iBall - 1 << " " << jBall - 1 << endl;
+                // cout << iBall << " " << jBall << "is connected to " << iBall - 1 << " " << jBall - 1 << endl;
                 balls[iBall][jBall].check = 1;
                 return true;
             }
@@ -114,7 +114,7 @@ bool shouldStick(int iBall, int jBall)
         {
             if (shouldStick(iBall, jBall - 1)) // West *
             {
-                cout << iBall << " " << jBall << "is connected to " << iBall << " " << jBall - 1 << endl;
+                // cout << iBall << " " << jBall << "is connected to " << iBall << " " << jBall - 1 << endl;
                 balls[iBall][jBall].check = 1;
                 return true;
             }
@@ -125,7 +125,7 @@ bool shouldStick(int iBall, int jBall)
             if (shouldStick(iBall + 1, jBall - 1)) // South West *
 
             {
-                cout << iBall << " " << jBall << "is connected to " << iBall + 1 << " " << jBall - 1 << endl;
+                // cout << iBall << " " << jBall << "is connected to " << iBall + 1 << " " << jBall - 1 << endl;
                 balls[iBall][jBall].check = 1;
                 return true;
             }
@@ -135,7 +135,7 @@ bool shouldStick(int iBall, int jBall)
         {
             if (shouldStick(iBall, jBall + 1)) // East *
             {
-                cout << iBall << " " << jBall << "is connected to " << iBall << " " << jBall + 1 << endl;
+                // cout << iBall << " " << jBall << "is connected to " << iBall << " " << jBall + 1 << endl;
                 balls[iBall][jBall].check = 1;
                 return true;
             }
@@ -145,7 +145,7 @@ bool shouldStick(int iBall, int jBall)
             if (shouldStick(iBall + 1, jBall)) // South *
 
             {
-                cout << iBall << " " << jBall << "is connected to " << iBall + 1 << " " << jBall << endl;
+                // cout << iBall << " " << jBall << "is connected to " << iBall + 1 << " " << jBall << endl;
                 balls[iBall][jBall].check = 1;
                 return true;
             }
@@ -160,7 +160,7 @@ bool shouldStick(int iBall, int jBall)
             if (balls[iBall - 1][jBall].check == 1) // North *
 
             {
-                cout << iBall << " " << jBall << "is connected to " << iBall - 1 << " " << jBall << endl;
+                // cout << iBall << " " << jBall << "is connected to " << iBall - 1 << " " << jBall << endl;
                 balls[iBall][jBall].check = balls[iBall - 1][jBall].check;
                 return true;
             }
@@ -171,7 +171,7 @@ bool shouldStick(int iBall, int jBall)
             if (balls[iBall - 1][jBall + 1].check == 1) // North East *
 
             {
-                cout << iBall << " " << jBall << "is connected to " << iBall - 1 << " " << jBall - 1 << endl;
+                // cout << iBall << " " << jBall << "is connected to " << iBall - 1 << " " << jBall - 1 << endl;
                 balls[iBall][jBall].check = balls[iBall - 1][jBall - 1].check;
                 return true;
             }
@@ -181,7 +181,7 @@ bool shouldStick(int iBall, int jBall)
         {
             if (balls[iBall][jBall + 1].check == 1) // East *
             {
-                cout << iBall << " " << jBall << "is connected to " << iBall << " " << jBall + 1 << endl;
+                // cout << iBall << " " << jBall << "is connected to " << iBall << " " << jBall + 1 << endl;
                 balls[iBall][jBall].check = balls[iBall][jBall + 1].check;
                 return true;
             }
@@ -192,7 +192,7 @@ bool shouldStick(int iBall, int jBall)
             if (balls[iBall][jBall - 1].check == 1) // West *
 
             {
-                cout << iBall << " " << jBall << "is connected to " << iBall << " " << jBall - 1 << endl;
+                // cout << iBall << " " << jBall << "is connected to " << iBall << " " << jBall - 1 << endl;
                 balls[iBall][jBall].check = balls[iBall][jBall - 1].check;
                 return true;
             }
@@ -201,7 +201,7 @@ bool shouldStick(int iBall, int jBall)
         if (iBall < lines - 1 && !balls[iBall + 1][jBall].isEmpty)
             if (balls[iBall + 1][jBall].check == 1) // South *
             {
-                cout << iBall << " " << jBall << "is connected to " << iBall + 1 << " " << jBall << endl;
+                // cout << iBall << " " << jBall << "is connected to " << iBall + 1 << " " << jBall << endl;
                 balls[iBall][jBall].check = balls[iBall + 1][jBall].check;
                 return true;
             }
@@ -209,7 +209,7 @@ bool shouldStick(int iBall, int jBall)
         if (jBall < columns - 1 && iBall < lines - 1 && !balls[iBall + 1][jBall + 1].isEmpty)
             if (balls[iBall + 1][jBall + 1].check == 1) // South East *
             {
-                cout << iBall << " " << jBall << "is connected to " << iBall + 1 << " " << jBall + 1 << endl;
+                // cout << iBall << " " << jBall << "is connected to " << iBall + 1 << " " << jBall + 1 << endl;
                 balls[iBall][jBall].check = balls[iBall + 1][jBall + 1].check;
                 return true;
             }
@@ -222,7 +222,7 @@ bool shouldStick(int iBall, int jBall)
         {
             if (shouldStick(iBall - 1, jBall + 1)) // North East *
             {
-                cout << iBall << " " << jBall << "is connected to " << iBall - 1 << " " << jBall + 1 << endl;
+                // cout << iBall << " " << jBall << "is connected to " << iBall - 1 << " " << jBall + 1 << endl;
                 balls[iBall][jBall].check = 1;
                 return true;
             }
@@ -232,7 +232,7 @@ bool shouldStick(int iBall, int jBall)
         {
             if (shouldStick(iBall - 1, jBall)) // North *
             {
-                cout << iBall << " " << jBall << "is connected to " << iBall - 1 << " " << jBall << endl;
+                // cout << iBall << " " << jBall << "is connected to " << iBall - 1 << " " << jBall << endl;
                 balls[iBall][jBall].check = 1;
                 return true;
             }
@@ -242,7 +242,7 @@ bool shouldStick(int iBall, int jBall)
         {
             if (shouldStick(iBall, jBall + 1)) // East *
             {
-                cout << iBall << " " << jBall << "is connected to " << iBall << " " << jBall + 1 << endl;
+                // cout << iBall << " " << jBall << "is connected to " << iBall << " " << jBall + 1 << endl;
                 balls[iBall][jBall].check = 1;
                 return true;
             }
@@ -252,7 +252,7 @@ bool shouldStick(int iBall, int jBall)
         {
             if (shouldStick(iBall + 1, jBall + 1)) // South East *
             {
-                cout << iBall << " " << jBall << "is connected to " << iBall + 1 << " " << jBall + 1 << endl;
+                // cout << iBall << " " << jBall << "is connected to " << iBall + 1 << " " << jBall + 1 << endl;
                 balls[iBall][jBall].check = 1;
                 return true;
             }
@@ -262,7 +262,7 @@ bool shouldStick(int iBall, int jBall)
         {
             if (shouldStick(iBall, jBall - 1)) // West *
             {
-                cout << iBall << " " << jBall << "is connected to " << iBall << " " << jBall - 1 << endl;
+                // cout << iBall << " " << jBall << "is connected to " << iBall << " " << jBall - 1 << endl;
                 balls[iBall][jBall].check = 1;
                 return true;
             }
@@ -272,7 +272,7 @@ bool shouldStick(int iBall, int jBall)
         {
             if (shouldStick(iBall + 1, jBall)) // South *
             {
-                cout << iBall << " " << jBall << "is connected to " << iBall + 1 << " " << jBall << endl;
+                // cout << iBall << " " << jBall << "is connected to " << iBall + 1 << " " << jBall << endl;
                 balls[iBall][jBall].check = 1;
                 return true;
             }
@@ -304,15 +304,15 @@ void rect(SDL_Renderer *Renderer, int x, int y, int WIDTH, int HIGHT, int R, int
 
 void initial_ball()
 {
-    balls.resize(lines);
+    balls.resize(lines + stick);
 
     int x_center = ballRadius;
     int y_center = -200;
 
     ball new_ball;
-    for (int i = 0; i < lines; i++)
+    for (int i = 0; i < lines + stick; i++)
     {
-        for (int j = 0; j < columns + stick; j++)
+        for (int j = 0; j < columns; j++)
         {
             new_ball.x = x_center;
             new_ball.y = y_center;
@@ -384,15 +384,42 @@ void initial_ball()
             x_center = 2 * ballRadius;
         else
             x_center = ballRadius;
-        y_center += 1.72 * ballRadius;
+        y_center += sqrt(3) * ballRadius;
     }
+    /*  if (stick > 0)
+     {
+         if (lines % 2 == 0)
+             x_center = 2 * ballRadius;
+         else
+             x_center = ballRadius;
+         y_center += sqrt(3) * ballRadius;
+         for (int i = lines; i < lines + stick; i++)
+         {
+             for (int j = 0; j < columns; j++)
+             {
+                 new_ball.x = x_center;
+                 new_ball.y = y_center;
+                 new_ball.i = i;
+                 new_ball.j = j;
+                 new_ball.isEmpty = true;
+                 balls[i].push_back(new_ball);
+                 x_center += 2 * ballRadius;
+                 balls[i][j].y += dy_initial;
+             }
+             if (i % 2 == 0)
+                 x_center = 2 * ballRadius;
+             else
+                 x_center = ballRadius;
+             y_center += sqrt(3) * ballRadius;
+         }
+     } */
 }
 
 void draw_ball(SDL_Renderer *Renderer)
 {
-    for (int i = 0; i < lines; i++)
+    for (int i = 0; i < lines + stick; i++)
     {
-        for (int j = 0; j < columns + stick; j++)
+        for (int j = 0; j < columns; j++)
         {
             if (!balls[i][j].isEmpty)
             {
@@ -531,16 +558,16 @@ void initial_crash_ball(SDL_Renderer *Renderer)
         while (repeat)
         {
             repeat = false;
-            for (int i = 1; i < lines; i++)
+            for (int i = 1; i < lines + stick; i++)
             {
-                for (int j = 0; j < columns + stick; j++)
+                for (int j = 0; j < columns; j++)
                 {
                     balls[i][j].check = 0;
                 }
             }
-            for (int i = 1; i < lines; i++)
+            for (int i = 1; i < lines + stick; i++)
             {
-                for (int j = 0; j < columns + stick; j++)
+                for (int j = 0; j < columns; j++)
                 {
                     if (!balls[i][j].isEmpty)
                     {
@@ -561,16 +588,16 @@ void initial_crash_ball(SDL_Renderer *Renderer)
 
 void isConnected(int i, int j)
 {
-    if (i < 0 || i > lines || j < 0 || j > columns)
-        return;
+    /* if (i < 0 || i > lines + stick || j < 0 || j > columns)
+        return; */
 
     crashed.push_back(balls[i][j]);
     balls[i][j].isEmpty = true;
 
-    for (int m = lines - 1; m >= 0; m--)
+    for (int m = 0; m < lines + stick; m++)
         for (int n = 0; n < columns; n++)
             if (!balls[m][n].isEmpty && balls[m][n].color != 7)
-                if (areConnected(balls[i][j], balls[m][n]))
+                if (pow(balls[m][n].x - balls[i][j].x, 2) + pow(balls[m][n].y - balls[i][j].y, 2) <= pow(2 * ballRadius, 2))
                     if (balls[i][j].color == balls[m][n].color || (balls[i][j].color == 1 && balls[m][n].color % 2 != 0) || (balls[i][j].color == 2 && (balls[m][n].color == 3 || balls[m][n].color == 6 || balls[m][n].color == 10)) || (balls[i][j].color == 4 && (balls[m][n].color == 5 || balls[m][n].color == 6 || balls[m][n].color == 12)) || (balls[i][j].color == 8 && (balls[m][n].color == 9 || balls[m][n].color == 10 || balls[m][n].color == 12)) || (balls[i][j].color == 3 && (balls[m][n].color == 1 || balls[m][n].color == 2)) || (balls[i][j].color == 5 && (balls[m][n].color == 1 || balls[m][n].color == 4)) || (balls[i][j].color == 9 && (balls[m][n].color == 1 || balls[m][n].color == 8)) || (balls[i][j].color == 6 && (balls[m][n].color == 2 || balls[m][n].color == 4)) || (balls[i][j].color == 10 && (balls[m][n].color == 2 || balls[m][n].color == 8)) || (balls[i][j].color == 12 && (balls[m][n].color == 4 || balls[m][n].color == 8)))
                         isConnected(m, n);
 
@@ -646,9 +673,9 @@ void crashed_ball(SDL_Renderer *Renderer)
         }
         else
         {
-            if (crash_balls[0].x > WIDTH || crash_balls[0].x < 0)
+            if (crash_balls[0].x + ballRadius > WIDTH || crash_balls[0].x - ballRadius < 0)
                 dx *= -1;
-            if (crash_balls[0].y > HIGHT || crash_balls[0].y < 0)
+            if (crash_balls[0].y + ballRadius > HIGHT || crash_balls[0].y - ballRadius < balls[0][0].y - ballRadius)
                 dy *= -1;
 
             crash_balls[0].x += dx;
@@ -683,23 +710,20 @@ void crashed_ball(SDL_Renderer *Renderer)
             }
             }
             bool shouldRemain = true;
-            for (int i = 0; i < lines && !is_crash_ball_crashed; i++)
+            for (int i = 0; i < lines + stick && !is_crash_ball_crashed; i++)
             {
-                for (int j = 0; j < columns + stick && !is_crash_ball_crashed; j++)
+                for (int j = 0; j < columns && !is_crash_ball_crashed; j++)
                 {
                     if (!balls[i][j].isEmpty)
                     {
-                        if (areConnected(crash_balls[0], balls[i][j]))
+                        if (pow(crash_balls[0].x - balls[i][j].x, 2) + pow(crash_balls[0].y - balls[i][j].y, 2) < 0.75 * pow(2 * ballRadius, 2))
                         {
-
                             is_crash_ball_crashed = true;
-                            crash_balls[0].isEmpty = false;
 
                             if ((crash_balls[0].color == 11 && balls[i][j].color != 7) || (crash_balls[0].color == 1 && (balls[i][j].color % 2 != 0 && balls[i][j].color != 7)) || (crash_balls[0].color == 2 && (balls[i][j].color == 2 || balls[i][j].color == 3 || balls[i][j].color == 6 || balls[i][j].color == 10)) || (crash_balls[0].color == 4 && (balls[i][j].color == 4 || balls[i][j].color == 5 || balls[i][j].color == 6 || balls[i][j].color == 12)) || (crash_balls[0].color == 8 && (balls[i][j].color == 8 || balls[i][j].color == 9 || balls[i][j].color == 10 || balls[i][j].color == 12)))
                             {
                                 isConnected(i, j);
-                                // crashed.push_back(crash_balls[0]);
-                                if (crashed.size() > 0)
+                                if (crashed.size() > 1) // set this to number of the balls that should be sticked to crash - 1
                                     shouldRemain = false;
                                 for (int k = crashed.size(); k > 0; k--)
                                 {
@@ -707,14 +731,68 @@ void crashed_ball(SDL_Renderer *Renderer)
                                         balls[crashed[k - 1].i][crashed[k - 1].j].isEmpty = false;
                                     crashed.pop_back();
                                 }
-                                crash_balls[0].isEmpty = true;
-                                initial_crash_ball(Renderer);
                             }
                             else if (shouldRemain)
                             {
-                                // stick++
-                                initial_crash_ball(Renderer);
+                                int jStick = ceil((crash_balls[0].x - balls[0][0].x) / (2 * ballRadius)), iStick = ceil((crash_balls[0].y - balls[0][0].y) / (sqrt(3) * ballRadius));
+
+                                if (iStick - (lines + stick) > 0)
+                                    iStick = lines + stick;
+
+                                cout << "New Ball" << iStick << " " << jStick << endl;
+
+                                if (iStick % 2 == 1)
+                                    jStick--;
+                                if (jStick < 0)
+                                    jStick = 0;
+                                if (jStick > columns - 1)
+                                    jStick = columns - 1;
+
+                                /* if (iStick > lines - 1)
+                                {
+                                    stick++;
+                                    int x_center, y_center;
+                                    if (stick + lines % 2)
+                                        x_center = 2 * ballRadius;
+                                    else
+                                        x_center = ballRadius;
+                                    y_center = balls[lines - 1][0].y + sqrt(3) * ballRadius;
+                                    for (int i = lines + stick - 1; i > lines; i--)
+                                    {
+                                        for (int j = 0; j < columns; j++)
+                                        {
+                                            balls[i][j].x = x_center;
+                                            balls[i][j].y = y_center;
+                                            balls[i][j].i = i;
+                                            balls[i][j].j = j;
+                                            balls[i][j].isEmpty = true;
+                                            x_center += 2 * ballRadius;
+                                            balls[i][j].y += dy_initial;
+                                        }
+                                        if (i % 2 == 0)
+                                            x_center = 2 * ballRadius;
+                                        else
+                                            x_center = ballRadius;
+                                        y_center += sqrt(3) * ballRadius;
+                                    }
+                                } */
+                                if (balls[iStick][jStick].isEmpty)
+                                {
+                                    balls[iStick][jStick].color = crash_balls[0].color;
+                                    balls[iStick][jStick].isEmpty = false;
+                                    isConnected(iStick, jStick);
+                                    if (crashed.size() > 1) // set this to number of the balls that should be sticked to crash - 1
+                                        shouldRemain = false;
+                                    for (int k = crashed.size(); k > 0; k--)
+                                    {
+                                        if (shouldRemain)
+                                            balls[crashed[k - 1].i][crashed[k - 1].j].isEmpty = false;
+                                        crashed.pop_back();
+                                    }
+                                }
                             }
+                            crash_balls[0].isEmpty = true;
+                            initial_crash_ball(Renderer);
                         }
                     }
                 }

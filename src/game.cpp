@@ -22,7 +22,7 @@ int d = 20;
 int dx, dy;
 float dy_initial = 0.25;
 int ballRadius = 25;
-int lines = 6;
+int lines = 15;
 int columns = WIDTH / (2 * ballRadius);
 int stick = 0;
 SDL_Window *window = SDL_CreateWindow("Bouncing Balls Game", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, WIDTH, HIGHT, SDL_WINDOW_SHOWN);
@@ -61,6 +61,12 @@ int main(int argv, char **args)
     for (int i = 1; i < lines; i++)
         for (int j = 0; j < columns; j++)
             balls[i][j].isEmpty = false, balls[i][j].shouldStick = false, balls[i][j].check = 0;
+
+    for (int i = 6; i < lines; i++)
+    {
+        for (int j = 0; j < columns; j++)
+            balls[i][j].isEmpty = true;
+    }
 
     crash_balls[0].x = int(WIDTH / 2);
     crash_balls[0].y = int(HIGHT - 100);
