@@ -29,6 +29,8 @@ SDL_Window *window = SDL_CreateWindow("Bouncing Balls Game", SDL_WINDOWPOS_CENTE
 SDL_Renderer *renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
 SDL_Event event;
 
+bool win = false, lose = false;
+
 vector<vector<ball>> balls;
 
 bool is_crash_ball_moved = false;
@@ -39,6 +41,7 @@ vector<ball> crashed;
 ball crash_balls[2];
 SDL_Rect Ball = {int(crash_balls[0].x - ballRadius), int(crash_balls[0].y - ballRadius), 2 * ballRadius, 2 * ballRadius};
 SDL_Rect Ball2 = {int(crash_balls[1].x - ballRadius), int(crash_balls[1].y - ballRadius), 2 * ballRadius, 2 * ballRadius};
+bool crash_ball_color[4];
 
 int x_mouse, y_mouse;
 
@@ -156,7 +159,9 @@ int main(int argv, char **args)
 
         crashed_ball(renderer);
         if (!pause)
-            initial_ball();
+            for (int i = 0; i < lines + stick; i++)
+                for (int j = 0; j < columns; j++)
+                    balls[i][j].y += dy_initial;
         draw_ball(renderer);
 
         if (event.type == SDL_KEYDOWN)
@@ -185,6 +190,8 @@ int main(int argv, char **args)
         }
 
         SDL_RenderPresent(renderer);
+        if (win || lose)
+            return 0;
         SDL_Delay(1000 / 60);
         SDL_RenderClear(renderer);
     }
