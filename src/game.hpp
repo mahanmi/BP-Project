@@ -318,10 +318,8 @@ void initial_ball()
             new_ball.y = y_center;
             new_ball.i = i;
             new_ball.j = j;
-            if (j == 0)
-                int rand_col = rand() % 22;
-            else
-                int rand_col = rand() % 33;
+
+            int rand_col = rand() % 33;
 
             if (rand_col == 20)
             {
@@ -381,7 +379,10 @@ void initial_ball()
             }
             else
             {
-                new_ball.color = balls[i][j - 1].color;
+                if(j == 0)
+                    new_ball.color = balls[i-1][0].color;
+                else
+                    new_ball.color = balls[i][j-1].color;
             }
 
             balls[i].push_back(new_ball);

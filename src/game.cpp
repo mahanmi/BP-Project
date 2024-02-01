@@ -157,12 +157,12 @@ int main(int argv, char **args)
     {
         SDL_RenderCopy(renderer, GameBG, NULL, NULL);
 
-        crashed_ball(renderer);
         if (!pause)
             for (int i = 0; i < lines + stick; i++)
                 for (int j = 0; j < columns; j++)
                     balls[i][j].y += dy_initial;
         draw_ball(renderer);
+        crashed_ball(renderer);
 
         if (event.type == SDL_KEYDOWN)
         {
