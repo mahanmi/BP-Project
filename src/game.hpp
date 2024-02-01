@@ -18,7 +18,10 @@ bool areConnected(ball ball1, ball ball2)
 
 bool shouldStick(int iBall, int jBall)
 {
-    if (iBall == lines - 1)
+    if (balls[iBall][jBall].isEmpty)
+        return false;
+
+    if (iBall == 0)
         return true;
 
     if (balls[iBall][jBall].check == -1)
@@ -26,8 +29,48 @@ bool shouldStick(int iBall, int jBall)
 
     if (iBall % 2 == 0)
     {
+        if (iBall > 0 && !balls[iBall - 1][jBall].isEmpty)
+        {
+            if (balls[iBall - 1][jBall].check == 1) // North *
+            {
+                cout << iBall << " " << jBall << "is connected to " << iBall - 1 << " " << jBall << endl;
+                balls[iBall][jBall].check = balls[iBall - 1][jBall].check;
+                return true;
+            }
+        }
+
+        if (iBall > 0 && jBall > 0 && !balls[iBall - 1][jBall - 1].isEmpty)
+        {
+            if (balls[iBall - 1][jBall - 1].check == 1) // North West *
+            {
+                cout << iBall << " " << jBall << "is connected to " << iBall - 1 << " " << jBall - 1 << endl;
+                balls[iBall][jBall].check = balls[iBall - 1][jBall - 1].check;
+                return true;
+            }
+        }
+
+        if (jBall < columns - 1 && !balls[iBall][jBall + 1].isEmpty)
+        {
+            if (balls[iBall][jBall + 1].check == 1) // East *
+            {
+                cout << iBall << " " << jBall << "is connected to " << iBall << " " << jBall + 1 << endl;
+                balls[iBall][jBall].check = balls[iBall][jBall + 1].check;
+                return true;
+            }
+        }
+
+        if (jBall > 0 && !balls[iBall][jBall - 1].isEmpty)
+        {
+            if (balls[iBall][jBall - 1].check == 1) // West *
+            {
+                cout << iBall << " " << jBall << "is connected to " << iBall << " " << jBall - 1 << endl;
+                balls[iBall][jBall].check = balls[iBall][jBall - 1].check;
+                return true;
+            }
+        }
+
         if (iBall < lines - 1 && !balls[iBall + 1][jBall].isEmpty)
-            if (balls[iBall + 1][jBall].check == 1) // North
+            if (balls[iBall + 1][jBall].check == 1) // South *
             {
                 cout << iBall << " " << jBall << "is connected to " << iBall + 1 << " " << jBall << endl;
                 balls[iBall][jBall].check = balls[iBall + 1][jBall].check;
@@ -35,159 +78,98 @@ bool shouldStick(int iBall, int jBall)
             }
 
         if (jBall > 0 && iBall < lines - 1 && !balls[iBall + 1][jBall - 1].isEmpty)
-            if (balls[iBall + 1][jBall - 1].check == 1) // North West
+            if (balls[iBall + 1][jBall - 1].check == 1) // South West *
             {
                 cout << iBall << " " << jBall << "is connected to " << iBall + 1 << " " << jBall - 1 << endl;
                 balls[iBall][jBall].check = balls[iBall + 1][jBall - 1].check;
                 return true;
             }
 
-        if (jBall > 0 && !balls[iBall][jBall - 1].isEmpty)
-        {
-            if (balls[iBall][jBall - 1].check == 1) // West
-            {
-                cout << iBall << " " << jBall << "is connected to " << iBall << " " << jBall - 1 << endl;
-                balls[iBall][jBall].check = balls[iBall][jBall - 1].check;
-                return true;
-            }
-        }
-
-        if (jBall < columns - 1 && !balls[iBall][jBall + 1].isEmpty)
-        {
-            if (balls[iBall][jBall + 1].check == 1) // East
-            {
-                cout << iBall << " " << jBall << "is connected to " << iBall << " " << jBall + 1 << endl;
-                balls[iBall][jBall].check = balls[iBall][jBall + 1].check;
-                return true;
-            }
-        }
-
-        if (iBall > 0 && !balls[iBall - 1][jBall].isEmpty)
-        {
-            if (balls[iBall - 1][jBall].check == 1) // South
-            {
-                cout << iBall << " " << jBall << "is connected to " << iBall - 1 << " " << jBall << endl;
-                balls[iBall][jBall].check = balls[iBall - 1][jBall].check;
-                return true;
-            }
-        }
-
-        if (iBall > 0 && jBall > 0 && !balls[iBall - 1][jBall - 1].isEmpty)
-        {
-            if (balls[iBall - 1][jBall - 1].check == 1) // South West
-            {
-                cout << iBall << " " << jBall << "is connected to " << iBall - 1 << " " << jBall - 1 << endl;
-                balls[iBall][jBall].check = balls[iBall - 1][jBall - 1].check;
-                return true;
-            }
-        }
-
         // 2nd check
 
         balls[iBall][jBall].check = -1;
 
-        if (iBall < lines - 1 && !balls[iBall + 1][jBall].isEmpty)
+        if (iBall > 0 && !balls[iBall - 1][jBall].isEmpty && balls[iBall - 1][jBall].check != -1)
         {
-            if (shouldStick(iBall + 1, jBall)) // North
+            if (shouldStick(iBall - 1, jBall)) // North *
             {
-                cout << iBall << " " << jBall << "is connected to " << iBall + 1 << " " << jBall << endl;
+                cout << iBall << " " << jBall << "is connected to " << iBall - 1 << " " << jBall << endl;
                 balls[iBall][jBall].check = 1;
                 return true;
             }
         }
-        if (iBall < lines - 1 && jBall > 0 && !balls[iBall + 1][jBall - 1].isEmpty)
+
+        if (iBall > 0 && jBall > 0 && !balls[iBall - 1][jBall - 1].isEmpty && balls[iBall - 1][jBall - 1].check != -1)
         {
-            if (shouldStick(iBall + 1, jBall - 1)) // North West
+            if (shouldStick(iBall - 1, jBall - 1)) // North West *
+
+            {
+                cout << iBall << " " << jBall << "is connected to " << iBall - 1 << " " << jBall - 1 << endl;
+                balls[iBall][jBall].check = 1;
+                return true;
+            }
+        }
+
+        if (jBall > 0 && !balls[iBall][jBall - 1].isEmpty && balls[iBall][jBall - 1].check != -1)
+        {
+            if (shouldStick(iBall, jBall - 1)) // West *
+            {
+                cout << iBall << " " << jBall << "is connected to " << iBall << " " << jBall - 1 << endl;
+                balls[iBall][jBall].check = 1;
+                return true;
+            }
+        }
+
+        if (iBall < lines - 1 && jBall > 0 && !balls[iBall + 1][jBall - 1].isEmpty && balls[iBall + 1][jBall - 1].check != -1)
+        {
+            if (shouldStick(iBall + 1, jBall - 1)) // South West *
+
             {
                 cout << iBall << " " << jBall << "is connected to " << iBall + 1 << " " << jBall - 1 << endl;
                 balls[iBall][jBall].check = 1;
                 return true;
             }
         }
-        if (jBall > 0 && !balls[iBall][jBall - 1].isEmpty)
+
+        if (jBall < columns - 1 && !balls[iBall][jBall + 1].isEmpty && balls[iBall][jBall + 1].check != -1)
         {
-            if (shouldStick(iBall, jBall - 1)) // West
-            {
-                cout << iBall << " " << jBall << "is connected to " << iBall << " " << jBall - 1 << endl;
-                balls[iBall][jBall].check = 1;
-                return true;
-            }
-        }
-        if (iBall > 0 && !balls[iBall - 1][jBall].isEmpty)
-        {
-            if (shouldStick(iBall - 1, jBall)) // South
-            {
-                cout << iBall << " " << jBall << "is connected to " << iBall - 1 << " " << jBall << endl;
-                balls[iBall][jBall].check = 1;
-                return true;
-            }
-        }
-        if (jBall < columns - 1 && !balls[iBall][jBall + 1].isEmpty)
-        {
-            if (shouldStick(iBall, jBall + 1)) // East
+            if (shouldStick(iBall, jBall + 1)) // East *
             {
                 cout << iBall << " " << jBall << "is connected to " << iBall << " " << jBall + 1 << endl;
                 balls[iBall][jBall].check = 1;
                 return true;
             }
         }
-        if (iBall > 0 && jBall > 0 && !balls[iBall - 1][jBall - 1].isEmpty)
+        if (iBall < lines - 1 && !balls[iBall + 1][jBall].isEmpty && balls[iBall + 1][jBall].check != -1)
         {
-            if (shouldStick(iBall - 1, jBall - 1)) // South West
+            if (shouldStick(iBall + 1, jBall)) // South *
+
             {
-                cout << iBall << " " << jBall << "is connected to " << iBall - 1 << " " << jBall - 1 << endl;
+                cout << iBall << " " << jBall << "is connected to " << iBall + 1 << " " << jBall << endl;
                 balls[iBall][jBall].check = 1;
                 return true;
             }
         }
+
         return false;
     }
     else
     {
-        if (iBall < lines - 1 && !balls[iBall + 1][jBall].isEmpty)
-            if (balls[iBall + 1][jBall].check == 1) // North
-            {
-                cout << iBall << " " << jBall << "is connected to " << iBall + 1 << " " << jBall << endl;
-                balls[iBall][jBall].check = balls[iBall + 1][jBall].check;
-                return true;
-            }
-        if (jBall < columns - 1 && iBall < lines - 1 && !balls[iBall + 1][jBall + 1].isEmpty)
-            if (balls[iBall + 1][jBall + 1].check == 1) // North East
-            {
-                cout << iBall << " " << jBall << "is connected to " << iBall + 1 << " " << jBall + 1 << endl;
-                balls[iBall][jBall].check = balls[iBall + 1][jBall + 1].check;
-                return true;
-            }
-        if (jBall < columns - 1 && !balls[iBall][jBall + 1].isEmpty)
-        {
-            if (balls[iBall][jBall + 1].check == 1) // East
-            {
-                cout << iBall << " " << jBall << "is connected to " << iBall << " " << jBall + 1 << endl;
-                balls[iBall][jBall].check = balls[iBall][jBall + 1].check;
-                return true;
-            }
-        }
-        if (jBall > 0 && !balls[iBall][jBall - 1].isEmpty)
-        {
-            if (balls[iBall][jBall - 1].check == 1) // West
-            {
-                cout << iBall << " " << jBall << "is connected to " << iBall << " " << jBall - 1 << endl;
-                balls[iBall][jBall].check = balls[iBall][jBall - 1].check;
-                return true;
-            }
-        }
         if (iBall > 0 && !balls[iBall - 1][jBall].isEmpty)
         {
-            if (balls[iBall - 1][jBall].check == 1) // South
+            if (balls[iBall - 1][jBall].check == 1) // North *
+
             {
                 cout << iBall << " " << jBall << "is connected to " << iBall - 1 << " " << jBall << endl;
                 balls[iBall][jBall].check = balls[iBall - 1][jBall].check;
                 return true;
             }
         }
-        if (iBall > 0 && jBall > 0 && !balls[iBall - 1][jBall - 1].isEmpty)
+
+        if (iBall > 0 && jBall < columns - 1 && !balls[iBall - 1][jBall + 1].isEmpty)
         {
-            if (balls[iBall - 1][jBall - 1].check == 1) // South West
+            if (balls[iBall - 1][jBall + 1].check == 1) // North East *
+
             {
                 cout << iBall << " " << jBall << "is connected to " << iBall - 1 << " " << jBall - 1 << endl;
                 balls[iBall][jBall].check = balls[iBall - 1][jBall - 1].check;
@@ -195,73 +177,107 @@ bool shouldStick(int iBall, int jBall)
             }
         }
 
+        if (jBall < columns - 1 && !balls[iBall][jBall + 1].isEmpty)
+        {
+            if (balls[iBall][jBall + 1].check == 1) // East *
+            {
+                cout << iBall << " " << jBall << "is connected to " << iBall << " " << jBall + 1 << endl;
+                balls[iBall][jBall].check = balls[iBall][jBall + 1].check;
+                return true;
+            }
+        }
+
+        if (jBall > 0 && !balls[iBall][jBall - 1].isEmpty)
+        {
+            if (balls[iBall][jBall - 1].check == 1) // West *
+
+            {
+                cout << iBall << " " << jBall << "is connected to " << iBall << " " << jBall - 1 << endl;
+                balls[iBall][jBall].check = balls[iBall][jBall - 1].check;
+                return true;
+            }
+        }
+
+        if (iBall < lines - 1 && !balls[iBall + 1][jBall].isEmpty)
+            if (balls[iBall + 1][jBall].check == 1) // South *
+            {
+                cout << iBall << " " << jBall << "is connected to " << iBall + 1 << " " << jBall << endl;
+                balls[iBall][jBall].check = balls[iBall + 1][jBall].check;
+                return true;
+            }
+
+        if (jBall < columns - 1 && iBall < lines - 1 && !balls[iBall + 1][jBall + 1].isEmpty)
+            if (balls[iBall + 1][jBall + 1].check == 1) // South East *
+            {
+                cout << iBall << " " << jBall << "is connected to " << iBall + 1 << " " << jBall + 1 << endl;
+                balls[iBall][jBall].check = balls[iBall + 1][jBall + 1].check;
+                return true;
+            }
+
         // 2nd check
 
         balls[iBall][jBall].check = -1;
 
-        if (iBall < lines - 1 && !balls[iBall + 1][jBall].isEmpty)
+        if (iBall > 0 && jBall < columns - 1 && !balls[iBall - 1][jBall + 1].isEmpty && balls[iBall - 1][jBall + 1].check != -1)
         {
-            if (shouldStick(iBall + 1, jBall)) // North
+            if (shouldStick(iBall - 1, jBall + 1)) // North East *
             {
-                cout << iBall << " " << jBall << "is connected to " << iBall + 1 << " " << jBall << endl;
+                cout << iBall << " " << jBall << "is connected to " << iBall - 1 << " " << jBall + 1 << endl;
                 balls[iBall][jBall].check = 1;
                 return true;
             }
         }
-        if (jBall < columns - 1 && iBall < lines - 1 && !balls[iBall + 1][jBall + 1].isEmpty)
+
+        if (iBall > 0 && !balls[iBall - 1][jBall].isEmpty && balls[iBall - 1][jBall].check != -1)
         {
-            if (shouldStick(iBall + 1, jBall + 1)) // North East
+            if (shouldStick(iBall - 1, jBall)) // North *
             {
-                cout << iBall << " " << jBall << "is connected to " << iBall + 1 << " " << jBall + 1 << endl;
+                cout << iBall << " " << jBall << "is connected to " << iBall - 1 << " " << jBall << endl;
                 balls[iBall][jBall].check = 1;
                 return true;
             }
         }
-        if (jBall < columns - 1 && !balls[iBall][jBall + 1].isEmpty)
+
+        if (jBall < columns - 1 && !balls[iBall][jBall + 1].isEmpty && balls[iBall][jBall + 1].check != -1)
         {
-            if (shouldStick(iBall, jBall + 1)) // East
+            if (shouldStick(iBall, jBall + 1)) // East *
             {
                 cout << iBall << " " << jBall << "is connected to " << iBall << " " << jBall + 1 << endl;
                 balls[iBall][jBall].check = 1;
                 return true;
             }
         }
-        if (iBall > 0 && !balls[iBall - 1][jBall].isEmpty)
+
+        if (jBall < columns - 1 && iBall < lines - 1 && !balls[iBall + 1][jBall + 1].isEmpty && balls[iBall + 1][jBall + 1].check != -1)
         {
-            if (shouldStick(iBall - 1, jBall)) // South
+            if (shouldStick(iBall + 1, jBall + 1)) // South East *
             {
-                cout << iBall << " " << jBall << "is connected to " << iBall - 1 << " " << jBall << endl;
+                cout << iBall << " " << jBall << "is connected to " << iBall + 1 << " " << jBall + 1 << endl;
                 balls[iBall][jBall].check = 1;
                 return true;
             }
         }
-        if (jBall > 0 && !balls[iBall][jBall - 1].isEmpty)
+
+        if (jBall > 0 && !balls[iBall][jBall - 1].isEmpty && balls[iBall][jBall - 1].check != -1)
         {
-            if (shouldStick(iBall, jBall - 1)) // West
+            if (shouldStick(iBall, jBall - 1)) // West *
             {
                 cout << iBall << " " << jBall << "is connected to " << iBall << " " << jBall - 1 << endl;
                 balls[iBall][jBall].check = 1;
                 return true;
             }
         }
-        if (iBall > 0 && jBall > 0 && !balls[iBall - 1][jBall - 1].isEmpty)
+
+        if (iBall < lines - 1 && !balls[iBall + 1][jBall].isEmpty && balls[iBall + 1][jBall].check != -1)
         {
-            if (shouldStick(iBall - 1, jBall - 1)) // South West
+            if (shouldStick(iBall + 1, jBall)) // South *
             {
-                cout << iBall << " " << jBall << "is connected to " << iBall - 1 << " " << jBall - 1 << endl;
+                cout << iBall << " " << jBall << "is connected to " << iBall + 1 << " " << jBall << endl;
                 balls[iBall][jBall].check = 1;
                 return true;
             }
         }
-        if (iBall > 0 && !balls[iBall - 1][jBall].isEmpty)
-        {
-            if (shouldStick(iBall - 1, jBall)) // South
-            {
-                cout << iBall << " " << jBall << "is connected to " << iBall - 1 << " " << jBall << endl;
-                balls[iBall][jBall].check = 1;
-                return true;
-            }
-        }
+
         return false;
     }
 }
@@ -291,7 +307,7 @@ void initial_ball()
     balls.resize(lines);
 
     int x_center = ballRadius;
-    int y_center = 7 * ballRadius;
+    int y_center = -200;
 
     ball new_ball;
     for (int i = 0; i < lines; i++)
@@ -368,7 +384,7 @@ void initial_ball()
             x_center = 2 * ballRadius;
         else
             x_center = ballRadius;
-        y_center -= 1.72 * ballRadius;
+        y_center += 1.72 * ballRadius;
     }
 }
 
@@ -515,14 +531,14 @@ void initial_crash_ball(SDL_Renderer *Renderer)
         while (repeat)
         {
             repeat = false;
-            for (int i = 0; i < lines - 1; i++)
+            for (int i = 1; i < lines; i++)
             {
                 for (int j = 0; j < columns + stick; j++)
                 {
                     balls[i][j].check = 0;
                 }
             }
-            for (int i = lines - 1; i >= 0; i--)
+            for (int i = 1; i < lines; i++)
             {
                 for (int j = 0; j < columns + stick; j++)
                 {
@@ -551,7 +567,7 @@ void isConnected(int i, int j)
     crashed.push_back(balls[i][j]);
     balls[i][j].isEmpty = true;
 
-    for (int m = 0; m < lines; m++)
+    for (int m = lines - 1; m >= 0; m--)
         for (int n = 0; n < columns; n++)
             if (!balls[m][n].isEmpty && balls[m][n].color != 7)
                 if (areConnected(balls[i][j], balls[m][n]))
@@ -683,11 +699,10 @@ void crashed_ball(SDL_Renderer *Renderer)
                             {
                                 isConnected(i, j);
                                 // crashed.push_back(crash_balls[0]);
-                                if (crashed.size() > 1)
+                                if (crashed.size() > 0)
                                     shouldRemain = false;
                                 for (int k = crashed.size(); k > 0; k--)
                                 {
-                                    cout << crashed[k - 1].x << " " << crashed[k - 1].y << endl;
                                     if (shouldRemain)
                                         balls[crashed[k - 1].i][crashed[k - 1].j].isEmpty = false;
                                     crashed.pop_back();
@@ -708,7 +723,7 @@ void crashed_ball(SDL_Renderer *Renderer)
 
         if (SDL_PollEvent(&event))
         {
-            if (event.button.x != 0 && event.button.y != 0)
+            if (event.button.x > 0 && event.button.x < WIDTH && event.button.y > 0 && event.button.y < HIGHT)
             {
                 x_mouse = event.button.x;
                 y_mouse = event.button.y;

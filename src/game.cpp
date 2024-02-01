@@ -40,8 +40,7 @@ ball crash_balls[2];
 SDL_Rect Ball = {int(crash_balls[0].x - ballRadius), int(crash_balls[0].y - ballRadius), 2 * ballRadius, 2 * ballRadius};
 SDL_Rect Ball2 = {int(crash_balls[1].x - ballRadius), int(crash_balls[1].y - ballRadius), 2 * ballRadius, 2 * ballRadius};
 
-int x_mouse;
-int y_mouse;
+int x_mouse, y_mouse;
 
 SDL_Texture *GameBG = IMG_LoadTexture(renderer, "assets/Game/GameBG2.png");
 
@@ -57,9 +56,9 @@ int main(int argv, char **args)
 
     initial_ball();
     for (int j = 0; j < columns; j++)
-        balls[lines - 1][j].isEmpty = false, balls[lines - 1][j].shouldStick = true, balls[lines - 1][j].check = 1;
+        balls[0][j].isEmpty = false, balls[0][j].shouldStick = true, balls[0][j].check = 1;
 
-    for (int i = 0; i < lines - 1; i++)
+    for (int i = 1; i < lines; i++)
         for (int j = 0; j < columns; j++)
             balls[i][j].isEmpty = false, balls[i][j].shouldStick = false, balls[i][j].check = 0;
 
@@ -153,9 +152,9 @@ int main(int argv, char **args)
         if (!pause)
             initial_ball();
         draw_ball(renderer);
-        if (SDL_PollEvent(&event))
-        {
 
+        if (event.type == SDL_KEYDOWN)
+        {
             switch (event.key.keysym.sym)
             {
             case SDLK_ESCAPE:
@@ -172,11 +171,11 @@ int main(int argv, char **args)
             case SDLK_SPACE:
                 swap(crash_balls[0].color, crash_balls[1].color);
             }
-            if (event.button.x > 0 && event.button.x < WIDTH && event.button.y > 0 && event.button.y < HIGHT)
-            {
-                x_mouse = event.button.x;
-                y_mouse = event.button.y;
-            }
+        }
+        if (event.button.x > 0 && event.button.x < WIDTH && event.button.y > 0 && event.button.y < HIGHT)
+        {
+            x_mouse = event.button.x;
+            y_mouse = event.button.y;
         }
 
         SDL_RenderPresent(renderer);
