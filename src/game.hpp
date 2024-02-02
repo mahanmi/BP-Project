@@ -543,6 +543,62 @@ void initial_crash_ball(SDL_Renderer *Renderer)
     SDL_Rect Ball = {int(crash_balls[0].x - ballRadius), int(crash_balls[0].y - ballRadius), 2 * ballRadius, 2 * ballRadius};
     SDL_Rect Ball2 = {int(crash_balls[1].x - ballRadius), int(crash_balls[1].y - ballRadius), 2 * ballRadius * 9 / 10, 2 * ballRadius * 9 / 10};
 
+    bool regenerate = false;
+
+    if ((crash_balls[0].color == 1 && crash_ball_color[0] == false) || (crash_balls[0].color == 2 && crash_ball_color[1] == false) || (crash_balls[0].color == 4 && crash_ball_color[2] == false) || (crash_balls[0].color == 8 && crash_ball_color[3] == false))
+        regenerate = true;
+
+    if (regenerate)
+    {
+        bool isColorSelected = true;
+        while (isColorSelected)
+        {
+            switch (rand() % 4)
+            {
+            case 0:
+            {
+                if (crash_ball_color[0])
+                {
+                    crash_balls[0].color = 1;
+                    SDL_RenderCopy(Renderer, IMG_LoadTexture(Renderer, "assets/Game/Balls/1.png"), NULL, &Ball);
+                    isColorSelected = false;
+                }
+                break;
+            }
+            case 1:
+            {
+                if (crash_ball_color[1])
+                {
+                    crash_balls[0].color = 2;
+                    SDL_RenderCopy(Renderer, IMG_LoadTexture(Renderer, "assets/Game/Balls/2.png"), NULL, &Ball);
+                    isColorSelected = false;
+                }
+                break;
+            }
+            case 2:
+            {
+                if (crash_ball_color[2])
+                {
+                    crash_balls[0].color = 4;
+                    SDL_RenderCopy(Renderer, IMG_LoadTexture(Renderer, "assets/Game/Balls/4.png"), NULL, &Ball);
+                    isColorSelected = false;
+                }
+                break;
+            }
+            case 3:
+            {
+                if (crash_ball_color[3])
+                {
+                    crash_balls[0].color = 8;
+                    SDL_RenderCopy(Renderer, IMG_LoadTexture(Renderer, "assets/Game/Balls/8.png"), NULL, &Ball);
+                    isColorSelected = false;
+                }
+                break;
+            }
+            }
+        }
+    }
+
     switch (crash_balls[0].color)
     {
     case 1:
@@ -923,7 +979,7 @@ void crashed_ball(SDL_Renderer *Renderer)
                 {
                     if (!balls[i][j].isEmpty)
                     {
-                        if (sqrt((crash_balls[0].x - balls[i][j].x) * (crash_balls[0].x - balls[i][j].x) + (crash_balls[0].y - balls[i][j].y) * (crash_balls[0].y - balls[i][j].y)) < 1.5 * ballRadius || crash_balls[0].y < balls[0][0].y + 5)
+                        if (sqrt((crash_balls[0].x - balls[i][j].x) * (crash_balls[0].x - balls[i][j].x) + (crash_balls[0].y - balls[i][j].y) * (crash_balls[0].y - balls[i][j].y)) < 1.5 * ballRadius || crash_balls[0].y < balls[0][0].y)
                         {
 
                             iStick = ceil((crash_balls[0].y - balls[0][0].y) / (sqrt(3) * ballRadius));

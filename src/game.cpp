@@ -109,7 +109,7 @@ int main(int argv, char **args)
     {
         SDL_RenderCopy(renderer, GameBG, NULL, NULL);
 
-        if (!pause)
+        if (!pause && !win && !lose && !is_crash_ball_moved)
             for (int i = 0; i < lines + stick; i++)
                 for (int j = 0; j < columns; j++)
                     balls[i][j].y += dy_initial;
