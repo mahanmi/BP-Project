@@ -923,7 +923,7 @@ void crashed_ball(SDL_Renderer *Renderer)
                 {
                     if (!balls[i][j].isEmpty)
                     {
-                        if (sqrt((crash_balls[0].x - balls[i][j].x) * (crash_balls[0].x - balls[i][j].x) + (crash_balls[0].y - balls[i][j].y) * (crash_balls[0].y - balls[i][j].y)) < 1.5 * ballRadius)
+                        if (sqrt((crash_balls[0].x - balls[i][j].x) * (crash_balls[0].x - balls[i][j].x) + (crash_balls[0].y - balls[i][j].y) * (crash_balls[0].y - balls[i][j].y)) < 1.5 * ballRadius || crash_balls[0].y < balls[0][0].y + 5)
                         {
 
                             iStick = ceil((crash_balls[0].y - balls[0][0].y) / (sqrt(3) * ballRadius));
