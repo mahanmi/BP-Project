@@ -14,7 +14,7 @@ struct ball
     int color;
     float x, y;
     bool isEmpty, shouldStick;
-    int stickCheck, connectCheck;
+    int stickCheck;
 };
 
 const int WIDTH = 625, HIGHT = 1000;
