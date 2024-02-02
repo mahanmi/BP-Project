@@ -14,12 +14,12 @@ struct ball
     int color;
     float x, y;
     bool isEmpty, shouldStick;
-    int check;
+    int stickCheck, connectCheck;
 };
 
 const int WIDTH = 625, HIGHT = 1000;
-int d = 20;
-int dx, dy;
+int d = 15;
+float dx, dy;
 float dy_initial = 0.25;
 int ballRadius = 25;
 int lines = 15;
@@ -37,8 +37,6 @@ bool is_crash_ball_crashed = false;
 vector<ball> crashed;
 
 ball crash_balls[2];
-SDL_Rect Ball = {int(crash_balls[0].x - ballRadius), int(crash_balls[0].y - ballRadius), 2 * ballRadius, 2 * ballRadius};
-SDL_Rect Ball2 = {int(crash_balls[1].x - ballRadius), int(crash_balls[1].y - ballRadius), 2 * ballRadius, 2 * ballRadius};
 
 int x_mouse, y_mouse;
 
@@ -56,11 +54,11 @@ int main(int argv, char **args)
 
     initial_ball();
     for (int j = 0; j < columns; j++)
-        balls[0][j].isEmpty = false, balls[0][j].shouldStick = true, balls[0][j].check = 1;
+        balls[0][j].isEmpty = false, balls[0][j].shouldStick = true, balls[0][j].stickCheck = 1;
 
     for (int i = 1; i < lines; i++)
         for (int j = 0; j < columns; j++)
-            balls[i][j].isEmpty = false, balls[i][j].shouldStick = false, balls[i][j].check = 0;
+            balls[i][j].isEmpty = false, balls[i][j].shouldStick = false, balls[i][j].stickCheck = 0;
 
     for (int i = 6; i < lines; i++)
     {
@@ -68,52 +66,9 @@ int main(int argv, char **args)
             balls[i][j].isEmpty = true;
     }
 
-    crash_balls[0].x = int(WIDTH / 2);
-    crash_balls[0].y = int(HIGHT - 100);
-
-    if (rand() % 10 == 0)
-    {
-        crash_balls[0].color = 11;
-        SDL_RenderCopy(renderer, IMG_LoadTexture(renderer, "assets/Game/Balls/11.png"), NULL, &Ball);
-    }
-    else
-    {
-        switch (rand() % 4)
-        {
-        case 0:
-        {
-            crash_balls[0].color = 1;
-            SDL_RenderCopy(renderer, IMG_LoadTexture(renderer, "assets/Game/Balls/1.png"), NULL, &Ball);
-            break;
-        }
-        case 1:
-        {
-            crash_balls[0].color = 2;
-            SDL_RenderCopy(renderer, IMG_LoadTexture(renderer, "assets/Game/Balls/2.png"), NULL, &Ball);
-            break;
-        }
-        case 2:
-        {
-            crash_balls[0].color = 4;
-            SDL_RenderCopy(renderer, IMG_LoadTexture(renderer, "assets/Game/Balls/4.png"), NULL, &Ball);
-            break;
-        }
-        case 3:
-        {
-            crash_balls[0].color = 8;
-            SDL_RenderCopy(renderer, IMG_LoadTexture(renderer, "assets/Game/Balls/8.png"), NULL, &Ball);
-            break;
-        }
-        }
-    }
-
-    crash_balls[1].x = int(WIDTH / 2) - 75;
-    crash_balls[1].y = int(HIGHT - 100) + 20;
-
     if (rand() % 10 == 0)
     {
         crash_balls[1].color = 11;
-        SDL_RenderCopy(renderer, IMG_LoadTexture(renderer, "assets/Game/Balls/11.png"), NULL, &Ball2);
     }
     else
     {
@@ -122,25 +77,21 @@ int main(int argv, char **args)
         case 0:
         {
             crash_balls[1].color = 1;
-            SDL_RenderCopy(renderer, IMG_LoadTexture(renderer, "assets/Game/Balls/1.png"), NULL, &Ball2);
             break;
         }
         case 1:
         {
             crash_balls[1].color = 2;
-            SDL_RenderCopy(renderer, IMG_LoadTexture(renderer, "assets/Game/Balls/2.png"), NULL, &Ball2);
             break;
         }
         case 2:
         {
             crash_balls[1].color = 4;
-            SDL_RenderCopy(renderer, IMG_LoadTexture(renderer, "assets/Game/Balls/4.png"), NULL, &Ball2);
             break;
         }
         case 3:
         {
             crash_balls[1].color = 8;
-            SDL_RenderCopy(renderer, IMG_LoadTexture(renderer, "assets/Game/Balls/8.png"), NULL, &Ball2);
             break;
         }
         }
@@ -155,7 +106,7 @@ int main(int argv, char **args)
         SDL_RenderCopy(renderer, GameBG, NULL, NULL);
 
         crashed_ball(renderer);
-        if (!pause)
+        if (!pause && !is_crash_ball_moved)
             initial_ball();
         draw_ball(renderer);
 
