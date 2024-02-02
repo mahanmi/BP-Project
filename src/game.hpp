@@ -11,7 +11,7 @@
 
 bool sameColor(ball ball1, ball ball2)
 {
-    if (ball1.color == ball2.color || (ball1.color == 1 && ball2.color % 2 != 0) || (ball1.color == 2 && (ball2.color == 3 || ball2.color == 6 || ball2.color == 10)) || (ball1.color == 4 && (ball2.color == 5 || ball2.color == 6 || ball2.color == 12)) || (ball1.color == 8 && (ball2.color == 9 || ball2.color == 10 || ball2.color == 12)) || (ball1.color == 3 && (ball2.color == 1 || ball2.color == 2)) || (ball1.color == 5 && (ball2.color == 1 || ball2.color == 4)) || (ball1.color == 9 && (ball2.color == 1 || ball2.color == 8)) || (ball1.color == 6 && (ball2.color == 2 || ball2.color == 4)) || (ball1.color == 10 && (ball2.color == 2 || ball2.color == 8)) || (ball1.color == 12 && (ball2.color == 4 || ball2.color == 8)))
+    if (ball2.color != 7 && (ball1.color == 11 || ball2.color == 11 || ball1.color == ball2.color || (ball1.color == 1 && ball2.color % 2 != 0) || (ball1.color == 2 && (ball2.color == 3 || ball2.color == 6 || ball2.color == 10)) || (ball1.color == 4 && (ball2.color == 5 || ball2.color == 6 || ball2.color == 12)) || (ball1.color == 8 && (ball2.color == 9 || ball2.color == 10 || ball2.color == 12)) || (ball1.color == 3 && (ball2.color == 1 || ball2.color == 2)) || (ball1.color == 5 && (ball2.color == 1 || ball2.color == 4)) || (ball1.color == 9 && (ball2.color == 1 || ball2.color == 8)) || (ball1.color == 6 && (ball2.color == 2 || ball2.color == 4)) || (ball1.color == 10 && (ball2.color == 2 || ball2.color == 8)) || (ball1.color == 12 && (ball2.color == 4 || ball2.color == 8))))
         return true;
     return false;
 }
@@ -664,96 +664,149 @@ void initial_crash_ball(SDL_Renderer *Renderer)
 
 void isConnected(ball theBall)
 {
-    theBall.connectCheck = 1;
-    if (theBall.i % 2 == 0)
+    if (theBall.j > 0 && theBall.j < columns - 1 && theBall.i > 0 && theBall.i < lines + stick - 1)
     {
-        if (theBall.i > 0 && !balls[theBall.i - 1][theBall.j].isEmpty && balls[theBall.i - 1][theBall.j].connectCheck != 1 && sameColor(theBall, balls[theBall.i - 1][theBall.j])) // North *
-        {
-            balls[theBall.i - 1][theBall.j].isEmpty = true;
-            crashed.push_back(balls[theBall.i - 1][theBall.j]);
-            cout << theBall.i << " " << theBall.j << " is connected to " << theBall.i - 1 << " " << theBall.j << endl;
-            isConnected(balls[theBall.i - 1][theBall.j]);
-        }
-        if (theBall.i > 0 && theBall.j < columns - 1 && !balls[theBall.i - 1][theBall.j + 1].isEmpty && balls[theBall.i - 1][theBall.j + 1].connectCheck != 1 && sameColor(theBall, balls[theBall.i - 1][theBall.j + 1])) // North East *
-        {
-            balls[theBall.i - 1][theBall.j + 1].isEmpty = true;
-            crashed.push_back(balls[theBall.i - 1][theBall.j + 1]);
-            cout << theBall.i << " " << theBall.j << " is connected to " << theBall.i - 1 << " " << theBall.j + 1 << endl;
-            isConnected(balls[theBall.i - 1][theBall.j + 1]);
-        }
-        if (theBall.j < columns - 1 && !balls[theBall.i][theBall.j + 1].isEmpty && balls[theBall.i][theBall.j + 1].connectCheck != 1 && sameColor(theBall, balls[theBall.i][theBall.j + 1])) // East *
-        {
-            balls[theBall.i][theBall.j + 1].isEmpty = true;
-            crashed.push_back(balls[theBall.i][theBall.j + 1]);
-            cout << theBall.i << " " << theBall.j << " is connected to " << theBall.i << " " << theBall.j + 1 << endl;
-            isConnected(balls[theBall.i][theBall.j + 1]);
-        }
-        if (theBall.j > 0 && !balls[theBall.i][theBall.j - 1].isEmpty && balls[theBall.i][theBall.j - 1].connectCheck != 1 && sameColor(theBall, balls[theBall.i][theBall.j - 1])) // West *
-        {
-            balls[theBall.i][theBall.j - 1].isEmpty = true;
-            crashed.push_back(balls[theBall.i][theBall.j - 1]);
-            cout << theBall.i << " " << theBall.j << " is connected to " << theBall.i << " " << theBall.j - 1 << endl;
-            isConnected(balls[theBall.i][theBall.j - 1]);
-        }
-        if (theBall.i < lines + stick - 1 && !balls[theBall.i + 1][theBall.j].isEmpty && balls[theBall.i + 1][theBall.j].connectCheck != 1 && sameColor(theBall, balls[theBall.i + 1][theBall.j])) // South *
-        {
-            balls[theBall.i + 1][theBall.j].isEmpty = true;
-            crashed.push_back(balls[theBall.i + 1][theBall.j]);
-            cout << theBall.i << " " << theBall.j << " is connected to " << theBall.i + 1 << " " << theBall.j << endl;
-            isConnected(balls[theBall.i + 1][theBall.j]);
-        }
-        if (theBall.j > 0 && theBall.i < lines + stick - 1 && !balls[theBall.i + 1][theBall.j - 1].isEmpty && balls[theBall.i + 1][theBall.j - 1].connectCheck != 1 && sameColor(theBall, balls[theBall.i + 1][theBall.j - 1])) // South West *
-        {
-            balls[theBall.i + 1][theBall.j - 1].isEmpty = true;
-            crashed.push_back(balls[theBall.i + 1][theBall.j - 1]);
-            cout << theBall.i << " " << theBall.j << " is connected to " << theBall.i + 1 << " " << theBall.j - 1 << endl;
-            isConnected(balls[theBall.i + 1][theBall.j - 1]);
-        }
+        for (int i = theBall.i - 1; i <= theBall.i + 1; i++)
+            for (int j = theBall.j - 1; j <= theBall.j + 1; j++)
+            {
+                if (!balls[i][j].isEmpty && (theBall.i != i || theBall.j != j))
+                {
+                    if (sameColor(theBall, balls[i][j]) && areConnected(theBall, balls[i][j]))
+                    {
+                        crashed.push_back(balls[i][j]);
+                        balls[i][j].isEmpty = true;
+                        isConnected(balls[i][j]);
+                    }
+                }
+            }
     }
-    else
+    else if (theBall.i == 0 && theBall.j > 0 && theBall.j < columns - 1)
     {
-        if (theBall.i > 0 && !balls[theBall.i - 1][theBall.j].isEmpty && balls[theBall.i - 1][theBall.j].connectCheck != 1 && sameColor(theBall, balls[theBall.i - 1][theBall.j])) // North *
-        {
-            balls[theBall.i - 1][theBall.j].isEmpty = true;
-            crashed.push_back(balls[theBall.i - 1][theBall.j]);
-            cout << theBall.i << " " << theBall.j << " is connected to " << theBall.i - 1 << " " << theBall.j << endl;
-            isConnected(balls[theBall.i - 1][theBall.j]);
-        }
-        if (theBall.i > 0 && theBall.j > 0 && !balls[theBall.i - 1][theBall.j - 1].isEmpty && balls[theBall.i - 1][theBall.j - 1].connectCheck != 1 && sameColor(theBall, balls[theBall.i - 1][theBall.j - 1])) // North West *
-        {
-            balls[theBall.i - 1][theBall.j - 1].isEmpty = true;
-            crashed.push_back(balls[theBall.i - 1][theBall.j - 1]);
-            cout << theBall.i << " " << theBall.j << " is connected to " << theBall.i - 1 << " " << theBall.j - 1 << endl;
-            isConnected(balls[theBall.i - 1][theBall.j - 1]);
-        }
-        if (theBall.j < columns - 1 && !balls[theBall.i][theBall.j + 1].isEmpty && balls[theBall.i][theBall.j + 1].connectCheck != 1 && sameColor(theBall, balls[theBall.i][theBall.j + 1])) // East *
-        {
-            balls[theBall.i][theBall.j + 1].isEmpty = true;
-            crashed.push_back(balls[theBall.i][theBall.j + 1]);
-            cout << theBall.i << " " << theBall.j << " is connected to " << theBall.i << " " << theBall.j + 1 << endl;
-            isConnected(balls[theBall.i][theBall.j + 1]);
-        }
-        if (theBall.j > 0 && !balls[theBall.i][theBall.j - 1].isEmpty && balls[theBall.i][theBall.j - 1].connectCheck != 1 && sameColor(theBall, balls[theBall.i][theBall.j - 1])) // West *
-        {
-            balls[theBall.i][theBall.j - 1].isEmpty = true;
-            crashed.push_back(balls[theBall.i][theBall.j - 1]);
-            cout << theBall.i << " " << theBall.j << " is connected to " << theBall.i << " " << theBall.j - 1 << endl;
-            isConnected(balls[theBall.i][theBall.j - 1]);
-        }
-        if (theBall.i < lines + stick - 1 && !balls[theBall.i + 1][theBall.j].isEmpty && balls[theBall.i + 1][theBall.j].connectCheck != 1 && sameColor(theBall, balls[theBall.i + 1][theBall.j])) // South *
-        {
-            balls[theBall.i + 1][theBall.j].isEmpty = true;
-            crashed.push_back(balls[theBall.i + 1][theBall.j]);
-            cout << theBall.i << " " << theBall.j << " is connected to " << theBall.i + 1 << " " << theBall.j << endl;
-            isConnected(balls[theBall.i + 1][theBall.j]);
-        }
-        if (theBall.j < columns - 1 && theBall.i < lines + stick - 1 && !balls[theBall.i + 1][theBall.j + 1].isEmpty && balls[theBall.i + 1][theBall.j + 1].connectCheck != 1 && sameColor(theBall, balls[theBall.i + 1][theBall.j + 1])) // South East *
-        {
-            balls[theBall.i + 1][theBall.j + 1].isEmpty = true;
-            crashed.push_back(balls[theBall.i + 1][theBall.j + 1]);
-            cout << theBall.i << " " << theBall.j << " is connected to " << theBall.i + 1 << " " << theBall.j + 1 << endl;
-            isConnected(balls[theBall.i + 1][theBall.j + 1]);
-        }
+        for (int i = theBall.i; i <= theBall.i + 1; i++)
+            for (int j = theBall.j - 1; j <= theBall.j + 1; j++)
+            {
+                if (!balls[i][j].isEmpty && (theBall.i != i || theBall.j != j))
+                {
+                    if (sameColor(theBall, balls[i][j]) && areConnected(theBall, balls[i][j]))
+                    {
+                        crashed.push_back(balls[i][j]);
+                        balls[i][j].isEmpty = true;
+                        isConnected(balls[i][j]);
+                    }
+                }
+            }
+    }
+    else if (theBall.i == 0 && theBall.j == 0)
+    {
+        for (int i = theBall.i; i <= theBall.i + 1; i++)
+            for (int j = theBall.j; j <= theBall.j + 1; j++)
+            {
+                if (!balls[i][j].isEmpty && (theBall.i != i || theBall.j != j))
+                {
+                    if (sameColor(theBall, balls[i][j]) && areConnected(theBall, balls[i][j]))
+                    {
+                        crashed.push_back(balls[i][j]);
+                        balls[i][j].isEmpty = true;
+                        isConnected(balls[i][j]);
+                    }
+                }
+            }
+    }
+    else if (theBall.i == 0 && theBall.j == columns - 1)
+    {
+        for (int i = theBall.i; i <= theBall.i + 1; i++)
+            for (int j = theBall.j - 1; j <= theBall.j; j++)
+            {
+                if (!balls[i][j].isEmpty && (theBall.i != i || theBall.j != j))
+                {
+                    if (sameColor(theBall, balls[i][j]) && areConnected(theBall, balls[i][j]))
+                    {
+                        crashed.push_back(balls[i][j]);
+                        balls[i][j].isEmpty = true;
+                        isConnected(balls[i][j]);
+                    }
+                }
+            }
+    }
+    else if (theBall.i > 0 && theBall.i < lines + stick - 1 && theBall.j == 0)
+    {
+        for (int i = theBall.i - 1; i <= theBall.i + 1; i++)
+            for (int j = theBall.j; j <= theBall.j + 1; j++)
+            {
+                if (!balls[i][j].isEmpty && (theBall.i != i || theBall.j != j))
+                {
+                    if (sameColor(theBall, balls[i][j]) && areConnected(theBall, balls[i][j]))
+                    {
+                        crashed.push_back(balls[i][j]);
+                        balls[i][j].isEmpty = true;
+                        isConnected(balls[i][j]);
+                    }
+                }
+            }
+    }
+    else if (theBall.i > 0 && theBall.i < lines + stick - 1 && theBall.j == columns - 1)
+    {
+        for (int i = theBall.i - 1; i <= theBall.i + 1; i++)
+            for (int j = theBall.j - 1; j <= theBall.j; j++)
+            {
+                if (!balls[i][j].isEmpty && (theBall.i != i || theBall.j != j))
+                {
+                    if (sameColor(theBall, balls[i][j]) && areConnected(theBall, balls[i][j]))
+                    {
+                        crashed.push_back(balls[i][j]);
+                        balls[i][j].isEmpty = true;
+                        isConnected(balls[i][j]);
+                    }
+                }
+            }
+    }
+    else if (theBall.i == lines + stick - 1 && theBall.j > 0 && theBall.j < columns - 1)
+    {
+        for (int i = theBall.i - 1; i <= theBall.i; i++)
+            for (int j = theBall.j - 1; j <= theBall.j + 1; j++)
+            {
+                if (!balls[i][j].isEmpty && (theBall.i != i || theBall.j != j))
+                {
+                    if (sameColor(theBall, balls[i][j]) && areConnected(theBall, balls[i][j]))
+                    {
+                        crashed.push_back(balls[i][j]);
+                        balls[i][j].isEmpty = true;
+                        isConnected(balls[i][j]);
+                    }
+                }
+            }
+    }
+    else if (theBall.i == lines + stick - 1 && theBall.j == 0)
+    {
+        for (int i = theBall.i - 1; i <= theBall.i; i++)
+            for (int j = theBall.j; j <= theBall.j + 1; j++)
+            {
+                if (!balls[i][j].isEmpty && (theBall.i != i || theBall.j != j))
+                {
+                    if (sameColor(theBall, balls[i][j]) && areConnected(theBall, balls[i][j]))
+                    {
+                        crashed.push_back(balls[i][j]);
+                        balls[i][j].isEmpty = true;
+                        isConnected(balls[i][j]);
+                    }
+                }
+            }
+    }
+    else if (theBall.i == lines + stick - 1 && theBall.j == columns - 1)
+    {
+        for (int i = theBall.i - 1; i <= theBall.i; i++)
+            for (int j = theBall.j - 1; j <= theBall.j; j++)
+            {
+                if (!balls[i][j].isEmpty && (theBall.i != i || theBall.j != j))
+                {
+                    if (sameColor(theBall, balls[i][j]) && areConnected(theBall, balls[i][j]))
+                    {
+                        crashed.push_back(balls[i][j]);
+                        balls[i][j].isEmpty = true;
+                        isConnected(balls[i][j]);
+                    }
+                }
+            }
     }
 }
 
@@ -910,24 +963,18 @@ void crashed_ball(SDL_Renderer *Renderer)
                 balls[iStick][jStick].color = crash_balls[0].color;
                 balls[iStick][jStick].isEmpty = false;
 
+                crashed.clear();
+
                 isConnected(balls[iStick][jStick]);
 
-                if (crashed.size() >= 2)
+                if (crashed.size() < 3)
                 {
                     for (int i = 0; i < crashed.size(); i++)
                     {
-                        cout << crashed[i].i << " " << crashed[i].j << "Removed" << endl;
-                        balls[crashed[i].i][crashed[i].j].isEmpty = true;
+                        balls[crashed[i].i][crashed[i].j].isEmpty = false;
                     }
-                    crashed.clear();
-                    initial_crash_ball(Renderer);
                 }
-                else
-                {
-                    crashed.clear();
-                    cout << "No Ball Removed" << endl;
-                    initial_crash_ball(Renderer);
-                }
+                initial_crash_ball(Renderer);
             }
         }
 
