@@ -88,6 +88,8 @@ SDL_Texture *ball10 = IMG_LoadTexture(renderer, "assets/Game/Balls/10.png");
 SDL_Texture *ball11 = IMG_LoadTexture(renderer, "assets/Game/Balls/11.png");
 SDL_Texture *ball12 = IMG_LoadTexture(renderer, "assets/Game/Balls/12.png");
 
+SDL_Texture *pauseMenu = IMG_LoadTexture(renderer, "assets/Game/pauseMenu.png");
+
 int musicIndex = 1;
 bool sfx = true;
 
@@ -136,6 +138,7 @@ int main(int argv, char **args)
   button timer = {151, 54, 63, 291, 0, 0, 0, 0, 0, false, false, IMG_LoadTexture(renderer, "assets/Leaderboard/LeaderboardTimer.png"), 0, 0, 0, click};
   button classic = {151, 54, 234, 291, 0, 0, 0, 0, 0, true, false, IMG_LoadTexture(renderer, "assets/Leaderboard/LeaderboardClassic.png"), 0, 0, 0, click};
   button infinite = {151, 54, 405, 291, 0, 0, 0, 0, 0, false, false, IMG_LoadTexture(renderer, "assets/Leaderboard/LeaderboardInfinite.png"), 0, 0, 0, click};
+  button setting = {55, 58, 20, 20, 0, 0, 0, 0, 0, false, false, IMG_LoadTexture(renderer, "assets/Game/settingsButton.png"), IMG_LoadTexture(renderer, "assets/Game/settingsButtonHovered.png"), 0, hover, click};
 
   SDL_Delay(1000);
 
@@ -401,7 +404,39 @@ int main(int argv, char **args)
                       timerGM.isSelected = false;
                       break;
                     }
-
+                    /* if (setting.wasClicked)
+                    {
+                      settings.wasClicked = true;
+                      while (settings.wasClicked)
+                      {
+                        vector<button> adjustButtons = {
+                            {39, 46, 218, 226, 0, 0, 0, 0, 0, false, false, IMG_LoadTexture(renderer, "assets/Settings/L-VOLUME.png"), IMG_LoadTexture(renderer, "assets/Settings/L-VOLUMEHovered.png"), 0, hover, click},
+                            {39, 46, 530, 226, 0, 0, 0, 0, 0, false, false, IMG_LoadTexture(renderer, "assets/Settings/R-VOLUME.png"), IMG_LoadTexture(renderer, "assets/Settings/R-VOLUMEHovered.png"), 0, hover, click},
+                            {39, 46, 218, 350, 0, 0, 0, 0, 0, false, false, IMG_LoadTexture(renderer, "assets/Settings/L-Music.png"), IMG_LoadTexture(renderer, "assets/Settings/L-MusicHovered.png"), 0, hover, click},
+                            {39, 46, 530, 350, 0, 0, 0, 0, 0, false, false, IMG_LoadTexture(renderer, "assets/Settings/R-Music.png"), IMG_LoadTexture(renderer, "assets/Settings/R-MusicHovered.png"), 0, hover, click},
+                            {58, 68, 90, 663, 0, 0, 0, 0, 0, false, false, IMG_LoadTexture(renderer, "assets/Settings/L-THEME.png"), IMG_LoadTexture(renderer, "assets/Settings/L-THEMEHovered.png"), 0, hover, click},
+                            {58, 68, 480, 663, 0, 0, 0, 0, 0, false, false, IMG_LoadTexture(renderer, "assets/Settings/R-THEME.png"), IMG_LoadTexture(renderer, "assets/Settings/R-THEMEHovered.png"), 0, hover, click},
+                            {39, 46, 218, 287, 0, 0, 0, 0, 0, false, false, IMG_LoadTexture(renderer, "assets/Settings/L-SFX.png"), IMG_LoadTexture(renderer, "assets/Settings/L-SFXHovered.png"), IMG_LoadTexture(renderer, "assets/Settings/L-SFXHovered.png"), hover, click},
+                            {39, 46, 530, 287, 0, 0, 0, 0, 0, false, false, IMG_LoadTexture(renderer, "assets/Settings/R-SFX.png"), IMG_LoadTexture(renderer, "assets/Settings/R-SFXHovered.png"), IMG_LoadTexture(renderer, "assets/Settings/R-SFXHovered.png"), hover, click}};
+                        while (SDL_PollEvent(&event) && settings.wasClicked)
+                        {
+                          if (quitGame(event))
+                          {
+                            settings.wasClicked = false;
+                            quit(running);
+                            break;
+                          }
+                          if (goBack(event) || back.wasClicked)
+                          {
+                            settings.wasClicked = false;
+                            break;
+                          }
+                          SDL_RenderCopy(renderer, Background, 0, 0);
+                          drawButton(renderer, back, event);
+                          render(renderer);
+                        }
+                      }
+                    } */
                     current_time = SDL_GetTicks();
                     elapsed_time = current_time - start_time;
 
@@ -448,7 +483,9 @@ int main(int argv, char **args)
                       x_mouse = event.button.x;
                       y_mouse = event.button.y;
                     }
-                    drawButton(renderer, back, event);
+
+                    // drawButton(renderer, setting, event);
+
                     render(renderer);
                   }
                   if (win)
@@ -528,7 +565,6 @@ int main(int argv, char **args)
                     }
                   }
                 }
-                // timerGM.isSelected = true;
               }
               else if (classicGM.isSelected)
               {
@@ -604,6 +640,40 @@ int main(int argv, char **args)
                       break;
                     }
 
+                    /* if (setting.wasClicked)
+                    {
+                      settings.wasClicked = true;
+                      while (settings.wasClicked)
+                      {
+                        vector<button> adjustButtons = {
+                            {39, 46, 218, 226, 0, 0, 0, 0, 0, false, false, IMG_LoadTexture(renderer, "assets/Settings/L-VOLUME.png"), IMG_LoadTexture(renderer, "assets/Settings/L-VOLUMEHovered.png"), 0, hover, click},
+                            {39, 46, 530, 226, 0, 0, 0, 0, 0, false, false, IMG_LoadTexture(renderer, "assets/Settings/R-VOLUME.png"), IMG_LoadTexture(renderer, "assets/Settings/R-VOLUMEHovered.png"), 0, hover, click},
+                            {39, 46, 218, 350, 0, 0, 0, 0, 0, false, false, IMG_LoadTexture(renderer, "assets/Settings/L-Music.png"), IMG_LoadTexture(renderer, "assets/Settings/L-MusicHovered.png"), 0, hover, click},
+                            {39, 46, 530, 350, 0, 0, 0, 0, 0, false, false, IMG_LoadTexture(renderer, "assets/Settings/R-Music.png"), IMG_LoadTexture(renderer, "assets/Settings/R-MusicHovered.png"), 0, hover, click},
+                            {58, 68, 90, 663, 0, 0, 0, 0, 0, false, false, IMG_LoadTexture(renderer, "assets/Settings/L-THEME.png"), IMG_LoadTexture(renderer, "assets/Settings/L-THEMEHovered.png"), 0, hover, click},
+                            {58, 68, 480, 663, 0, 0, 0, 0, 0, false, false, IMG_LoadTexture(renderer, "assets/Settings/R-THEME.png"), IMG_LoadTexture(renderer, "assets/Settings/R-THEMEHovered.png"), 0, hover, click},
+                            {39, 46, 218, 287, 0, 0, 0, 0, 0, false, false, IMG_LoadTexture(renderer, "assets/Settings/L-SFX.png"), IMG_LoadTexture(renderer, "assets/Settings/L-SFXHovered.png"), IMG_LoadTexture(renderer, "assets/Settings/L-SFXHovered.png"), hover, click},
+                            {39, 46, 530, 287, 0, 0, 0, 0, 0, false, false, IMG_LoadTexture(renderer, "assets/Settings/R-SFX.png"), IMG_LoadTexture(renderer, "assets/Settings/R-SFXHovered.png"), IMG_LoadTexture(renderer, "assets/Settings/R-SFXHovered.png"), hover, click}};
+                        while (SDL_PollEvent(&event) && settings.wasClicked)
+                        {
+                          if (quitGame(event))
+                          {
+                            settings.wasClicked = false;
+                            quit(running);
+                            break;
+                          }
+                          if (goBack(event) || back.wasClicked)
+                          {
+                            settings.wasClicked = false;
+                            break;
+                          }
+                          SDL_RenderCopy(renderer, Background, 0, 0);
+                          drawButton(renderer, back, event);
+                          render(renderer);
+                        }
+                      }
+                    } */
+
                     SDL_RenderCopy(renderer, GameBG, NULL, NULL);
 
                     if (slowMotion)
@@ -640,7 +710,7 @@ int main(int argv, char **args)
                       x_mouse = event.button.x;
                       y_mouse = event.button.y;
                     }
-                    drawButton(renderer, back, event);
+                    //  drawButton(renderer, setting, event);
                     render(renderer);
                   }
                   if (win)
