@@ -46,7 +46,20 @@ bool crash_ball_color[4] = {1, 1, 1, 1};
 
 int x_mouse, y_mouse;
 
-SDL_Texture *GameBG = IMG_LoadTexture(renderer, "assets/Game/GameBG2.png");
+SDL_Texture *GameBG = IMG_LoadTexture(renderer, "assets/Game/GameBG3.png");
+
+SDL_Texture *ball1 = IMG_LoadTexture(renderer, "assets/Game/Balls/1.png");
+SDL_Texture *ball2 = IMG_LoadTexture(renderer, "assets/Game/Balls/2.png");
+SDL_Texture *ball3 = IMG_LoadTexture(renderer, "assets/Game/Balls/3.png");
+SDL_Texture *ball4 = IMG_LoadTexture(renderer, "assets/Game/Balls/4.png");
+SDL_Texture *ball5 = IMG_LoadTexture(renderer, "assets/Game/Balls/5.png");
+SDL_Texture *ball6 = IMG_LoadTexture(renderer, "assets/Game/Balls/6.png");
+SDL_Texture *ball7 = IMG_LoadTexture(renderer, "assets/Game/Balls/7.png");
+SDL_Texture *ball8 = IMG_LoadTexture(renderer, "assets/Game/Balls/8.png");
+SDL_Texture *ball9 = IMG_LoadTexture(renderer, "assets/Game/Balls/9.png");
+SDL_Texture *ball10 = IMG_LoadTexture(renderer, "assets/Game/Balls/10.png");
+SDL_Texture *ball11 = IMG_LoadTexture(renderer, "assets/Game/Balls/11.png");
+SDL_Texture *ball12 = IMG_LoadTexture(renderer, "assets/Game/Balls/12.png");
 
 #include "game.hpp"
 
