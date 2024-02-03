@@ -15,7 +15,7 @@ bool check_win()
     {
         for (int j = 0; j < columns; j++)
         {
-            if (balls[i][j].isEmpty == false)
+            if (balls[i][j].isEmpty == false && balls[i][j].color != 7)
             {
                 cout << i << " " << j << " " << balls[i][j].isEmpty << endl;
                 return false;
@@ -74,7 +74,6 @@ void draw_aimLine(SDL_Renderer *renderer)
         }
     }
 }
-
 
 bool areConnectedBallsVector(ball ball1, ball ball2)
 {
