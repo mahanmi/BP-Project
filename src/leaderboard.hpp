@@ -140,10 +140,15 @@ void drawLeaderboard(vector<player> &players, SDL_Renderer *renderer, SDL_Textur
 void updateLeaderboard(vector<player> &players)
 {
   ofstream file;
-  file.open("assets/leaderboard/leaderboard.txt");
+  file.open("assets/leaderboard/leaderboard.txt", ios::trunc);
+  // file.open("assets/leaderboard/leaderboard.txt");
+
   for (int i = 0; i < players.size(); i++)
   {
-    file << players[i].name << " " << players[i].classicScore << " " << players[i].infiniteScore << " " << players[i].timerScore << endl;
+    if (players[i].name != "0" && players[i].name != "")
+    {
+      file << players[i].name << " " << players[i].classicScore << " " << players[i].infiniteScore << " " << players[i].timerScore << endl;
+    }
   }
   file.close();
 }

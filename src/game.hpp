@@ -1259,7 +1259,7 @@ int gameScore()
         for (int i = 0; i < lines + stick; i++)
             for (int j = 0; j < columns; j++)
                 if (!balls[i][j].isEmpty && balls[i][j].color != 7)
-                    score -= 2;
+                    score--;
     }
     return score;
 }
