@@ -45,22 +45,22 @@ void draw_aimLine(SDL_Renderer *renderer)
     int dym = y_mouse - crash_balls[0].y;
 
     float angle = atan2(dym, dxm);
-    float y_end = crash_balls[0].y - (WIDTH - crash_balls[0].x) * tan(angle);
+    float y_end = crash_balls[0].y + (WIDTH - ballRadius - crash_balls[0].x) * tan(angle);
 
     if (x_mouse < crash_balls[0].x)
-        y_end = crash_balls[0].y + (crash_balls[0].x) * tan(angle);
+        y_end = crash_balls[0].y - (crash_balls[0].x - ballRadius) * tan(angle);
 
     if (y_end > 0 && y_end < HIGHT)
     {
         if (x_mouse > crash_balls[0].x)
         {
-            lineRGBA(renderer, crash_balls[0].x, crash_balls[0].y, WIDTH, y_end, 255, 0, 0, 255);
-            lineRGBA(renderer, WIDTH, y_end, 0, y_end - WIDTH * tan(angle), 255, 0, 0, 255);
+            lineRGBA(renderer, crash_balls[0].x, crash_balls[0].y, WIDTH - ballRadius, y_end, 255, 0, 0, 255);
+            lineRGBA(renderer, WIDTH - ballRadius, y_end, ballRadius, y_end + WIDTH * tan(angle), 255, 0, 0, 255);
         }
         else
         {
-            lineRGBA(renderer, crash_balls[0].x, crash_balls[0].y, 0, y_end, 255, 0, 0, 255);
-            lineRGBA(renderer, 0, y_end, WIDTH, y_end + WIDTH * tan(angle), 255, 0, 0, 255);
+            lineRGBA(renderer, crash_balls[0].x, crash_balls[0].y, ballRadius, y_end, 255, 0, 0, 255);
+            lineRGBA(renderer, ballRadius, y_end, WIDTH - ballRadius, y_end - WIDTH * tan(angle), 255, 0, 0, 255);
         }
     }
 
