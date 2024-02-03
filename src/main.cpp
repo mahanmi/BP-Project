@@ -54,7 +54,7 @@ TTF_Font *Leaderboard = TTF_OpenFont("assets/Fonts/Poppins-Bold.ttf", 45);
 TTF_Font *Settings = TTF_OpenFont("assets/Fonts/Digitalt.ttf", 38);
 TTF_Font *name = TTF_OpenFont("assets/Fonts/Digitalt.ttf", 28);
 
-int main(int argc, char const *argv[])
+int main(int argv, char **args)
 {
   if (!SDLinit)
     return 1;

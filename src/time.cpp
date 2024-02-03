@@ -26,7 +26,7 @@ int lines = 11;
 int columns = WIDTH / (2 * ballRadius);
 int stick = 0;
 int score = 100;
-int end_time = 60 * 1000;
+int end_time = 120 * 1000;
 
 SDL_Window *window = SDL_CreateWindow("Bouncing Balls Game", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, WIDTH, HIGHT, SDL_WINDOW_SHOWN);
 SDL_Renderer *renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
@@ -108,11 +108,13 @@ int main(int argv, char **args)
     SDL_RenderPresent(renderer);
 
     Uint32 start_time = SDL_GetTicks();
+    Uint32 current_time = SDL_GetTicks();
+    Uint32 elapsed_time = current_time - start_time;
 
     while (!win && !lose)
     {
-        Uint32 current_time = SDL_GetTicks();
-        Uint32 elapsed_time = current_time - start_time;
+        current_time = SDL_GetTicks();
+        elapsed_time = current_time - start_time;
 
         if (elapsed_time >= end_time)
         {
@@ -165,5 +167,6 @@ int main(int argv, char **args)
     SDL_RenderCopy(renderer, GameBG, NULL, NULL);
     SDL_RenderPresent(renderer);
     SDL_Delay(3000);
+    cout << timeScore(elapsed_time);
     return 0;
 }
