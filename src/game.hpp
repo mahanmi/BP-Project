@@ -1146,18 +1146,14 @@ void crashed_ball(SDL_Renderer *Renderer)
 
 int gameScore()
 {
-    if (win)
-    {
-        return score;
-    }
     if (lose)
     {
         for (int i = 0; i < lines + stick; i++)
             for (int j = 0; j < columns; j++)
                 if (!balls[i][j].isEmpty && balls[i][j].color != 7)
                     score--;
-        return score;
     }
+    return score;
 }
 
 int timeScore(Uint32 elapsed_time)
@@ -1166,7 +1162,7 @@ int timeScore(Uint32 elapsed_time)
     {
         return score + (end_time - elapsed_time) / 1000;
     }
-    if (lose)
+    else
     {
         for (int i = 0; i < lines + stick; i++)
             for (int j = 0; j < columns; j++)
