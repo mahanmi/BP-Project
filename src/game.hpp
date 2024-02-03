@@ -128,7 +128,10 @@ bool shouldStick(int iBall, int jBall)
     if (balls[iBall][jBall].isEmpty)
         return false;
 
-    if (iBall == 0)
+    if (lines<50 && iBall == 0)
+        return true;
+
+    if(lines>50 && abs(balls[iBall][jBall].y) <= ballRadius)
         return true;
 
     if (balls[iBall][jBall].stickCheck == -1)
@@ -390,7 +393,7 @@ void initial_ball()
     balls.resize(lines + stick);
 
     int x_center = ballRadius;
-    int y_center = 0;
+    int y_center = -(lines * sqrt(3) * ballRadius) + HIGHT + ballRadius;
 
     ball new_ball;
     int last_color = -1;
@@ -554,7 +557,6 @@ void draw_ball(SDL_Renderer *Renderer)
         {
             if (!balls[i][j].isEmpty)
             {
-
                 int x_center = balls[i][j].x, y_center = balls[i][j].y;
                 SDL_Rect Ball = {x_center - ballRadius, y_center - ballRadius, 2 * ballRadius, 2 * ballRadius};
                 switch (balls[i][j].color)
@@ -623,6 +625,10 @@ void draw_ball(SDL_Renderer *Renderer)
                     crash_ball_color[3] = true;
                     break;
                 }
+                if (balls[i][j].y > HIGHT - 100 - 2 * ballRadius )
+                {
+                    lose = true;
+                }
             }
         }
     }
@@ -650,8 +656,6 @@ void initial_crash_ball(SDL_Renderer *Renderer)
     crash_balls[0].color = crash_balls[1].color;
     crash_balls[0].isEmpty = false;
 
-    // crash_balls[1].x = int(WIDTH / 2) - 75;
-    // crash_balls[1].y = int(HIGHT - 100) + 20;
     crash_balls[1].x = 317;
     crash_balls[1].y = 920;
 
@@ -780,6 +784,7 @@ void initial_crash_ball(SDL_Renderer *Renderer)
                         if (!shouldStick(i, j))
                         {
                             cout << i << " " << j << " ShouldN't stick" << endl;
+                            crashed_score++;
                             balls[i][j].isEmpty = true;
                             repeat = true;
                         }
@@ -806,6 +811,7 @@ void isConnected(ball theBall)
                     {
                         crashed.push_back(balls[i][j]);
                         balls[i][j].isEmpty = true;
+                        crashed_score++;
                         isConnected(balls[i][j]);
                     }
                 }
@@ -822,6 +828,7 @@ void isConnected(ball theBall)
                     {
                         crashed.push_back(balls[i][j]);
                         balls[i][j].isEmpty = true;
+                        crashed_score++;
                         isConnected(balls[i][j]);
                     }
                 }
@@ -838,6 +845,7 @@ void isConnected(ball theBall)
                     {
                         crashed.push_back(balls[i][j]);
                         balls[i][j].isEmpty = true;
+                        crashed_score++;
                         isConnected(balls[i][j]);
                     }
                 }
@@ -854,6 +862,7 @@ void isConnected(ball theBall)
                     {
                         crashed.push_back(balls[i][j]);
                         balls[i][j].isEmpty = true;
+                        crashed_score++;
                         isConnected(balls[i][j]);
                     }
                 }
@@ -870,6 +879,7 @@ void isConnected(ball theBall)
                     {
                         crashed.push_back(balls[i][j]);
                         balls[i][j].isEmpty = true;
+                        crashed_score++;
                         isConnected(balls[i][j]);
                     }
                 }
@@ -886,6 +896,7 @@ void isConnected(ball theBall)
                     {
                         crashed.push_back(balls[i][j]);
                         balls[i][j].isEmpty = true;
+                        crashed_score++;
                         isConnected(balls[i][j]);
                     }
                 }
@@ -902,6 +913,7 @@ void isConnected(ball theBall)
                     {
                         crashed.push_back(balls[i][j]);
                         balls[i][j].isEmpty = true;
+                        crashed_score++;
                         isConnected(balls[i][j]);
                     }
                 }
@@ -918,6 +930,7 @@ void isConnected(ball theBall)
                     {
                         crashed.push_back(balls[i][j]);
                         balls[i][j].isEmpty = true;
+                        crashed_score++;
                         isConnected(balls[i][j]);
                     }
                 }
@@ -934,6 +947,7 @@ void isConnected(ball theBall)
                     {
                         crashed.push_back(balls[i][j]);
                         balls[i][j].isEmpty = true;
+                        crashed_score++;
                         isConnected(balls[i][j]);
                     }
                 }
@@ -1046,6 +1060,7 @@ void crashed_ball(SDL_Renderer *Renderer)
                     for (int i = 0; i < crashed.size(); i++)
                     {
                         balls[crashed[i].i][crashed[i].j].isEmpty = false;
+                        crashed_score--;
                     }
                 }
                 initial_crash_ball(Renderer);
@@ -1174,5 +1189,10 @@ int timeScore(Uint32 elapsed_time)
                     score--;
         return score;
     }
+}
+
+int infinityScore()
+{
+    return (score + crashed_score);
 }
 #endif // !game_hpp

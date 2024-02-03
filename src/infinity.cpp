@@ -22,7 +22,7 @@ int d = 20;
 float dx, dy;
 float dy_initial = 0.25;
 int ballRadius = 25;
-int lines = 20;
+int lines = 100;
 int columns = WIDTH / (2 * ballRadius);
 int stick = 0;
 
@@ -62,17 +62,18 @@ int main(int argv, char **args)
 
     initial_ball();
     for (int j = 0; j < columns; j++)
-        balls[0][j].isEmpty = false, balls[0][j].shouldStick = true, balls[0][j].stickCheck = 1;
+        balls[0][j].shouldStick = true, balls[0][j].stickCheck = 1;
 
     for (int i = 1; i < lines; i++)
         for (int j = 0; j < columns; j++)
-            balls[i][j].isEmpty = false, balls[i][j].shouldStick = false, balls[i][j].stickCheck = 0;
+            balls[i][j].shouldStick = false, balls[i][j].stickCheck = 0;
 
-    for (int i = 6; i < lines; i++)
-    {
+    for (int i = 0; i < lines; i++)
         for (int j = 0; j < columns; j++)
-            balls[i][j].isEmpty = true;
-    }
+            if (i > lines - 21 && i <= lines - 13)
+                balls[i][j].isEmpty = false;
+            else
+                balls[i][j].isEmpty = true;
 
     if (rand() % 10 == 0)
     {
@@ -149,10 +150,6 @@ int main(int argv, char **args)
         {
             cout << "You win" << endl;
         }
-        if (lose)
-        {
-            cout << "You lose" << endl;
-        }
         SDL_RenderPresent(renderer);
         SDL_Delay(1000 / 60);
         SDL_RenderClear(renderer);
@@ -160,6 +157,6 @@ int main(int argv, char **args)
     SDL_RenderCopy(renderer, GameBG, NULL, NULL);
     SDL_RenderPresent(renderer);
     SDL_Delay(3000);
-    cout << gameScore();
+    cout << infinityScore();
     return 0;
 }

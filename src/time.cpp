@@ -25,7 +25,9 @@ int ballRadius = 25;
 int lines = 11;
 int columns = WIDTH / (2 * ballRadius);
 int stick = 0;
+
 int score = 100;
+int crashed_score = 0;
 int end_time = 120 * 1000;
 
 SDL_Window *window = SDL_CreateWindow("Bouncing Balls Game", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, WIDTH, HIGHT, SDL_WINDOW_SHOWN);
