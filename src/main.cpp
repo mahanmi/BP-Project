@@ -18,7 +18,7 @@ SDL_Renderer *renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED
 SDL_Event event;
 struct ball
 {
-  int i, j;
+  int i, j, r = 25;
   int color;
   float x, y;
   bool isEmpty, shouldStick;
@@ -27,7 +27,7 @@ struct ball
 
 int d = 20;
 float dx, dy;
-float dy_initial = 0.25;
+float dy_initial = 0.25, dy_fallingBall = 10;
 int ballRadius = 25;
 int lines = 11;
 int columns = WIDTH / (2 * ballRadius);
@@ -65,7 +65,7 @@ vector<vector<ball>> balls;
 bool is_crash_ball_moved = false;
 bool is_crash_ball_crashed = false;
 
-vector<ball> crashed;
+vector<ball> crashed, fallingBall;
 
 ball crash_balls[2];
 bool crash_ball_color[4] = {1, 1, 1, 1};
@@ -418,7 +418,7 @@ int main(int argv, char **args)
                     draw_ball(renderer);
                     crashed_ball(renderer);
 
-                    if (event.type == SDL_KEYDOWN)
+                    if (event.type == SDL_KEYDOWN && event.type != SDL_MOUSEMOTION)
                     {
                       switch (event.key.keysym.sym)
                       {
@@ -448,12 +448,13 @@ int main(int argv, char **args)
                   }
                   if (win)
                   {
-                    balls.clear();
                     if (players[playerIndex].classicScore < score)
                     {
+                      cout << "New High Score" << endl;
                       players[playerIndex].classicScore = score;
                       updateLeaderboard(players);
                     }
+                    balls.clear();
                     button OK = {150, 68, 242, 657, 0, 0, 0, 0, 0, false, false, IMG_LoadTexture(renderer, "assets/Game/OKButton.png"), IMG_LoadTexture(renderer, "assets/Game/OKButtonHover.png"), IMG_LoadTexture(renderer, "assets/Game/OKButtonClicked.png"), hover, click};
                     cout << "You win" << endl;
                     while (win)
@@ -491,6 +492,7 @@ int main(int argv, char **args)
                           score--;
                     if (players[playerIndex].classicScore < score)
                     {
+                      cout << "New High Score" << endl;
                       players[playerIndex].classicScore = score;
                       updateLeaderboard(players);
                     }
