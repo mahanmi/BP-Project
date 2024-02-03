@@ -418,7 +418,66 @@ void initial_ball()
             }
             if (rand_col == 21)
             {
-                new_ball.color = 7; // black
+                if (i != 0)
+                {
+                    new_ball.color = 7; // black
+                }
+                else
+                {
+                    rand_col = rand() % 21;
+                    if (rand_col == 20)
+                    {
+                        switch (rand() % 6)
+                        {
+                        case 0:
+                        {
+                            new_ball.color = 3; // yellow & blue
+                            break;
+                        }
+                        case 1:
+                        {
+                            new_ball.color = 5; // yellow & green
+                            break;
+                        }
+                        case 2:
+                        {
+                            new_ball.color = 9; // yellow & red
+                            break;
+                        }
+                        case 3:
+                        {
+                            new_ball.color = 6; // blue & green
+                            break;
+                        }
+                        case 4:
+                        {
+                            new_ball.color = 10; // blue & red
+                            break;
+                        }
+                        case 5:
+                        {
+                            new_ball.color = 12; // green & red
+                            break;
+                        }
+                        }
+                    }
+                    else if (rand_col % 4 == 0 && rand_col < 22)
+                    {
+                        new_ball.color = 1; // yellow
+                    }
+                    else if (rand_col % 4 == 1 && rand_col < 22)
+                    {
+                        new_ball.color = 2; // blue
+                    }
+                    else if (rand_col % 4 == 2 && rand_col < 22)
+                    {
+                        new_ball.color = 4; // green
+                    }
+                    else if (rand_col % 4 == 3 && rand_col < 22)
+                    {
+                        new_ball.color = 8; // red
+                    }
+                }
             }
             else if (rand_col % 4 == 1 && rand_col < 22)
             {
@@ -609,7 +668,7 @@ void initial_crash_ball(SDL_Renderer *Renderer)
         }
     }
 
-    if (rand() % 10 == 0)
+    if (rand() % 17 == 0)
     {
         crash_balls[1].color = 11;
     }
