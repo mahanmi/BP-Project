@@ -43,6 +43,7 @@ SDL_Texture *Background = IMG_LoadTexture(renderer, "assets/Menu/BG.png");
 SDL_Texture *StartScreen = IMG_LoadTexture(renderer, "assets/Menu/StartingScreen.png");
 
 int musicIndex = 1;
+bool sfx = true;
 
 vector<music> musicList = {{"Off", ""}, {"Piano", "assets/Sounds/pianoMusic.mp3"}, {"Bache Nane", "assets/Sounds/MohsenLorestani-BacheNane.mp3"}};
 
@@ -475,17 +476,20 @@ int main(int argc, char const *argv[])
       if (settings.wasClicked)
       {
         SDL_Texture *SettingsBG = IMG_LoadTexture(renderer, "assets/Settings/Settings.png");
+        SDL_Texture *on = IMG_LoadTexture(renderer, "assets/Settings/ON.png");
+        SDL_Texture *off = IMG_LoadTexture(renderer, "assets/Settings/OFF.png");
 
         vector<SDL_Texture *> soundBar = {IMG_LoadTexture(renderer, "assets/Settings/sound0.png"), IMG_LoadTexture(renderer, "assets/Settings/sound20.png"), IMG_LoadTexture(renderer, "assets/Settings/sound40.png"), IMG_LoadTexture(renderer, "assets/Settings/sound60.png"), IMG_LoadTexture(renderer, "assets/Settings/sound80.png"), IMG_LoadTexture(renderer, "assets/Settings/sound100.png")};
 
         vector<button> adjustButtons = {
-            {39, 46, 218, 226, 0, 0, 0, 0, 0, false, false, IMG_LoadTexture(renderer, "assets/Settings/L-SFX.png"), IMG_LoadTexture(renderer, "assets/Settings/L-SFXHovered.png"), 0, hover, click},
-            {39, 46, 530, 226, 0, 0, 0, 0, 0, false, false, IMG_LoadTexture(renderer, "assets/Settings/R-SFX.png"), IMG_LoadTexture(renderer, "assets/Settings/R-SFXHovered.png"), 0, hover, click},
-            {39, 46, 218, 324, 0, 0, 0, 0, 0, false, false, IMG_LoadTexture(renderer, "assets/Settings/L-Music.png"), IMG_LoadTexture(renderer, "assets/Settings/L-MusicHovered.png"), 0, hover, click},
-            {39, 46, 530, 324, 0, 0, 0, 0, 0, false, false, IMG_LoadTexture(renderer, "assets/Settings/R-Music.png"), IMG_LoadTexture(renderer, "assets/Settings/R-MusicHovered.png"), 0, hover, click},
+            {39, 46, 218, 226, 0, 0, 0, 0, 0, false, false, IMG_LoadTexture(renderer, "assets/Settings/L-VOLUME.png"), IMG_LoadTexture(renderer, "assets/Settings/L-VOLUMEHovered.png"), 0, hover, click},
+            {39, 46, 530, 226, 0, 0, 0, 0, 0, false, false, IMG_LoadTexture(renderer, "assets/Settings/R-VOLUME.png"), IMG_LoadTexture(renderer, "assets/Settings/R-VOLUMEHovered.png"), 0, hover, click},
+            {39, 46, 218, 350, 0, 0, 0, 0, 0, false, false, IMG_LoadTexture(renderer, "assets/Settings/L-Music.png"), IMG_LoadTexture(renderer, "assets/Settings/L-MusicHovered.png"), 0, hover, click},
+            {39, 46, 530, 350, 0, 0, 0, 0, 0, false, false, IMG_LoadTexture(renderer, "assets/Settings/R-Music.png"), IMG_LoadTexture(renderer, "assets/Settings/R-MusicHovered.png"), 0, hover, click},
             {58, 68, 90, 663, 0, 0, 0, 0, 0, false, false, IMG_LoadTexture(renderer, "assets/Settings/L-THEME.png"), IMG_LoadTexture(renderer, "assets/Settings/L-THEMEHovered.png"), 0, hover, click},
             {58, 68, 480, 663, 0, 0, 0, 0, 0, false, false, IMG_LoadTexture(renderer, "assets/Settings/R-THEME.png"), IMG_LoadTexture(renderer, "assets/Settings/R-THEMEHovered.png"), 0, hover, click},
-        };
+            {39, 46, 218, 287, 0, 0, 0, 0, 0, false, false, IMG_LoadTexture(renderer, "assets/Settings/L-SFX.png"), IMG_LoadTexture(renderer, "assets/Settings/L-SFXHovered.png"), IMG_LoadTexture(renderer, "assets/Settings/L-SFXHovered.png"), hover, click},
+            {39, 46, 530, 287, 0, 0, 0, 0, 0, false, false, IMG_LoadTexture(renderer, "assets/Settings/R-SFX.png"), IMG_LoadTexture(renderer, "assets/Settings/R-SFXHovered.png"), IMG_LoadTexture(renderer, "assets/Settings/R-SFXHovered.png"), hover, click}};
 
         vector<SDL_Texture *> themes = {IMG_LoadTexture(renderer, "assets/Settings/Theme1.png"), IMG_LoadTexture(renderer, "assets/Settings/Theme2.png"), IMG_LoadTexture(renderer, "assets/Settings/Theme3.png")};
 
@@ -515,26 +519,51 @@ int main(int argc, char const *argv[])
             drawButton(renderer, adjustButtons[3], event);
             drawButton(renderer, adjustButtons[4], event);
             drawButton(renderer, adjustButtons[5], event);
+            drawButton(renderer, adjustButtons[6], event);
+            drawButton(renderer, adjustButtons[7], event);
 
             if (adjustButtons[1].wasClicked && volume < 100)
             {
               volume += 20;
-              Mix_Volume(-1, volume);
+              if (sfx)
+                Mix_Volume(-1, volume);
+
               Mix_VolumeMusic(MIX_MAX_VOLUME * volume / 100);
               adjustButtons[1].wasClicked = false;
             }
             else if (adjustButtons[0].wasClicked && volume > 0)
             {
               volume -= 20;
-              Mix_Volume(-1, volume);
+              if (sfx)
+                Mix_Volume(-1, volume);
               Mix_VolumeMusic(MIX_MAX_VOLUME * volume / 100);
               adjustButtons[0].wasClicked = false;
+            }
+
+            if (adjustButtons[7].wasClicked || adjustButtons[6].wasClicked)
+            {
+              sfx = !sfx;
+              adjustButtons[7].wasClicked = false, adjustButtons[6].wasClicked = false;
+              if (sfx)
+                Mix_Volume(-1, volume);
+              else
+                Mix_Volume(-1, 0);
+            }
+            if (sfx)
+            {
+              SDL_Rect sfxRect = {363, 296, 42, 22};
+              SDL_RenderCopy(renderer, on, 0, &sfxRect);
+            }
+            else
+            {
+              SDL_Rect sfxRect = {349, 296, 55, 22};
+              SDL_RenderCopy(renderer, off, 0, &sfxRect);
             }
 
             SDL_Rect volumeBar = {285, 225, 222, 43};
             SDL_RenderCopy(renderer, soundBar[volume / 20], 0, &volumeBar);
 
-            setMusic(renderer, adjustButtons[3].wasClicked, adjustButtons[2].wasClicked, musicList, musicIndex, musicSound, Settings, 285, 323);
+            setMusic(renderer, adjustButtons[3].wasClicked, adjustButtons[2].wasClicked, musicList, musicIndex, musicSound, Settings, 285, 350);
 
             if (adjustButtons[3].wasClicked || adjustButtons[2].wasClicked)
             {
