@@ -63,6 +63,8 @@ SDL_Texture *ball10 = IMG_LoadTexture(renderer, "assets/Game/Balls/10.png");
 SDL_Texture *ball11 = IMG_LoadTexture(renderer, "assets/Game/Balls/11.png");
 SDL_Texture *ball12 = IMG_LoadTexture(renderer, "assets/Game/Balls/12.png");
 
+Mix_Chunk *crash = Mix_LoadWAV("assets/Sounds/crash.wav");
+Mix_Chunk *movement_swipe = Mix_LoadWAV("assets/Sounds/movement_swipe.mp3");
 
 #include "game.hpp"
 
