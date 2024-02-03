@@ -1106,6 +1106,7 @@ void crashed_ball(SDL_Renderer *Renderer)
                     {
                         if (sqrt((crash_balls[0].x - balls[i][j].x) * (crash_balls[0].x - balls[i][j].x) + (crash_balls[0].y - balls[i][j].y) * (crash_balls[0].y - balls[i][j].y)) < 1.5 * ballRadius || crash_balls[0].y < balls[0][0].y)
                         {
+                            Mix_PlayChannel(-1, crash, 0);
 
                             iStick = ceil((crash_balls[0].y - balls[0][0].y) / (sqrt(3) * ballRadius));
 
@@ -1171,6 +1172,7 @@ void crashed_ball(SDL_Renderer *Renderer)
             {
                 if (!is_crash_ball_crashed && !is_crash_ball_moved)
                 {
+                    Mix_PlayChannel(-1, movement_swipe, 0);
                     is_crash_ball_moved = true;
                     score--;
                     dx = d * ((x_mouse - crash_balls[0].x) / sqrt(pow(x_mouse - crash_balls[0].x, 2) + pow(y_mouse - crash_balls[0].y, 2)));
