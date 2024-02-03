@@ -10,7 +10,7 @@ using namespace std;
 
 struct ball
 {
-    int i, j;
+    int i, j, r = 25;
     int color;
     float x, y;
     bool isEmpty, shouldStick;
@@ -20,7 +20,7 @@ struct ball
 const int WIDTH = 625, HIGHT = 1000;
 int d = 20;
 float dx, dy;
-float dy_initial = 0.25;
+float dy_initial = 0.25, dy_fallingBall = 10;
 int ballRadius = 25;
 int lines = 11;
 int columns = WIDTH / (2 * ballRadius);

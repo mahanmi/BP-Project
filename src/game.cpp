@@ -10,7 +10,7 @@ using namespace std;
 
 struct ball
 {
-    int i, j;
+    int i, j, r = 25;
     int color;
     float x, y;
     bool isEmpty, shouldStick;
@@ -20,7 +20,7 @@ struct ball
 const int WIDTH = 625, HIGHT = 1000;
 int d = 20;
 float dx, dy;
-float dy_initial = 0.25;
+float dy_initial = 0.25, dy_fallingBall = 10;
 int ballRadius = 25;
 int lines = 20;
 int columns = WIDTH / (2 * ballRadius);
@@ -41,14 +41,14 @@ vector<vector<ball>> balls;
 bool is_crash_ball_moved = false;
 bool is_crash_ball_crashed = false;
 
-vector<ball> crashed;
+vector<ball> crashed, fallingBall;
 
 ball crash_balls[2];
 bool crash_ball_color[4] = {1, 1, 1, 1};
 
 int x_mouse, y_mouse;
 
-SDL_Texture *GameBG = IMG_LoadTexture(renderer, "assets/Game/GameBG3.png");
+SDL_Texture *GameBG = IMG_LoadTexture(renderer, "assets/Game/GameBG2.png");
 
 SDL_Texture *ball1 = IMG_LoadTexture(renderer, "assets/Game/Balls/1.png");
 SDL_Texture *ball2 = IMG_LoadTexture(renderer, "assets/Game/Balls/2.png");

@@ -128,10 +128,10 @@ bool shouldStick(int iBall, int jBall)
     if (balls[iBall][jBall].isEmpty)
         return false;
 
-    if (lines<50 && iBall == 0)
+    if (lines < 50 && iBall == 0)
         return true;
 
-    if(lines>50 && abs(balls[iBall][jBall].y) <= ballRadius)
+    if (lines > 50 && abs(balls[iBall][jBall].y) <= ballRadius)
         return true;
 
     if (balls[iBall][jBall].stickCheck == -1)
@@ -393,7 +393,7 @@ void initial_ball()
     balls.resize(lines + stick);
 
     int x_center = ballRadius;
-    int y_center = -(lines * sqrt(3) * ballRadius) + HIGHT + ballRadius;
+    int y_center = -(lines * sqrt(3) * ballRadius) + HIGHT - 150;
 
     ball new_ball;
     int last_color = -1;
@@ -551,6 +551,98 @@ void draw_ball(SDL_Renderer *Renderer)
     for (int i = 0; i < 4; i++)
         crash_ball_color[i] = false;
 
+    for (int i = 0; i < fallingBall.size(); i++)
+        if (fallingBall[i].y < HIGHT)
+        {
+            SDL_Rect fallingBallRect = {fallingBall[i].x - ballRadius, fallingBall[i].y - ballRadius, 2 * ballRadius, 2 * ballRadius};
+            switch (fallingBall[i].color)
+            {
+            case 1:
+                SDL_RenderCopy(Renderer, ball1, NULL, &fallingBallRect);
+                break;
+            case 2:
+                SDL_RenderCopy(Renderer, ball2, NULL, &fallingBallRect);
+                break;
+            case 3:
+                SDL_RenderCopy(Renderer, ball3, NULL, &fallingBallRect);
+                break;
+            case 4:
+                SDL_RenderCopy(Renderer, ball4, NULL, &fallingBallRect);
+                break;
+            case 5:
+                SDL_RenderCopy(Renderer, ball5, NULL, &fallingBallRect);
+                break;
+            case 6:
+                SDL_RenderCopy(Renderer, ball6, NULL, &fallingBallRect);
+                break;
+            case 7:
+                SDL_RenderCopy(Renderer, ball7, NULL, &fallingBallRect);
+                break;
+            case 8:
+                SDL_RenderCopy(Renderer, ball8, NULL, &fallingBallRect);
+                break;
+            case 9:
+                SDL_RenderCopy(Renderer, ball9, NULL, &fallingBallRect);
+                break;
+            case 10:
+                SDL_RenderCopy(Renderer, ball10, NULL, &fallingBallRect);
+                break;
+            case 11:
+                SDL_RenderCopy(Renderer, ball11, NULL, &fallingBallRect);
+                break;
+            case 12:
+                SDL_RenderCopy(Renderer, ball12, NULL, &fallingBallRect);
+                break;
+            }
+            fallingBall[i].y += dy_fallingBall;
+        }
+
+    for (int i = 0; i < crashed.size(); i++)
+        if (crashed[i].r > 1)
+        {
+            SDL_Rect crashedBall = {crashed[i].x - crashed[i].r, crashed[i].y - crashed[i].r, 2 * crashed[i].r, 2 * crashed[i].r};
+            switch (crashed[i].color)
+            {
+            case 1:
+                SDL_RenderCopy(Renderer, ball1, NULL, &crashedBall);
+                break;
+            case 2:
+                SDL_RenderCopy(Renderer, ball2, NULL, &crashedBall);
+                break;
+            case 3:
+                SDL_RenderCopy(Renderer, ball3, NULL, &crashedBall);
+                break;
+            case 4:
+                SDL_RenderCopy(Renderer, ball4, NULL, &crashedBall);
+                break;
+            case 5:
+                SDL_RenderCopy(Renderer, ball5, NULL, &crashedBall);
+                break;
+            case 6:
+                SDL_RenderCopy(Renderer, ball6, NULL, &crashedBall);
+                break;
+            case 7:
+                SDL_RenderCopy(Renderer, ball7, NULL, &crashedBall);
+                break;
+            case 8:
+                SDL_RenderCopy(Renderer, ball8, NULL, &crashedBall);
+                break;
+            case 9:
+                SDL_RenderCopy(Renderer, ball9, NULL, &crashedBall);
+                break;
+            case 10:
+                SDL_RenderCopy(Renderer, ball10, NULL, &crashedBall);
+                break;
+            case 11:
+                SDL_RenderCopy(Renderer, ball11, NULL, &crashedBall);
+                break;
+            case 12:
+                SDL_RenderCopy(Renderer, ball12, NULL, &crashedBall);
+                break;
+            }
+            crashed[i].r /= 1.3;
+        }
+
     for (int i = 0; i < lines + stick; i++)
     {
         for (int j = 0; j < columns; j++)
@@ -625,7 +717,7 @@ void draw_ball(SDL_Renderer *Renderer)
                     crash_ball_color[3] = true;
                     break;
                 }
-                if (balls[i][j].y > HIGHT - 100 - 2 * ballRadius )
+                if (balls[i][j].y > HIGHT - 100 - 2 * ballRadius)
                 {
                     lose = true;
                 }
@@ -775,7 +867,7 @@ void initial_crash_ball(SDL_Renderer *Renderer)
                     balls[i][j].stickCheck = 0;
                 }
             }
-            for (int i = 1; i < lines + stick; i++)
+            for (int i = 1; i < lines; i++)
             {
                 for (int j = 0; j < columns; j++)
                 {
@@ -786,6 +878,7 @@ void initial_crash_ball(SDL_Renderer *Renderer)
                             cout << i << " " << j << " ShouldN't stick" << endl;
                             crashed_score++;
                             balls[i][j].isEmpty = true;
+                            fallingBall.push_back(balls[i][j]);
                             repeat = true;
                         }
                     }
@@ -1166,7 +1259,7 @@ int gameScore()
         for (int i = 0; i < lines + stick; i++)
             for (int j = 0; j < columns; j++)
                 if (!balls[i][j].isEmpty && balls[i][j].color != 7)
-                    score--;
+                    score -= 2;
     }
     return score;
 }
@@ -1182,7 +1275,7 @@ int timeScore(Uint32 elapsed_time)
         for (int i = 0; i < lines + stick; i++)
             for (int j = 0; j < columns; j++)
                 if (!balls[i][j].isEmpty && balls[i][j].color != 7)
-                    score--;
+                    score -= 2;
         return score;
     }
 }
