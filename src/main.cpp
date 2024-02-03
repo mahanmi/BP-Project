@@ -8,6 +8,7 @@
 #include "gameMenu.hpp"
 #include "leaderboard.hpp"
 #include "settings.hpp"
+#include "gameMode.hpp"
 
 using namespace std;
 
@@ -49,9 +50,11 @@ Mix_Music *musicSound = Mix_LoadMUS(musicList[musicIndex].path.c_str());
 Mix_Chunk *click = Mix_LoadWAV("assets/Sounds/click.mp3");
 Mix_Chunk *hover = Mix_LoadWAV("assets/Sounds/hover.mp3");
 
+string username = "";
+
 TTF_Font *Leaderboard = TTF_OpenFont("assets/Fonts/Poppins-Bold.ttf", 45);
 TTF_Font *Settings = TTF_OpenFont("assets/Fonts/Digitalt.ttf", 38);
-TTF_Font *GM = TTF_OpenFont("assets/Fonts/Digitalt.ttf", 28);
+TTF_Font *name = TTF_OpenFont("assets/Fonts/Digitalt.ttf", 28);
 
 int main(int argc, char const *argv[])
 {
@@ -131,7 +134,7 @@ int main(int argc, char const *argv[])
         button classicGM = {142, 270, 243, 432, 0, 0, 0, 0, 0, true, false, IMG_LoadTexture(renderer, "assets/GameMode/Classic.png"), IMG_LoadTexture(renderer, "assets/GameMode/ClassicHover.png"), IMG_LoadTexture(renderer, "assets/GameMode/classicSelected.png"), hover, click, true};
         button infiniteGM = {142, 270, 422, 432, 0, 0, 0, 0, 0, false, false, IMG_LoadTexture(renderer, "assets/GameMode/Infinite.png"), IMG_LoadTexture(renderer, "assets/GameMode/InfiniteHover.png"), IMG_LoadTexture(renderer, "assets/GameMode/InfiniteSelected.png"), hover, click, false};
         button start = {198, 91, 219, 829, 0, 0, 0, 0, 5, false, false, IMG_LoadTexture(renderer, "assets/GameMode/startButton.png"), IMG_LoadTexture(renderer, "assets/GameMode/startButtonHover.png"), IMG_LoadTexture(renderer, "assets/GameMode/startButtonClick.png"), hover, click};
-        button inputBox = {319, 38, 236, 296, 0, 0, 0, 0, 0, false, false, IMG_LoadTexture(renderer, "assets/GameMode/inputBox.png"), IMG_LoadTexture(renderer, "assets/GameMode/inputBoxHover.png"), IMG_LoadTexture(renderer, "assets/GameMode/infiniteSelected.png"), hover, click};
+        button inputBox = {319, 38, 236, 296, 0, 0, 0, 0, 0, false, false, IMG_LoadTexture(renderer, "assets/GameMode/inputBox.png"), IMG_LoadTexture(renderer, "assets/GameMode/inputBoxHover.png"), IMG_LoadTexture(renderer, "assets/GameMode/inputBoxSelected.png"), hover, click};
         while (play.wasClicked)
         {
           while (SDL_PollEvent(&event) && play.wasClicked)
@@ -191,42 +194,63 @@ int main(int argc, char const *argv[])
 
             SDL_RenderCopy(renderer, PlayBG, 0, 0);
 
-            drawButton(renderer, inputBox, event);
-
-            if (inputBox.wasClicked)
-            {
-              string name = "";
-              while (inputBox.wasClicked)
-              {
-                while (SDL_PollEvent(&event) && inputBox.wasClicked)
-                {
-                  if (SDL_KEYDOWN)
-                  {
-                    switch (event.key.keysym.sym)
-                    {
-                    case SDLK_SPACE:
-                      cout << name << endl;
-                      inputBox.wasClicked = false;
-                      break;
-                    case SDLK_BACKSPACE:
-                      if (name.size() > 0)
-                        name.pop_back();
-                      break;
-                    default:
-                      name += event.key.keysym.sym;
-                      break;
-                    }
-                  }
-                }
-              }
-            }
-
             drawButton(renderer, timerGM, event);
             drawButton(renderer, classicGM, event);
             drawButton(renderer, infiniteGM, event);
             drawButton(renderer, start, event);
             drawButton(renderer, back, event);
+            drawButton(renderer, inputBox, event);
+            showUserInput(renderer, Settings, username, 250, 295);
             render(renderer);
+
+            if (inputBox.wasClicked)
+            {
+              inputBox.image = IMG_LoadTexture(renderer, "assets/GameMode/inputBoxSelected.png");
+              inputBox.isSelected = true;
+              while (inputBox.isSelected)
+              {
+                while (SDL_PollEvent(&event) && inputBox.isSelected)
+                {
+                  if (event.type == SDL_KEYDOWN)
+                  {
+                    if (get_current_time(-3000) > 3)
+                    {
+                      switch (event.key.keysym.sym)
+                      {
+                      case SDLK_SPACE:
+                        inputBox.isSelected = false;
+                        break;
+                      case SDLK_BACKSPACE:
+                        if (username.size() > 0)
+                          username.pop_back();
+                        break;
+                      default:
+                        if (event.key.keysym.sym >= 97 && event.key.keysym.sym <= 122)
+                          username += event.key.keysym.sym;
+
+                        break;
+                      }
+                    }
+                  }
+                  SDL_RenderCopy(renderer, PlayBG, 0, 0);
+                  drawButton(renderer, inputBox, event);
+                  drawButton(renderer, timerGM, event);
+                  drawButton(renderer, classicGM, event);
+                  drawButton(renderer, infiniteGM, event);
+                  drawButton(renderer, start, event);
+                  drawButton(renderer, back, event);
+                  showUserInput(renderer, Settings, username, 250, 295);
+                  render(renderer);
+                  if (back.wasClicked || timerGM.wasClicked || classicGM.wasClicked || infiniteGM.wasClicked || start.wasClicked || !inputBox.isSelected)
+                  {
+                    cout << username << endl;
+                    inputBox.image = IMG_LoadTexture(renderer, "assets/GameMode/inputBox.png");
+                    inputBox.isSelected = false;
+                    break;
+                  }
+                }
+              }
+            }
 
             if (start.wasClicked) // this should run the game
             {
@@ -305,12 +329,14 @@ int main(int argc, char const *argv[])
 
               back.wasClicked = false;
               SDL_RenderCopy(renderer, PlayBG, 0, 0);
+              drawButton(renderer, inputBox, event);
+              showUserInput(renderer, Settings, username, 250, 295);
               drawButton(renderer, timerGM, event);
               drawButton(renderer, classicGM, event);
               drawButton(renderer, infiniteGM, event);
               drawButton(renderer, start, event);
               drawButton(renderer, back, event);
-              SDL_RenderPresent(renderer);
+              render(renderer);
             }
           }
         }
