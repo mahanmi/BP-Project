@@ -145,8 +145,7 @@ void updateLeaderboard(vector<player> &players)
   {
     if (players[i].name != "0" && players[i].name != "")
     {
-      string name = players[i].name;
-      file << name << ' ' << players[i].classicScore << ' ' << players[i].infiniteScore << ' ' << players[i].timerScore << endl;
+      file << players[i].name << ' ' << players[i].classicScore << ' ' << players[i].infiniteScore << ' ' << players[i].timerScore << endl;
     }
   }
   file << "0 0 0 0" << endl;
