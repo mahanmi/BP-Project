@@ -12,6 +12,29 @@
 
 using namespace std;
 
+const int WIDTH = 625, HIGHT = 1000;
+SDL_Window *window = SDL_CreateWindow("Bouncing Balls Game", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, WIDTH, HIGHT, SDL_WINDOW_SHOWN);
+SDL_Renderer *renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
+SDL_Event event;
+struct ball
+{
+  int i, j;
+  int color;
+  float x, y;
+  bool isEmpty, shouldStick;
+  int stickCheck;
+};
+
+int d = 20;
+float dx, dy;
+float dy_initial = 0.25;
+int ballRadius = 25;
+int lines = 11;
+int columns = WIDTH / (2 * ballRadius);
+int stick = 0;
+int score = 100;
+int end_time = 60 * 1000;
+
 bool init()
 {
   if (SDL_Init(SDL_INIT_VIDEO) > 0)
@@ -34,13 +57,35 @@ void render(SDL_Renderer *renderer)
   SDL_RenderClear(renderer);
 }
 
-const int WIDTH = 625, HIGHT = 1000;
-SDL_Window *window = SDL_CreateWindow("Bouncing Balls Game", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, WIDTH, HIGHT, SDL_WINDOW_SHOWN);
-SDL_Renderer *renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
-SDL_Event event;
+bool win = false, lose = false;
+
+vector<vector<ball>> balls;
+
+bool is_crash_ball_moved = false;
+bool is_crash_ball_crashed = false;
+
+vector<ball> crashed;
+
+ball crash_balls[2];
+bool crash_ball_color[4] = {1, 1, 1, 1};
+
+int x_mouse, y_mouse;
 
 SDL_Texture *Background = IMG_LoadTexture(renderer, "assets/Menu/BG.png");
 SDL_Texture *StartScreen = IMG_LoadTexture(renderer, "assets/Menu/StartingScreen.png");
+
+SDL_Texture *ball1 = IMG_LoadTexture(renderer, "assets/Game/Balls/1.png");
+SDL_Texture *ball2 = IMG_LoadTexture(renderer, "assets/Game/Balls/2.png");
+SDL_Texture *ball3 = IMG_LoadTexture(renderer, "assets/Game/Balls/3.png");
+SDL_Texture *ball4 = IMG_LoadTexture(renderer, "assets/Game/Balls/4.png");
+SDL_Texture *ball5 = IMG_LoadTexture(renderer, "assets/Game/Balls/5.png");
+SDL_Texture *ball6 = IMG_LoadTexture(renderer, "assets/Game/Balls/6.png");
+SDL_Texture *ball7 = IMG_LoadTexture(renderer, "assets/Game/Balls/7.png");
+SDL_Texture *ball8 = IMG_LoadTexture(renderer, "assets/Game/Balls/8.png");
+SDL_Texture *ball9 = IMG_LoadTexture(renderer, "assets/Game/Balls/9.png");
+SDL_Texture *ball10 = IMG_LoadTexture(renderer, "assets/Game/Balls/10.png");
+SDL_Texture *ball11 = IMG_LoadTexture(renderer, "assets/Game/Balls/11.png");
+SDL_Texture *ball12 = IMG_LoadTexture(renderer, "assets/Game/Balls/12.png");
 
 int musicIndex = 1;
 bool sfx = true;
@@ -55,10 +100,14 @@ TTF_Font *Leaderboard = TTF_OpenFont("assets/Fonts/Poppins-Bold.ttf", 45);
 TTF_Font *Settings = TTF_OpenFont("assets/Fonts/Digitalt.ttf", 38);
 TTF_Font *name = TTF_OpenFont("assets/Fonts/Digitalt.ttf", 28);
 
+#include "game.hpp"
+
 int main(int argv, char **args)
 {
   if (!SDLinit)
     return 1;
+
+  srand(time(0));
 
   showStartScreen(renderer, StartScreen, event);
 
@@ -80,40 +129,8 @@ int main(int argv, char **args)
 
   button close = {55, 58, 20, 20, 0, 0, 0, 0, 0, false, false, IMG_LoadTexture(renderer, "assets/Menu/close.png"), IMG_LoadTexture(renderer, "assets/Menu/closeHovered.png"), 0, hover, click};
   button back = {55, 58, 20, 20, 0, 0, 0, 0, 0, false, false, IMG_LoadTexture(renderer, "assets/Menu/Back.png"), IMG_LoadTexture(renderer, "assets/Menu/BackHovered.png"), 0, hover, click};
-  button play = {
-      387,
-      87,
-      113,
-      370,
-      0,
-      0,
-      0,
-      255,
-      6,
-      false,
-      false,
-      IMG_LoadTexture(renderer, "assets/Menu/PlayButton.png"),
-      IMG_LoadTexture(renderer, "assets/Menu/PlayButtonHovered.png"),
-      IMG_LoadTexture(renderer, "assets/Menu/PlayButtonClicked.png"),
-      hover,
-      click};
-  button leaderboard = {
-      387,
-      87,
-      113,
-      537,
-      0,
-      0,
-      0,
-      255,
-      6,
-      false,
-      false,
-      IMG_LoadTexture(renderer, "assets/Menu/LeaderboardButton.png"),
-      IMG_LoadTexture(renderer, "assets/Menu/LeaderboardButtonHovered.png"),
-      IMG_LoadTexture(renderer, "assets/Menu/LeaderboardButtonClicked.png"),
-      hover,
-      click};
+  button play = {387, 87, 113, 370, 0, 0, 0, 255, 6, false, false, IMG_LoadTexture(renderer, "assets/Menu/PlayButton.png"), IMG_LoadTexture(renderer, "assets/Menu/PlayButtonHovered.png"), IMG_LoadTexture(renderer, "assets/Menu/PlayButtonClicked.png"), hover, click};
+  button leaderboard = {387, 87, 113, 537, 0, 0, 0, 255, 6, false, false, IMG_LoadTexture(renderer, "assets/Menu/LeaderboardButton.png"), IMG_LoadTexture(renderer, "assets/Menu/LeaderboardButtonHovered.png"), IMG_LoadTexture(renderer, "assets/Menu/LeaderboardButtonClicked.png"), hover, click};
   button settings = {387, 87, 113, 704, 0, 0, 0, 255, 6, false, false, IMG_LoadTexture(renderer, "assets/Menu/SettingsButton.png"), IMG_LoadTexture(renderer, "assets/Menu/SettingsButtonHovered.png"), IMG_LoadTexture(renderer, "assets/Menu/SettingsButtonClicked.png"), hover, click};
   button timer = {151, 54, 63, 291, 0, 0, 0, 0, 0, false, false, IMG_LoadTexture(renderer, "assets/Leaderboard/LeaderboardTimer.png"), 0, 0, 0, click};
   button classic = {151, 54, 234, 291, 0, 0, 0, 0, 0, true, false, IMG_LoadTexture(renderer, "assets/Leaderboard/LeaderboardClassic.png"), 0, 0, 0, click};
@@ -280,6 +297,21 @@ int main(int argv, char **args)
             {
               start.wasClicked = false;
 
+              SDL_Texture *GameBG;
+
+              if (theme == 0)
+              {
+                GameBG = IMG_LoadTexture(renderer, "assets/Game/GameBG1.png");
+              }
+              else if (theme == 1)
+              {
+                GameBG = IMG_LoadTexture(renderer, "assets/Game/GameBG2.png");
+              }
+              else if (theme == 2)
+              {
+                GameBG = IMG_LoadTexture(renderer, "assets/Game/GameBG3.png");
+              }
+
               SDL_RenderClear(renderer);
 
               if (timerGM.isSelected)
@@ -308,9 +340,63 @@ int main(int argv, char **args)
               }
               else if (classicGM.isSelected)
               {
+                balls.clear();
+
+                lines = 20;
+                score = 100;
+                win = false, lose = false;
+                bool pause = false;
+
+                initial_ball();
+                for (int j = 0; j < columns; j++)
+                  balls[0][j].isEmpty = false, balls[0][j].shouldStick = true, balls[0][j].stickCheck = 1;
+
+                for (int i = 1; i < lines; i++)
+                  for (int j = 0; j < columns; j++)
+                    balls[i][j].isEmpty = false, balls[i][j].shouldStick = false, balls[i][j].stickCheck = 0;
+
+                for (int i = 6; i < lines; i++)
+                {
+                  for (int j = 0; j < columns; j++)
+                    balls[i][j].isEmpty = true;
+                }
+
+                if (rand() % 17 == 0)
+                {
+                  crash_balls[1].color = 11;
+                }
+                else
+                {
+                  switch (rand() % 4)
+                  {
+                  case 0:
+                  {
+                    crash_balls[1].color = 1;
+                    break;
+                  }
+                  case 1:
+                  {
+                    crash_balls[1].color = 2;
+                    break;
+                  }
+                  case 2:
+                  {
+                    crash_balls[1].color = 4;
+                    break;
+                  }
+                  case 3:
+                  {
+                    crash_balls[1].color = 8;
+                    break;
+                  }
+                  }
+                }
+                initial_crash_ball(renderer);
+                draw_ball(renderer);
+
                 while (classicGM.isSelected)
                 {
-                  while (SDL_PollEvent(&event) && classicGM.isSelected)
+                  while (!win && !lose)
                   {
                     if (quitGame(event))
                     {
@@ -323,9 +409,75 @@ int main(int argv, char **args)
                       classicGM.isSelected = false;
                       break;
                     }
-                    SDL_RenderCopy(renderer, Background, 0, 0);
+                    SDL_RenderCopy(renderer, GameBG, NULL, NULL);
+                    if (!pause && !is_crash_ball_moved)
+                      for (int i = 0; i < lines + stick; i++)
+                        for (int j = 0; j < columns; j++)
+                          balls[i][j].y += dy_initial;
+                    draw_ball(renderer);
+                    crashed_ball(renderer);
+
+                    if (event.type == SDL_KEYDOWN)
+                    {
+                      switch (event.key.keysym.sym)
+                      {
+                      case SDLK_ESCAPE:
+                      {
+                        pause = !pause;
+                      }
+
+                      case SDLK_w:
+                        win = true;
+
+                      case SDLK_SPACE:
+                        if (!is_crash_ball_moved)
+                          swap(crash_balls[0].color, crash_balls[1].color);
+                      }
+                    }
+                    if (event.button.x > 0 && event.button.x < WIDTH && event.button.y > 0 && event.button.y < HIGHT)
+                    {
+                      x_mouse = event.button.x;
+                      y_mouse = event.button.y;
+                    }
                     drawButton(renderer, back, event);
                     render(renderer);
+                  }
+                  if (win)
+                  {
+                    balls.clear();
+                    if (players[playerIndex].classicScore < score)
+                    {
+                      players[playerIndex].classicScore = score;
+                      updateLeaderboard(players);
+                    }
+                    button OK = {150, 68, 242, 657, 0, 0, 0, 0, 2, false, false, IMG_LoadTexture(renderer, "assets/Game/OKButton.png"), IMG_LoadTexture(renderer, "assets/Game/OKButtonHover.png"), IMG_LoadTexture(renderer, "assets/Game/OKButtonClicked.png"), hover, click};
+                    cout << "You win" << endl;
+                    while (win)
+                    {
+                      while (SDL_PollEvent(&event) && win)
+                      {
+                        if (quitGame(event))
+                        {
+                          classicGM.isSelected = false;
+                          quit(running);
+                          break;
+                        }
+                        if (goBack(event) || OK.wasClicked)
+                        {
+                          classicGM.isSelected = false;
+                          win = false;
+                          break;
+                        }
+                        SDL_RenderCopy(renderer, GameBG, 0, 0);
+                        SDL_Texture *winText = IMG_LoadTexture(renderer, "assets/Game/win.png");
+                        SDL_Rect winRect = {112, 250, 401, 513};
+                        SDL_RenderCopy(renderer, winText, 0, &winRect);
+                        showUserScore(renderer, name, score, 250, 495);
+                        showUserScore(renderer, name, players[playerIndex].classicScore, 250, 595);
+                        drawButton(renderer, OK, event);
+                        render(renderer);
+                      }
+                    }
                   }
                 }
                 classicGM.isSelected = true;
@@ -586,7 +738,7 @@ int main(int argv, char **args)
 
             theme = theme % themes.size();
 
-            SDL_Rect themeRect = {184, 482, 260, 416};
+            SDL_Rect themeRect = {184, 482, 260, 457};
             SDL_RenderCopy(renderer, themes[theme], 0, &themeRect);
 
             drawButton(renderer, back, event);

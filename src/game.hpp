@@ -562,65 +562,65 @@ void draw_ball(SDL_Renderer *Renderer)
                 switch (balls[i][j].color)
                 {
                 case 1:
-                    SDL_RenderCopy(Renderer, IMG_LoadTexture(Renderer, "assets/Game/Balls/1.png"), NULL, &Ball);
+                    SDL_RenderCopy(Renderer, ball1, NULL, &Ball);
                     crash_ball_color[0] = true;
                     break;
 
                 case 2:
-                    SDL_RenderCopy(Renderer, IMG_LoadTexture(Renderer, "assets/Game/Balls/2.png"), NULL, &Ball);
+                    SDL_RenderCopy(Renderer, ball2, NULL, &Ball);
                     crash_ball_color[1] = true;
                     break;
 
                 case 3:
-                    SDL_RenderCopy(Renderer, IMG_LoadTexture(Renderer, "assets/Game/Balls/3.png"), NULL, &Ball);
+                    SDL_RenderCopy(Renderer, ball3, NULL, &Ball);
                     crash_ball_color[0] = true;
                     crash_ball_color[1] = true;
                     break;
 
                 case 4:
-                    SDL_RenderCopy(Renderer, IMG_LoadTexture(Renderer, "assets/Game/Balls/4.png"), NULL, &Ball);
+                    SDL_RenderCopy(Renderer, ball4, NULL, &Ball);
                     crash_ball_color[2] = true;
                     break;
 
                 case 5:
-                    SDL_RenderCopy(Renderer, IMG_LoadTexture(Renderer, "assets/Game/Balls/5.png"), NULL, &Ball);
+                    SDL_RenderCopy(Renderer, ball5, NULL, &Ball);
                     crash_ball_color[0] = true;
                     crash_ball_color[2] = true;
                     break;
 
                 case 6:
-                    SDL_RenderCopy(Renderer, IMG_LoadTexture(Renderer, "assets/Game/Balls/6.png"), NULL, &Ball);
+                    SDL_RenderCopy(Renderer, ball6, NULL, &Ball);
                     crash_ball_color[1] = true;
                     crash_ball_color[2] = true;
                     break;
 
                 case 7:
-                    SDL_RenderCopy(Renderer, IMG_LoadTexture(Renderer, "assets/Game/Balls/7.png"), NULL, &Ball);
+                    SDL_RenderCopy(Renderer, ball7, NULL, &Ball);
                     break;
 
                 case 8:
-                    SDL_RenderCopy(Renderer, IMG_LoadTexture(Renderer, "assets/Game/Balls/8.png"), NULL, &Ball);
+                    SDL_RenderCopy(Renderer, ball8, NULL, &Ball);
                     crash_ball_color[3] = true;
                     break;
 
                 case 9:
-                    SDL_RenderCopy(Renderer, IMG_LoadTexture(Renderer, "assets/Game/Balls/9.png"), NULL, &Ball);
+                    SDL_RenderCopy(Renderer, ball9, NULL, &Ball);
                     crash_ball_color[0] = true;
                     crash_ball_color[3] = true;
                     break;
 
                 case 10:
-                    SDL_RenderCopy(Renderer, IMG_LoadTexture(Renderer, "assets/Game/Balls/10.png"), NULL, &Ball);
+                    SDL_RenderCopy(Renderer, ball10, NULL, &Ball);
                     crash_ball_color[1] = true;
                     crash_ball_color[3] = true;
                     break;
 
                 case 11:
-                    SDL_RenderCopy(Renderer, IMG_LoadTexture(Renderer, "assets/Game/Balls/11.png"), NULL, &Ball);
+                    SDL_RenderCopy(Renderer, ball11, NULL, &Ball);
                     break;
 
                 case 12:
-                    SDL_RenderCopy(Renderer, IMG_LoadTexture(Renderer, "assets/Game/Balls/12.png"), NULL, &Ball);
+                    SDL_RenderCopy(Renderer, ball12, NULL, &Ball);
                     crash_ball_color[2] = true;
                     crash_ball_color[3] = true;
                     break;
@@ -979,27 +979,27 @@ void crashed_ball(SDL_Renderer *Renderer)
             {
             case 1:
             {
-                SDL_RenderCopy(Renderer, IMG_LoadTexture(Renderer, "assets/Game/Balls/1.png"), NULL, &Ball);
+                SDL_RenderCopy(Renderer, ball1, NULL, &Ball);
                 break;
             }
             case 2:
             {
-                SDL_RenderCopy(Renderer, IMG_LoadTexture(Renderer, "assets/Game/Balls/2.png"), NULL, &Ball);
+                SDL_RenderCopy(Renderer, ball2, NULL, &Ball);
                 break;
             }
             case 4:
             {
-                SDL_RenderCopy(Renderer, IMG_LoadTexture(Renderer, "assets/Game/Balls/4.png"), NULL, &Ball);
+                SDL_RenderCopy(Renderer, ball4, NULL, &Ball);
                 break;
             }
             case 8:
             {
-                SDL_RenderCopy(Renderer, IMG_LoadTexture(Renderer, "assets/Game/Balls/8.png"), NULL, &Ball);
+                SDL_RenderCopy(Renderer, ball8, NULL, &Ball);
                 break;
             }
             case 11:
             {
-                SDL_RenderCopy(Renderer, IMG_LoadTexture(Renderer, "assets/Game/Balls/11.png"), NULL, &Ball);
+                SDL_RenderCopy(Renderer, ball11, NULL, &Ball);
                 break;
             }
             }
@@ -1133,27 +1133,27 @@ void crashed_ball(SDL_Renderer *Renderer)
     {
     case 1:
     {
-        SDL_RenderCopy(Renderer, IMG_LoadTexture(Renderer, "assets/Game/Balls/1.png"), NULL, &Ball2);
+        SDL_RenderCopy(Renderer, ball1, NULL, &Ball2);
         break;
     }
     case 2:
     {
-        SDL_RenderCopy(Renderer, IMG_LoadTexture(Renderer, "assets/Game/Balls/2.png"), NULL, &Ball2);
+        SDL_RenderCopy(Renderer, ball2, NULL, &Ball2);
         break;
     }
     case 4:
     {
-        SDL_RenderCopy(Renderer, IMG_LoadTexture(Renderer, "assets/Game/Balls/4.png"), NULL, &Ball2);
+        SDL_RenderCopy(Renderer, ball4, NULL, &Ball2);
         break;
     }
     case 8:
     {
-        SDL_RenderCopy(Renderer, IMG_LoadTexture(Renderer, "assets/Game/Balls/8.png"), NULL, &Ball2);
+        SDL_RenderCopy(Renderer, ball8, NULL, &Ball2);
         break;
     }
     case 11:
     {
-        SDL_RenderCopy(Renderer, IMG_LoadTexture(Renderer, "assets/Game/Balls/11.png"), NULL, &Ball2);
+        SDL_RenderCopy(Renderer, ball11, NULL, &Ball2);
         break;
     }
     }
@@ -1161,18 +1161,14 @@ void crashed_ball(SDL_Renderer *Renderer)
 
 int gameScore()
 {
-    if (win)
-    {
-        return score;
-    }
     if (lose)
     {
         for (int i = 0; i < lines + stick; i++)
             for (int j = 0; j < columns; j++)
                 if (!balls[i][j].isEmpty && balls[i][j].color != 7)
                     score--;
-        return score;
     }
+    return score;
 }
 
 int timeScore(Uint32 elapsed_time)
@@ -1181,7 +1177,7 @@ int timeScore(Uint32 elapsed_time)
     {
         return score + (end_time - elapsed_time) / 1000;
     }
-    if (lose)
+    else
     {
         for (int i = 0; i < lines + stick; i++)
             for (int j = 0; j < columns; j++)
@@ -1194,5 +1190,16 @@ int timeScore(Uint32 elapsed_time)
 int infinityScore()
 {
     return (score + crashed_score);
+}
+
+void showUserScore(SDL_Renderer *renderer, TTF_Font *font, int score, int x, int y)
+{
+    SDL_Color color = {34, 138, 237, 255};
+    SDL_Surface *surface = TTF_RenderText_Solid(font, to_string(score).c_str(), color);
+    SDL_Texture *texture = SDL_CreateTextureFromSurface(renderer, surface);
+    SDL_Rect rect = {x, y, surface->w, surface->h};
+    SDL_RenderCopy(renderer, texture, NULL, &rect);
+    SDL_FreeSurface(surface);
+    SDL_DestroyTexture(texture);
 }
 #endif // !game_hpp
