@@ -10,7 +10,7 @@ using namespace std;
 
 struct player
 {
-  char name[20];
+  string name;
   int classicScore, infiniteScore, timerScore;
 };
 
@@ -94,7 +94,7 @@ void drawLeaderboard(vector<player> &players, SDL_Renderer *renderer, SDL_Textur
     for (int i = 0; i < 7 && i < players.size(); i++)
     {
       // player name
-      SDL_Surface *surface = TTF_RenderText_Solid(font, players[i].name, color);
+      SDL_Surface *surface = TTF_RenderText_Solid(font, players[i].name.c_str(), color);
       SDL_Texture *texture = SDL_CreateTextureFromSurface(renderer, surface);
       SDL_Rect rect = {128, 390 + (i * 80), surface->w, surface->h};
       SDL_RenderCopy(renderer, texture, NULL, &rect);

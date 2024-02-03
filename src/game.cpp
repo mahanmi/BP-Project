@@ -106,11 +106,11 @@ int main(int argv, char **args)
     draw_ball(renderer);
     SDL_RenderPresent(renderer);
 
-    while (1)
+    while (!win && !lose)
     {
         SDL_RenderCopy(renderer, GameBG, NULL, NULL);
 
-        if (!pause)
+        if (!pause && !win && !lose && !is_crash_ball_moved)
             for (int i = 0; i < lines + stick; i++)
                 for (int j = 0; j < columns; j++)
                     balls[i][j].y += dy_initial;
@@ -133,7 +133,8 @@ int main(int argv, char **args)
                 pause = !pause;
 
             case SDLK_SPACE:
-                swap(crash_balls[0].color, crash_balls[1].color);
+                if (!is_crash_ball_moved)
+                    swap(crash_balls[0].color, crash_balls[1].color);
             }
         }
         if (event.button.x > 0 && event.button.x < WIDTH && event.button.y > 0 && event.button.y < HIGHT)
@@ -141,9 +142,16 @@ int main(int argv, char **args)
             x_mouse = event.button.x;
             y_mouse = event.button.y;
         }
-
+        if (win)
+        {
+            cout << "You win" << endl;
+        }
         SDL_RenderPresent(renderer);
         SDL_Delay(1000 / 60);
         SDL_RenderClear(renderer);
     }
+    SDL_RenderCopy(renderer, GameBG, NULL, NULL);
+    SDL_RenderPresent(renderer);
+    SDL_Delay(3000);
+    return 0;
 }
