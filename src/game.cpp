@@ -132,7 +132,8 @@ int main(int argv, char **args)
                 pause = !pause;
 
             case SDLK_SPACE:
-                swap(crash_balls[0].color, crash_balls[1].color);
+                if (!is_crash_ball_moved)
+                    swap(crash_balls[0].color, crash_balls[1].color);
             }
         }
         if (event.button.x > 0 && event.button.x < WIDTH && event.button.y > 0 && event.button.y < HIGHT)

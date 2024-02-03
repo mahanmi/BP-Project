@@ -530,6 +530,21 @@ void draw_ball(SDL_Renderer *Renderer)
     }
 }
 
+void rotateCannonWithMouse(SDL_Renderer *renderer, SDL_Texture *image)
+{
+
+    int mouseX, mouseY;
+    SDL_GetMouseState(&mouseX, &mouseY);
+
+    SDL_Rect cannonRect = {int(WIDTH / 2 - 85), int(HIGHT - 170), 170, 170};
+
+    int dx = mouseX - 315;
+    int dy = mouseY - 900;
+    double angle = atan2(dy, dx) * 180 / M_PI;
+
+    SDL_RenderCopyEx(renderer, image, nullptr, &cannonRect, angle, nullptr, SDL_FLIP_NONE);
+}
+
 void initial_crash_ball(SDL_Renderer *Renderer)
 {
     crash_balls[0].x = int(WIDTH / 2);
@@ -537,11 +552,10 @@ void initial_crash_ball(SDL_Renderer *Renderer)
     crash_balls[0].color = crash_balls[1].color;
     crash_balls[0].isEmpty = false;
 
-    crash_balls[1].x = int(WIDTH / 2) - 75;
-    crash_balls[1].y = int(HIGHT - 100) + 20;
-
-    SDL_Rect Ball = {int(crash_balls[0].x - ballRadius), int(crash_balls[0].y - ballRadius), 2 * ballRadius, 2 * ballRadius};
-    SDL_Rect Ball2 = {int(crash_balls[1].x - ballRadius), int(crash_balls[1].y - ballRadius), 2 * ballRadius * 9 / 10, 2 * ballRadius * 9 / 10};
+    // crash_balls[1].x = int(WIDTH / 2) - 75;
+    // crash_balls[1].y = int(HIGHT - 100) + 20;
+    crash_balls[1].x = 317;
+    crash_balls[1].y = 920;
 
     bool regenerate = false;
 
@@ -560,7 +574,6 @@ void initial_crash_ball(SDL_Renderer *Renderer)
                 if (crash_ball_color[0])
                 {
                     crash_balls[0].color = 1;
-                    SDL_RenderCopy(Renderer, IMG_LoadTexture(Renderer, "assets/Game/Balls/1.png"), NULL, &Ball);
                     isColorSelected = false;
                 }
                 break;
@@ -570,7 +583,6 @@ void initial_crash_ball(SDL_Renderer *Renderer)
                 if (crash_ball_color[1])
                 {
                     crash_balls[0].color = 2;
-                    SDL_RenderCopy(Renderer, IMG_LoadTexture(Renderer, "assets/Game/Balls/2.png"), NULL, &Ball);
                     isColorSelected = false;
                 }
                 break;
@@ -580,7 +592,6 @@ void initial_crash_ball(SDL_Renderer *Renderer)
                 if (crash_ball_color[2])
                 {
                     crash_balls[0].color = 4;
-                    SDL_RenderCopy(Renderer, IMG_LoadTexture(Renderer, "assets/Game/Balls/4.png"), NULL, &Ball);
                     isColorSelected = false;
                 }
                 break;
@@ -590,7 +601,6 @@ void initial_crash_ball(SDL_Renderer *Renderer)
                 if (crash_ball_color[3])
                 {
                     crash_balls[0].color = 8;
-                    SDL_RenderCopy(Renderer, IMG_LoadTexture(Renderer, "assets/Game/Balls/8.png"), NULL, &Ball);
                     isColorSelected = false;
                 }
                 break;
@@ -599,39 +609,9 @@ void initial_crash_ball(SDL_Renderer *Renderer)
         }
     }
 
-    switch (crash_balls[0].color)
-    {
-    case 1:
-    {
-        SDL_RenderCopy(Renderer, IMG_LoadTexture(Renderer, "assets/Game/Balls/1.png"), NULL, &Ball);
-        break;
-    }
-    case 2:
-    {
-        SDL_RenderCopy(Renderer, IMG_LoadTexture(Renderer, "assets/Game/Balls/2.png"), NULL, &Ball);
-        break;
-    }
-    case 4:
-    {
-        SDL_RenderCopy(Renderer, IMG_LoadTexture(Renderer, "assets/Game/Balls/4.png"), NULL, &Ball);
-        break;
-    }
-    case 8:
-    {
-        SDL_RenderCopy(Renderer, IMG_LoadTexture(Renderer, "assets/Game/Balls/8.png"), NULL, &Ball);
-        break;
-    }
-    case 11:
-    {
-        SDL_RenderCopy(Renderer, IMG_LoadTexture(Renderer, "assets/Game/Balls/11.png"), NULL, &Ball);
-        break;
-    }
-    }
-
     if (rand() % 10 == 0)
     {
         crash_balls[1].color = 11;
-        SDL_RenderCopy(Renderer, IMG_LoadTexture(Renderer, "assets/Game/Balls/11.png"), NULL, &Ball2);
     }
     else
     {
@@ -645,7 +625,6 @@ void initial_crash_ball(SDL_Renderer *Renderer)
                 if (crash_ball_color[0])
                 {
                     crash_balls[1].color = 1;
-                    SDL_RenderCopy(Renderer, IMG_LoadTexture(Renderer, "assets/Game/Balls/1.png"), NULL, &Ball2);
                     isColorSelected = false;
                 }
                 break;
@@ -655,7 +634,6 @@ void initial_crash_ball(SDL_Renderer *Renderer)
                 if (crash_ball_color[1])
                 {
                     crash_balls[1].color = 2;
-                    SDL_RenderCopy(Renderer, IMG_LoadTexture(Renderer, "assets/Game/Balls/2.png"), NULL, &Ball2);
                     isColorSelected = false;
                 }
                 break;
@@ -665,7 +643,6 @@ void initial_crash_ball(SDL_Renderer *Renderer)
                 if (crash_ball_color[2])
                 {
                     crash_balls[1].color = 4;
-                    SDL_RenderCopy(Renderer, IMG_LoadTexture(Renderer, "assets/Game/Balls/4.png"), NULL, &Ball2);
                     isColorSelected = false;
                 }
                 break;
@@ -675,7 +652,6 @@ void initial_crash_ball(SDL_Renderer *Renderer)
                 if (crash_ball_color[3])
                 {
                     crash_balls[1].color = 8;
-                    SDL_RenderCopy(Renderer, IMG_LoadTexture(Renderer, "assets/Game/Balls/8.png"), NULL, &Ball2);
                     isColorSelected = false;
                 }
                 break;
@@ -869,63 +845,6 @@ void isConnected(ball theBall)
 void crashed_ball(SDL_Renderer *Renderer)
 {
     SDL_Rect Ball = {int(crash_balls[0].x - ballRadius), int(crash_balls[0].y - ballRadius), 2 * ballRadius, 2 * ballRadius};
-    switch (crash_balls[0].color)
-    {
-    case 1:
-    {
-        SDL_RenderCopy(Renderer, IMG_LoadTexture(Renderer, "assets/Game/Balls/1.png"), NULL, &Ball);
-        break;
-    }
-    case 2:
-    {
-        SDL_RenderCopy(Renderer, IMG_LoadTexture(Renderer, "assets/Game/Balls/2.png"), NULL, &Ball);
-        break;
-    }
-    case 4:
-    {
-        SDL_RenderCopy(Renderer, IMG_LoadTexture(Renderer, "assets/Game/Balls/4.png"), NULL, &Ball);
-        break;
-    }
-    case 8:
-    {
-        SDL_RenderCopy(Renderer, IMG_LoadTexture(Renderer, "assets/Game/Balls/8.png"), NULL, &Ball);
-        break;
-    }
-    case 11:
-    {
-        SDL_RenderCopy(Renderer, IMG_LoadTexture(Renderer, "assets/Game/Balls/11.png"), NULL, &Ball);
-        break;
-    }
-    }
-    SDL_Rect Ball2 = {int(crash_balls[1].x - ballRadius), int(crash_balls[1].y - ballRadius), 40, 40};
-    switch (crash_balls[1].color)
-    {
-    case 1:
-    {
-        SDL_RenderCopy(Renderer, IMG_LoadTexture(Renderer, "assets/Game/Balls/1.png"), NULL, &Ball2);
-        break;
-    }
-    case 2:
-    {
-        SDL_RenderCopy(Renderer, IMG_LoadTexture(Renderer, "assets/Game/Balls/2.png"), NULL, &Ball2);
-        break;
-    }
-    case 4:
-    {
-        SDL_RenderCopy(Renderer, IMG_LoadTexture(Renderer, "assets/Game/Balls/4.png"), NULL, &Ball2);
-        break;
-    }
-    case 8:
-    {
-        SDL_RenderCopy(Renderer, IMG_LoadTexture(Renderer, "assets/Game/Balls/8.png"), NULL, &Ball2);
-        break;
-    }
-    case 11:
-    {
-        SDL_RenderCopy(Renderer, IMG_LoadTexture(Renderer, "assets/Game/Balls/11.png"), NULL, &Ball2);
-        break;
-    }
-    }
 
     if (!is_crash_ball_crashed)
     {
@@ -1051,6 +970,77 @@ void crashed_ball(SDL_Renderer *Renderer)
                 }
             }
         }
+    }
+    if (!is_crash_ball_moved)
+    {
+        switch (crash_balls[0].color)
+        {
+        case 1:
+        {
+            SDL_Texture *cannon1 = IMG_LoadTexture(Renderer, "assets/Game/cannon/cannon1.png");
+            rotateCannonWithMouse(Renderer, cannon1);
+            break;
+        }
+        case 2:
+        {
+            SDL_Texture *cannon2 = IMG_LoadTexture(Renderer, "assets/Game/cannon/cannon2.png");
+            rotateCannonWithMouse(Renderer, cannon2);
+            break;
+        }
+        case 4:
+        {
+            SDL_Texture *cannon4 = IMG_LoadTexture(Renderer, "assets/Game/cannon/cannon4.png");
+            rotateCannonWithMouse(Renderer, cannon4);
+            break;
+        }
+        case 8:
+        {
+            SDL_Texture *cannon8 = IMG_LoadTexture(Renderer, "assets/Game/cannon/cannon8.png");
+            rotateCannonWithMouse(Renderer, cannon8);
+            break;
+        }
+        case 11:
+        {
+            SDL_Texture *cannon11 = IMG_LoadTexture(Renderer, "assets/Game/cannon/cannon11.png");
+            rotateCannonWithMouse(Renderer, cannon11);
+            break;
+        }
+        }
+    }
+    else
+    {
+        SDL_Texture *cannonEmpty = IMG_LoadTexture(Renderer, "assets/Game/cannon/cannonEmpty.png");
+        rotateCannonWithMouse(Renderer, cannonEmpty);
+    }
+
+    SDL_Rect Ball2 = {302, 910, 20, 20};
+    switch (crash_balls[1].color)
+    {
+    case 1:
+    {
+        SDL_RenderCopy(Renderer, IMG_LoadTexture(Renderer, "assets/Game/Balls/1.png"), NULL, &Ball2);
+        break;
+    }
+    case 2:
+    {
+        SDL_RenderCopy(Renderer, IMG_LoadTexture(Renderer, "assets/Game/Balls/2.png"), NULL, &Ball2);
+        break;
+    }
+    case 4:
+    {
+        SDL_RenderCopy(Renderer, IMG_LoadTexture(Renderer, "assets/Game/Balls/4.png"), NULL, &Ball2);
+        break;
+    }
+    case 8:
+    {
+        SDL_RenderCopy(Renderer, IMG_LoadTexture(Renderer, "assets/Game/Balls/8.png"), NULL, &Ball2);
+        break;
+    }
+    case 11:
+    {
+        SDL_RenderCopy(Renderer, IMG_LoadTexture(Renderer, "assets/Game/Balls/11.png"), NULL, &Ball2);
+        break;
+    }
     }
 }
 
