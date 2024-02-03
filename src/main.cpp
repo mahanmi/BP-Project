@@ -33,6 +33,7 @@ int lines = 11;
 int columns = WIDTH / (2 * ballRadius);
 int stick = 0;
 int score = 100;
+int crashed_score = 0;
 int end_time = 60 * 1000;
 
 bool init()
@@ -421,13 +422,16 @@ int main(int argv, char **args)
                     {
                       switch (event.key.keysym.sym)
                       {
-                      case SDLK_ESCAPE:
+                      case SDLK_p:
                       {
                         pause = !pause;
                       }
 
                       case SDLK_w:
-                        win = true;
+                        dy_initial = 0.25;
+
+                      case SDLK_s:
+                        dy_initial = 0.1;
 
                       case SDLK_SPACE:
                         if (!is_crash_ball_moved)
@@ -450,7 +454,7 @@ int main(int argv, char **args)
                       players[playerIndex].classicScore = score;
                       updateLeaderboard(players);
                     }
-                    button OK = {150, 68, 242, 657, 0, 0, 0, 0, 2, false, false, IMG_LoadTexture(renderer, "assets/Game/OKButton.png"), IMG_LoadTexture(renderer, "assets/Game/OKButtonHover.png"), IMG_LoadTexture(renderer, "assets/Game/OKButtonClicked.png"), hover, click};
+                    button OK = {150, 68, 242, 657, 0, 0, 0, 0, 0, false, false, IMG_LoadTexture(renderer, "assets/Game/OKButton.png"), IMG_LoadTexture(renderer, "assets/Game/OKButtonHover.png"), IMG_LoadTexture(renderer, "assets/Game/OKButtonClicked.png"), hover, click};
                     cout << "You win" << endl;
                     while (win)
                     {
@@ -472,6 +476,47 @@ int main(int argv, char **args)
                         SDL_Texture *winText = IMG_LoadTexture(renderer, "assets/Game/win.png");
                         SDL_Rect winRect = {112, 250, 401, 513};
                         SDL_RenderCopy(renderer, winText, 0, &winRect);
+                        showUserScore(renderer, name, score, 250, 495);
+                        showUserScore(renderer, name, players[playerIndex].classicScore, 250, 595);
+                        drawButton(renderer, OK, event);
+                        render(renderer);
+                      }
+                    }
+                  }
+                  else
+                  {
+                    for (int i = 0; i < lines + stick; i++)
+                      for (int j = 0; j < columns; j++)
+                        if (!balls[i][j].isEmpty && balls[i][j].color != 7)
+                          score--;
+                    if (players[playerIndex].classicScore < score)
+                    {
+                      players[playerIndex].classicScore = score;
+                      updateLeaderboard(players);
+                    }
+                    balls.clear();
+                    button OK = {150, 68, 242, 657, 0, 0, 0, 0, 0, false, false, IMG_LoadTexture(renderer, "assets/Game/OKButton.png"), IMG_LoadTexture(renderer, "assets/Game/OKButtonHover.png"), IMG_LoadTexture(renderer, "assets/Game/OKButtonClicked.png"), hover, click};
+                    cout << "You lose" << endl;
+                    while (lose)
+                    {
+                      while (SDL_PollEvent(&event) && lose)
+                      {
+                        if (quitGame(event))
+                        {
+                          classicGM.isSelected = false;
+                          quit(running);
+                          break;
+                        }
+                        if (goBack(event) || OK.wasClicked)
+                        {
+                          classicGM.isSelected = false;
+                          lose = false;
+                          break;
+                        }
+                        SDL_RenderCopy(renderer, GameBG, 0, 0);
+                        SDL_Texture *loseText = IMG_LoadTexture(renderer, "assets/Game/lose.png");
+                        SDL_Rect loseRect = {112, 250, 401, 513};
+                        SDL_RenderCopy(renderer, loseText, 0, &loseRect);
                         showUserScore(renderer, name, score, 250, 495);
                         showUserScore(renderer, name, players[playerIndex].classicScore, 250, 595);
                         drawButton(renderer, OK, event);

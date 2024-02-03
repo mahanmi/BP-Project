@@ -128,10 +128,10 @@ bool shouldStick(int iBall, int jBall)
     if (balls[iBall][jBall].isEmpty)
         return false;
 
-    if (lines<50 && iBall == 0)
+    if (lines < 50 && iBall == 0)
         return true;
 
-    if(lines>50 && abs(balls[iBall][jBall].y) <= ballRadius)
+    if (lines > 50 && abs(balls[iBall][jBall].y) <= ballRadius)
         return true;
 
     if (balls[iBall][jBall].stickCheck == -1)
@@ -625,7 +625,7 @@ void draw_ball(SDL_Renderer *Renderer)
                     crash_ball_color[3] = true;
                     break;
                 }
-                if (balls[i][j].y > HIGHT - 100 - 2 * ballRadius )
+                if (balls[i][j].y > HIGHT - 100 - 2 * ballRadius)
                 {
                     lose = true;
                 }
@@ -1157,18 +1157,6 @@ void crashed_ball(SDL_Renderer *Renderer)
         break;
     }
     }
-}
-
-int gameScore()
-{
-    if (lose)
-    {
-        for (int i = 0; i < lines + stick; i++)
-            for (int j = 0; j < columns; j++)
-                if (!balls[i][j].isEmpty && balls[i][j].color != 7)
-                    score--;
-    }
-    return score;
 }
 
 int timeScore(Uint32 elapsed_time)

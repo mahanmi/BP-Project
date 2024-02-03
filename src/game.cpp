@@ -173,6 +173,5 @@ int main(int argv, char **args)
     SDL_RenderCopy(renderer, GameBG, NULL, NULL);
     SDL_RenderPresent(renderer);
     SDL_Delay(3000);
-    cout << gameScore();
     return 0;
 }
