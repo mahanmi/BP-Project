@@ -554,7 +554,7 @@ void draw_ball(SDL_Renderer *Renderer)
     for (int i = 0; i < fallingBall.size(); i++)
         if (fallingBall[i].y < HIGHT)
         {
-            SDL_Rect fallingBallRect = {fallingBall[i].x - ballRadius, fallingBall[i].y - ballRadius, 2 * ballRadius, 2 * ballRadius};
+            SDL_Rect fallingBallRect = {int(fallingBall[i].x - ballRadius), int(fallingBall[i].y - ballRadius), 2 * ballRadius, 2 * ballRadius};
             switch (fallingBall[i].color)
             {
             case 1:
@@ -600,7 +600,7 @@ void draw_ball(SDL_Renderer *Renderer)
     for (int i = 0; i < crashed.size(); i++)
         if (crashed[i].r > 1)
         {
-            SDL_Rect crashedBall = {crashed[i].x - crashed[i].r, crashed[i].y - crashed[i].r, 2 * crashed[i].r, 2 * crashed[i].r};
+            SDL_Rect crashedBall = {int(crashed[i].x - crashed[i].r), int(crashed[i].y - crashed[i].r), 2 * crashed[i].r, 2 * crashed[i].r};
             switch (crashed[i].color)
             {
             case 1:

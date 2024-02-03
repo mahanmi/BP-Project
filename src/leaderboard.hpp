@@ -141,15 +141,15 @@ void updateLeaderboard(vector<player> &players)
 {
   ofstream file;
   file.open("assets/leaderboard/leaderboard.txt", ios::trunc);
-  // file.open("assets/leaderboard/leaderboard.txt");
-
   for (int i = 0; i < players.size(); i++)
   {
     if (players[i].name != "0" && players[i].name != "")
     {
-      file << players[i].name << " " << players[i].classicScore << " " << players[i].infiniteScore << " " << players[i].timerScore << endl;
+      string name = players[i].name;
+      file << name << ' ' << players[i].classicScore << ' ' << players[i].infiniteScore << ' ' << players[i].timerScore << endl;
     }
   }
+  file << "0 0 0 0" << endl;
   file.close();
 }
 
