@@ -9,6 +9,22 @@
 #include <cstdlib>
 #include <vector>
 
+bool check_win()
+{
+    for (int i = 0; i < lines + stick; i++)
+    {
+        for (int j = 0; j < columns; j++)
+        {
+            if (balls[i][j].isEmpty == false)
+            {
+                cout << i << " " << j << " " << balls[i][j].isEmpty << endl;
+                return false;
+            }
+        }
+    }
+    return true;
+}
+
 bool sameColor(ball ball1, ball ball2)
 {
     if (ball2.color != 7 && (ball1.color == 11 || ball2.color == 11 || ball1.color == ball2.color || (ball1.color == 1 && ball2.color % 2 != 0) || (ball1.color == 2 && (ball2.color == 3 || ball2.color == 6 || ball2.color == 10)) || (ball1.color == 4 && (ball2.color == 5 || ball2.color == 6 || ball2.color == 12)) || (ball1.color == 8 && (ball2.color == 9 || ball2.color == 10 || ball2.color == 12)) || (ball1.color == 3 && (ball2.color == 1 || ball2.color == 2)) || (ball1.color == 5 && (ball2.color == 1 || ball2.color == 4)) || (ball1.color == 9 && (ball2.color == 1 || ball2.color == 8)) || (ball1.color == 6 && (ball2.color == 2 || ball2.color == 4)) || (ball1.color == 10 && (ball2.color == 2 || ball2.color == 8)) || (ball1.color == 12 && (ball2.color == 4 || ball2.color == 8))))
@@ -88,7 +104,6 @@ bool shouldStick(int iBall, int jBall)
         {
             if (balls[iBall - 1][jBall].stickCheck == 1) // North *
             {
-                // cout << iBall << " " << jBall << "is connected to " << iBall - 1 << " " << jBall << endl;
                 balls[iBall][jBall].stickCheck = balls[iBall - 1][jBall].stickCheck;
                 return true;
             }
@@ -98,7 +113,6 @@ bool shouldStick(int iBall, int jBall)
         {
             if (balls[iBall - 1][jBall - 1].stickCheck == 1) // North West *
             {
-                // cout << iBall << " " << jBall << "is connected to " << iBall - 1 << " " << jBall - 1 << endl;
                 balls[iBall][jBall].stickCheck = balls[iBall - 1][jBall - 1].stickCheck;
                 return true;
             }
@@ -108,7 +122,6 @@ bool shouldStick(int iBall, int jBall)
         {
             if (balls[iBall][jBall + 1].stickCheck == 1) // East *
             {
-                // cout << iBall << " " << jBall << "is connected to " << iBall << " " << jBall + 1 << endl;
                 balls[iBall][jBall].stickCheck = balls[iBall][jBall + 1].stickCheck;
                 return true;
             }
@@ -118,7 +131,6 @@ bool shouldStick(int iBall, int jBall)
         {
             if (balls[iBall][jBall - 1].stickCheck == 1) // West *
             {
-                // cout << iBall << " " << jBall << "is connected to " << iBall << " " << jBall - 1 << endl;
                 balls[iBall][jBall].stickCheck = balls[iBall][jBall - 1].stickCheck;
                 return true;
             }
@@ -127,7 +139,6 @@ bool shouldStick(int iBall, int jBall)
         if (iBall < lines - 1 && !balls[iBall + 1][jBall].isEmpty)
             if (balls[iBall + 1][jBall].stickCheck == 1) // South *
             {
-                // cout << iBall << " " << jBall << "is connected to " << iBall + 1 << " " << jBall << endl;
                 balls[iBall][jBall].stickCheck = balls[iBall + 1][jBall].stickCheck;
                 return true;
             }
@@ -135,7 +146,6 @@ bool shouldStick(int iBall, int jBall)
         if (jBall > 0 && iBall < lines - 1 && !balls[iBall + 1][jBall - 1].isEmpty)
             if (balls[iBall + 1][jBall - 1].stickCheck == 1) // South West *
             {
-                // //cout << iBall << " " << jBall << "is connected to " << iBall + 1 << " " << jBall - 1 << endl;
                 balls[iBall][jBall].stickCheck = balls[iBall + 1][jBall - 1].stickCheck;
                 return true;
             }
@@ -148,7 +158,6 @@ bool shouldStick(int iBall, int jBall)
         {
             if (shouldStick(iBall - 1, jBall)) // North *
             {
-                // cout << iBall << " " << jBall << "is connected to " << iBall - 1 << " " << jBall << endl;
                 balls[iBall][jBall].stickCheck = 1;
                 return true;
             }
@@ -159,7 +168,6 @@ bool shouldStick(int iBall, int jBall)
             if (shouldStick(iBall - 1, jBall - 1)) // North West *
 
             {
-                // cout << iBall << " " << jBall << "is connected to " << iBall - 1 << " " << jBall - 1 << endl;
                 balls[iBall][jBall].stickCheck = 1;
                 return true;
             }
@@ -169,7 +177,6 @@ bool shouldStick(int iBall, int jBall)
         {
             if (shouldStick(iBall, jBall - 1)) // West *
             {
-                // cout << iBall << " " << jBall << "is connected to " << iBall << " " << jBall - 1 << endl;
                 balls[iBall][jBall].stickCheck = 1;
                 return true;
             }
@@ -180,7 +187,6 @@ bool shouldStick(int iBall, int jBall)
             if (shouldStick(iBall + 1, jBall - 1)) // South West *
 
             {
-                // cout << iBall << " " << jBall << "is connected to " << iBall + 1 << " " << jBall - 1 << endl;
                 balls[iBall][jBall].stickCheck = 1;
                 return true;
             }
@@ -190,7 +196,6 @@ bool shouldStick(int iBall, int jBall)
         {
             if (shouldStick(iBall, jBall + 1)) // East *
             {
-                // cout << iBall << " " << jBall << "is connected to " << iBall << " " << jBall + 1 << endl;
                 balls[iBall][jBall].stickCheck = 1;
                 return true;
             }
@@ -200,7 +205,6 @@ bool shouldStick(int iBall, int jBall)
             if (shouldStick(iBall + 1, jBall)) // South *
 
             {
-                // cout << iBall << " " << jBall << "is connected to " << iBall + 1 << " " << jBall << endl;
                 balls[iBall][jBall].stickCheck = 1;
                 return true;
             }
@@ -215,7 +219,6 @@ bool shouldStick(int iBall, int jBall)
             if (balls[iBall - 1][jBall].stickCheck == 1) // North *
 
             {
-                // cout << iBall << " " << jBall << "is connected to " << iBall - 1 << " " << jBall << endl;
                 balls[iBall][jBall].stickCheck = balls[iBall - 1][jBall].stickCheck;
                 return true;
             }
@@ -226,7 +229,6 @@ bool shouldStick(int iBall, int jBall)
             if (balls[iBall - 1][jBall + 1].stickCheck == 1) // North East *
 
             {
-                // cout << iBall << " " << jBall << "is connected to " << iBall - 1 << " " << jBall - 1 << endl;
                 balls[iBall][jBall].stickCheck = balls[iBall - 1][jBall - 1].stickCheck;
                 return true;
             }
@@ -236,7 +238,6 @@ bool shouldStick(int iBall, int jBall)
         {
             if (balls[iBall][jBall + 1].stickCheck == 1) // East *
             {
-                // cout << iBall << " " << jBall << "is connected to " << iBall << " " << jBall + 1 << endl;
                 balls[iBall][jBall].stickCheck = balls[iBall][jBall + 1].stickCheck;
                 return true;
             }
@@ -247,7 +248,6 @@ bool shouldStick(int iBall, int jBall)
             if (balls[iBall][jBall - 1].stickCheck == 1) // West *
 
             {
-                // cout << iBall << " " << jBall << "is connected to " << iBall << " " << jBall - 1 << endl;
                 balls[iBall][jBall].stickCheck = balls[iBall][jBall - 1].stickCheck;
                 return true;
             }
@@ -256,7 +256,6 @@ bool shouldStick(int iBall, int jBall)
         if (iBall < lines - 1 && !balls[iBall + 1][jBall].isEmpty)
             if (balls[iBall + 1][jBall].stickCheck == 1) // South *
             {
-                // cout << iBall << " " << jBall << "is connected to " << iBall + 1 << " " << jBall << endl;
                 balls[iBall][jBall].stickCheck = balls[iBall + 1][jBall].stickCheck;
                 return true;
             }
@@ -264,7 +263,6 @@ bool shouldStick(int iBall, int jBall)
         if (jBall < columns - 1 && iBall < lines - 1 && !balls[iBall + 1][jBall + 1].isEmpty)
             if (balls[iBall + 1][jBall + 1].stickCheck == 1) // South East *
             {
-                // cout << iBall << " " << jBall << "is connected to " << iBall + 1 << " " << jBall + 1 << endl;
                 balls[iBall][jBall].stickCheck = balls[iBall + 1][jBall + 1].stickCheck;
                 return true;
             }
@@ -277,7 +275,6 @@ bool shouldStick(int iBall, int jBall)
         {
             if (shouldStick(iBall - 1, jBall + 1)) // North East *
             {
-                // cout << iBall << " " << jBall << "is connected to " << iBall - 1 << " " << jBall + 1 << endl;
                 balls[iBall][jBall].stickCheck = 1;
                 return true;
             }
@@ -287,7 +284,6 @@ bool shouldStick(int iBall, int jBall)
         {
             if (shouldStick(iBall - 1, jBall)) // North *
             {
-                // cout << iBall << " " << jBall << "is connected to " << iBall - 1 << " " << jBall << endl;
                 balls[iBall][jBall].stickCheck = 1;
                 return true;
             }
@@ -297,7 +293,6 @@ bool shouldStick(int iBall, int jBall)
         {
             if (shouldStick(iBall, jBall + 1)) // East *
             {
-                // cout << iBall << " " << jBall << "is connected to " << iBall << " " << jBall + 1 << endl;
                 balls[iBall][jBall].stickCheck = 1;
                 return true;
             }
@@ -307,7 +302,6 @@ bool shouldStick(int iBall, int jBall)
         {
             if (shouldStick(iBall + 1, jBall + 1)) // South East *
             {
-                // cout << iBall << " " << jBall << "is connected to " << iBall + 1 << " " << jBall + 1 << endl;
                 balls[iBall][jBall].stickCheck = 1;
                 return true;
             }
@@ -317,7 +311,6 @@ bool shouldStick(int iBall, int jBall)
         {
             if (shouldStick(iBall, jBall - 1)) // West *
             {
-                // cout << iBall << " " << jBall << "is connected to " << iBall << " " << jBall - 1 << endl;
                 balls[iBall][jBall].stickCheck = 1;
                 return true;
             }
@@ -327,7 +320,6 @@ bool shouldStick(int iBall, int jBall)
         {
             if (shouldStick(iBall + 1, jBall)) // South *
             {
-                // cout << iBall << " " << jBall << "is connected to " << iBall + 1 << " " << jBall << endl;
                 balls[iBall][jBall].stickCheck = 1;
                 return true;
             }
@@ -365,6 +357,8 @@ void initial_ball()
     int y_center = 0;
 
     ball new_ball;
+    int last_color = -1;
+
     for (int i = 0; i < lines + stick; i++)
     {
         for (int j = 0; j < columns; j++)
@@ -374,124 +368,133 @@ void initial_ball()
             new_ball.i = i;
             new_ball.j = j;
 
-            int rand_col = rand() % 22;
+            int rand_col = rand() % 5;
 
-            if (rand_col == 20)
+            if (rand_col != 0 || last_color == -1)
             {
-                switch (rand() % 6)
-                {
-                case 0:
-                {
-                    new_ball.color = 3; // yellow & blue
-                    break;
-                }
-                case 1:
-                {
-                    new_ball.color = 5; // yellow & green
-                    break;
-                }
-                case 2:
-                {
-                    new_ball.color = 9; // yellow & red
-                    break;
-                }
-                case 3:
-                {
-                    new_ball.color = 6; // blue & green
-                    break;
-                }
-                case 4:
-                {
-                    new_ball.color = 10; // blue & red
-                    break;
-                }
-                case 5:
-                {
-                    new_ball.color = 12; // green & red
-                    break;
-                }
-                }
-            }
-            else if (rand_col % 4 == 0 && rand_col < 22)
-            {
-                new_ball.color = 1; // yellow
-            }
-            if (rand_col == 21)
-            {
-                if (i != 0)
-                {
-                    new_ball.color = 7; // black
-                }
-                else
-                {
-                    rand_col = rand() % 21;
-                    if (rand_col == 20)
-                    {
-                        switch (rand() % 6)
-                        {
-                        case 0:
-                        {
-                            new_ball.color = 3; // yellow & blue
-                            break;
-                        }
-                        case 1:
-                        {
-                            new_ball.color = 5; // yellow & green
-                            break;
-                        }
-                        case 2:
-                        {
-                            new_ball.color = 9; // yellow & red
-                            break;
-                        }
-                        case 3:
-                        {
-                            new_ball.color = 6; // blue & green
-                            break;
-                        }
-                        case 4:
-                        {
-                            new_ball.color = 10; // blue & red
-                            break;
-                        }
-                        case 5:
-                        {
-                            new_ball.color = 12; // green & red
-                            break;
-                        }
-                        }
-                    }
-                    else if (rand_col % 4 == 0 && rand_col < 22)
-                    {
-                        new_ball.color = 1; // yellow
-                    }
-                    else if (rand_col % 4 == 1 && rand_col < 22)
-                    {
-                        new_ball.color = 2; // blue
-                    }
-                    else if (rand_col % 4 == 2 && rand_col < 22)
-                    {
-                        new_ball.color = 4; // green
-                    }
-                    else if (rand_col % 4 == 3 && rand_col < 22)
-                    {
-                        new_ball.color = 8; // red
-                    }
-                }
-            }
-            else if (rand_col % 4 == 1 && rand_col < 22)
-            {
-                new_ball.color = 2; // blue
-            }
-            if (rand_col % 4 == 2 && rand_col < 22)
-            {
-                new_ball.color = 4; // green
-            }
-            if (rand_col % 4 == 3 && rand_col < 22)
-            {
-                new_ball.color = 8; // red
-            }
+                rand_col = rand() % 22;
 
+                if (rand_col == 20)
+                {
+                    switch (rand() % 6)
+                    {
+                    case 0:
+                    {
+                        new_ball.color = 3; // yellow & blue
+                        break;
+                    }
+                    case 1:
+                    {
+                        new_ball.color = 5; // yellow & green
+                        break;
+                    }
+                    case 2:
+                    {
+                        new_ball.color = 9; // yellow & red
+                        break;
+                    }
+                    case 3:
+                    {
+                        new_ball.color = 6; // blue & green
+                        break;
+                    }
+                    case 4:
+                    {
+                        new_ball.color = 10; // blue & red
+                        break;
+                    }
+                    case 5:
+                    {
+                        new_ball.color = 12; // green & red
+                        break;
+                    }
+                    }
+                }
+                else if (rand_col % 4 == 0 && rand_col < 22)
+                {
+                    new_ball.color = 1; // yellow
+                }
+                if (rand_col == 21)
+                {
+                    if (i != 0)
+                    {
+                        new_ball.color = 7; // black
+                    }
+                    else
+                    {
+                        rand_col = rand() % 21;
+                        if (rand_col == 20)
+                        {
+                            switch (rand() % 6)
+                            {
+                            case 0:
+                            {
+                                new_ball.color = 3; // yellow & blue
+                                break;
+                            }
+                            case 1:
+                            {
+                                new_ball.color = 5; // yellow & green
+                                break;
+                            }
+                            case 2:
+                            {
+                                new_ball.color = 9; // yellow & red
+                                break;
+                            }
+                            case 3:
+                            {
+                                new_ball.color = 6; // blue & green
+                                break;
+                            }
+                            case 4:
+                            {
+                                new_ball.color = 10; // blue & red
+                                break;
+                            }
+                            case 5:
+                            {
+                                new_ball.color = 12; // green & red
+                                break;
+                            }
+                            }
+                        }
+                        else if (rand_col % 4 == 0 && rand_col < 22)
+                        {
+                            new_ball.color = 1; // yellow
+                        }
+                        else if (rand_col % 4 == 1 && rand_col < 22)
+                        {
+                            new_ball.color = 2; // blue
+                        }
+                        else if (rand_col % 4 == 2 && rand_col < 22)
+                        {
+                            new_ball.color = 4; // green
+                        }
+                        else if (rand_col % 4 == 3 && rand_col < 22)
+                        {
+                            new_ball.color = 8; // red
+                        }
+                    }
+                }
+                else if (rand_col % 4 == 1 && rand_col < 22)
+                {
+                    new_ball.color = 2; // blue
+                }
+                if (rand_col % 4 == 2 && rand_col < 22)
+                {
+                    new_ball.color = 4; // green
+                }
+                if (rand_col % 4 == 3 && rand_col < 22)
+                {
+                    new_ball.color = 8; // red
+                }
+            }
+            else
+            {
+                new_ball.color = last_color;
+            }
+            last_color = new_ball.color;
             balls[i].push_back(new_ball);
             x_center += 2 * ballRadius;
             balls[i][j].y += dy_initial;
@@ -749,6 +752,7 @@ void initial_crash_ball(SDL_Renderer *Renderer)
             }
         }
     }
+    win = check_win();
     is_crash_ball_crashed = false;
     is_crash_ball_moved = false;
 }

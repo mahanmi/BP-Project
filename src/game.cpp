@@ -105,7 +105,7 @@ int main(int argv, char **args)
     draw_ball(renderer);
     SDL_RenderPresent(renderer);
 
-    while (1)
+    while (!win && !lose)
     {
         SDL_RenderCopy(renderer, GameBG, NULL, NULL);
 
@@ -141,9 +141,16 @@ int main(int argv, char **args)
             x_mouse = event.button.x;
             y_mouse = event.button.y;
         }
-
+        if (win)
+        {
+            cout << "You win" << endl;
+        }
         SDL_RenderPresent(renderer);
         SDL_Delay(1000 / 60);
         SDL_RenderClear(renderer);
     }
+    SDL_RenderCopy(renderer, GameBG, NULL, NULL);
+    SDL_RenderPresent(renderer);
+    SDL_Delay(3000);
+    return 0;
 }
