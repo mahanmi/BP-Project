@@ -18,13 +18,14 @@ struct ball
 };
 
 const int WIDTH = 625, HIGHT = 1000;
-int d = 15;
+int d = 20;
 float dx, dy;
 float dy_initial = 0.25;
 int ballRadius = 25;
-int lines = 15;
+int lines = 11;
 int columns = WIDTH / (2 * ballRadius);
 int stick = 0;
+int score = 100;
 
 SDL_Window *window = SDL_CreateWindow("Bouncing Balls Game", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, WIDTH, HIGHT, SDL_WINDOW_SHOWN);
 SDL_Renderer *renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);

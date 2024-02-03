@@ -23,6 +23,43 @@ bool areConnected(ball ball1, ball ball2)
     return false;
 }
 
+void draw_aimLine(SDL_Renderer *renderer)
+{
+    int dxm = x_mouse - crash_balls[0].x;
+    int dym = y_mouse - crash_balls[0].y;
+
+    float angle = atan2(dym, dxm);
+    float y_end = crash_balls[0].y - (WIDTH - crash_balls[0].x) * tan(angle);
+
+    if (x_mouse < crash_balls[0].x)
+        y_end = crash_balls[0].y + (crash_balls[0].x) * tan(angle);
+
+    if (y_end > 0 && y_end < HIGHT)
+    {
+        if (x_mouse > crash_balls[0].x)
+        {
+            lineRGBA(renderer, crash_balls[0].x, crash_balls[0].y, WIDTH, y_end, 255, 0, 0, 255);
+            lineRGBA(renderer, WIDTH, y_end, 0, y_end - WIDTH * tan(angle), 255, 0, 0, 255);
+        }
+        else
+        {
+            lineRGBA(renderer, crash_balls[0].x, crash_balls[0].y, 0, y_end, 255, 0, 0, 255);
+            lineRGBA(renderer, 0, y_end, WIDTH, y_end + WIDTH * tan(angle), 255, 0, 0, 255);
+        }
+    }
+
+    if (y_end <= 0 || y_end >= HIGHT)
+    {
+        float x_end = crash_balls[0].x - (crash_balls[0].y) / tan(angle);
+
+        if (x_end > 0 && x_end < WIDTH)
+        {
+            lineRGBA(renderer, crash_balls[0].x, crash_balls[0].y, x_end, 0, 255, 0, 0, 255);
+        }
+    }
+}
+
+
 bool areConnectedBallsVector(ball ball1, ball ball2)
 {
     int i1 = ball1.i, j1 = ball1.j, i2 = ball2.i, j2 = ball2.j;
@@ -875,7 +912,7 @@ void crashed_ball(SDL_Renderer *Renderer)
     {
         if (!is_crash_ball_moved)
         {
-            aalineRGBA(Renderer, crash_balls[0].x, crash_balls[0].y, x_mouse, y_mouse, 255, 0, 0, 255);
+            draw_aimLine(Renderer);
         }
         else
         {
@@ -990,6 +1027,7 @@ void crashed_ball(SDL_Renderer *Renderer)
                 if (!is_crash_ball_crashed && !is_crash_ball_moved)
                 {
                     is_crash_ball_moved = true;
+                    score--;
                     dx = d * ((x_mouse - crash_balls[0].x) / sqrt(pow(x_mouse - crash_balls[0].x, 2) + pow(y_mouse - crash_balls[0].y, 2)));
                     dy = d * ((y_mouse - crash_balls[0].y) / sqrt(pow(x_mouse - crash_balls[0].x, 2) + pow(y_mouse - crash_balls[0].y, 2)));
                 }
