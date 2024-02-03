@@ -35,6 +35,8 @@ int stick = 0;
 int score = 100;
 int crashed_score = 0;
 int end_time;
+bool pause = false, slowMotion = false;
+bool win = false, lose = false;
 
 bool init()
 {
@@ -57,8 +59,6 @@ void render(SDL_Renderer *renderer)
   SDL_Delay(1000 / 60);
   SDL_RenderClear(renderer);
 }
-
-bool win = false, lose = false;
 
 vector<vector<ball>> balls;
 
@@ -315,14 +315,23 @@ int main(int argv, char **args)
 
               SDL_RenderClear(renderer);
 
+              for (int i = 0; i < 4; i++)
+              {
+                crash_ball_color[i] = true;
+              }
+
               if (timerGM.isSelected)
               {
+                balls.clear();
+                crashed.clear();
+                fallingBall.clear();
+
                 end_time = 90 * 1000;
 
                 lines = 20;
                 score = 100;
                 win = false, lose = false;
-                bool pause = false, slowMotion = false;
+                pause = false, slowMotion = false;
 
                 initial_ball();
 
@@ -383,13 +392,13 @@ int main(int argv, char **args)
                   {
                     if (quitGame(event))
                     {
-                      classicGM.isSelected = false;
+                      timerGM.isSelected = false;
                       quit(running);
                       break;
                     }
                     if (goBack(event) || back.wasClicked)
                     {
-                      classicGM.isSelected = false;
+                      timerGM.isSelected = false;
                       break;
                     }
 
@@ -415,8 +424,8 @@ int main(int argv, char **args)
                         for (int j = 0; j < columns; j++)
                           balls[i][j].y += dy_initial;
 
-                    draw_ball(renderer);
                     crashed_ball(renderer);
+                    draw_ball(renderer);
 
                     if (event.type == SDL_KEYDOWN)
                     {
@@ -442,18 +451,14 @@ int main(int argv, char **args)
                     drawButton(renderer, back, event);
                     render(renderer);
                   }
-                  score = timeScore(elapsed_time);
                   if (win)
                   {
-                    if (players[playerIndex].timerScore < score)
+                    if (players[playerIndex].timerScore < timeScore(elapsed_time))
                     {
                       cout << "New High Score" << endl;
-                      players[playerIndex].timerScore = score;
+                      players[playerIndex].timerScore = timeScore(elapsed_time);
                       updateLeaderboard(players);
                     }
-                    balls.clear();
-                    crashed.clear();
-                    fallingBall.clear();
                     button OK = {150, 68, 242, 657, 0, 0, 0, 0, 0, false, false, IMG_LoadTexture(renderer, "assets/Game/OKButton.png"), IMG_LoadTexture(renderer, "assets/Game/OKButtonHover.png"), IMG_LoadTexture(renderer, "assets/Game/OKButtonClicked.png"), hover, click};
                     cout << "You win" << endl;
                     while (win)
@@ -468,6 +473,7 @@ int main(int argv, char **args)
                         }
                         if (goBack(event) || OK.wasClicked)
                         {
+                          OK.wasClicked = false;
                           timerGM.isSelected = false;
                           win = false;
                           break;
@@ -491,9 +497,6 @@ int main(int argv, char **args)
                       players[playerIndex].timerScore = score;
                       updateLeaderboard(players);
                     }
-                    balls.clear();
-                    crashed.clear();
-                    fallingBall.clear();
                     button OK = {150, 68, 242, 657, 0, 0, 0, 0, 0, false, false, IMG_LoadTexture(renderer, "assets/Game/OKButton.png"), IMG_LoadTexture(renderer, "assets/Game/OKButtonHover.png"), IMG_LoadTexture(renderer, "assets/Game/OKButtonClicked.png"), hover, click};
                     cout << "You lose" << endl;
                     while (lose)
@@ -508,6 +511,7 @@ int main(int argv, char **args)
                         }
                         if (goBack(event) || OK.wasClicked)
                         {
+                          OK.wasClicked = false;
                           timerGM.isSelected = false;
                           lose = false;
                           break;
@@ -524,16 +528,18 @@ int main(int argv, char **args)
                     }
                   }
                 }
-                timerGM.isSelected = true;
+                // timerGM.isSelected = true;
               }
               else if (classicGM.isSelected)
               {
                 balls.clear();
+                crashed.clear();
+                fallingBall.clear();
 
                 lines = 20;
                 score = 100;
                 win = false, lose = false;
-                bool pause = false, slowMotion = false;
+                pause = false, slowMotion = false;
 
                 initial_ball();
                 for (int j = 0; j < columns; j++)
