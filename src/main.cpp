@@ -50,8 +50,6 @@ Mix_Music *musicSound = Mix_LoadMUS(musicList[musicIndex].path.c_str());
 Mix_Chunk *click = Mix_LoadWAV("assets/Sounds/click.mp3");
 Mix_Chunk *hover = Mix_LoadWAV("assets/Sounds/hover.mp3");
 
-string username = "";
-
 TTF_Font *Leaderboard = TTF_OpenFont("assets/Fonts/Poppins-Bold.ttf", 45);
 TTF_Font *Settings = TTF_OpenFont("assets/Fonts/Digitalt.ttf", 38);
 TTF_Font *name = TTF_OpenFont("assets/Fonts/Digitalt.ttf", 28);
@@ -67,6 +65,13 @@ int main(int argc, char const *argv[])
 
   int volume = 60;
   Mix_Volume(-1, volume);
+  Mix_VolumeMusic(MIX_MAX_VOLUME * volume / 100);
+
+  string username = "";
+  int playerIndex = -1;
+
+  vector<player> players;
+  getLeaderboard(players);
 
   bool running = true;
 
@@ -225,7 +230,7 @@ int main(int argc, char const *argv[])
                           username.pop_back();
                         break;
                       default:
-                        if (event.key.keysym.sym >= 97 && event.key.keysym.sym <= 122)
+                        if (event.key.keysym.sym >= 97 && event.key.keysym.sym <= 122 && username.size() <= 10)
                           username += event.key.keysym.sym;
 
                         break;
@@ -243,7 +248,25 @@ int main(int argc, char const *argv[])
                   render(renderer);
                   if (back.wasClicked || timerGM.wasClicked || classicGM.wasClicked || infiniteGM.wasClicked || start.wasClicked || !inputBox.isSelected)
                   {
-                    cout << username << endl;
+                    bool playerFound = false;
+                    for (int i = 0; i < players.size(); i++)
+                    {
+                      if (players[i].name == username)
+                      {
+                        playerFound = true;
+                        playerIndex = i;
+                        cout << "Player Found! Welcome Back " << players[i].name << endl;
+                        break;
+                      }
+                    }
+                    if (!playerFound)
+                    {
+                      player newPlayer = {username, 0, 0, 0};
+                      players.push_back(newPlayer);
+                      addNewPlayerToFile(newPlayer);
+                      playerIndex = players.size() - 1;
+                      cout << "New Player Added : " << players[playerIndex].name << endl;
+                    }
                     inputBox.image = IMG_LoadTexture(renderer, "assets/GameMode/inputBox.png");
                     inputBox.isSelected = false;
                     break;
@@ -252,9 +275,10 @@ int main(int argc, char const *argv[])
               }
             }
 
-            if (start.wasClicked) // this should run the game
+            if (start.wasClicked && playerIndex != -1) // this should run the game
             {
               start.wasClicked = false;
+
               SDL_RenderClear(renderer);
 
               if (timerGM.isSelected)
@@ -279,6 +303,7 @@ int main(int argc, char const *argv[])
                     render(renderer);
                   }
                 }
+                timerGM.isSelected = true;
               }
               else if (classicGM.isSelected)
               {
@@ -302,6 +327,7 @@ int main(int argc, char const *argv[])
                     render(renderer);
                   }
                 }
+                classicGM.isSelected = true;
               }
               else if (infiniteGM.isSelected)
               {
@@ -325,6 +351,7 @@ int main(int argc, char const *argv[])
                     render(renderer);
                   }
                 }
+                infiniteGM.isSelected = true;
               }
 
               back.wasClicked = false;
@@ -345,7 +372,7 @@ int main(int argc, char const *argv[])
       if (leaderboard.wasClicked)
       {
         string sort;
-        vector<player> players;
+        players.clear();
         getLeaderboard(players);
         while (leaderboard.wasClicked)
         {

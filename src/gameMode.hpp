@@ -5,6 +5,7 @@
 #include <string>
 #include <vector>
 #include "SDL_Headers.h"
+#include "leaderboard.hpp"
 
 using namespace std;
 
@@ -27,6 +28,14 @@ void showUserInput(SDL_Renderer *renderer, TTF_Font *font, string userInput, int
   SDL_RenderCopy(renderer, texture, NULL, &rect);
   SDL_FreeSurface(surface);
   SDL_DestroyTexture(texture);
+}
+
+void addNewPlayerToFile(player newPlayer)
+{
+  ofstream file;
+  file.open("assets/leaderboard/leaderboard.txt", ios::app);
+  file << newPlayer.name << " " << newPlayer.classicScore << " " << newPlayer.infiniteScore << " " << newPlayer.timerScore << endl;
+  file.close();
 }
 
 #endif // !gamemode_hpp
