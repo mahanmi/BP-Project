@@ -309,6 +309,15 @@ int main(int argv, char **args)
             {
               start.wasClicked = false;
 
+              for (int i = 0; i < players.size(); i++)
+              {
+                if (players[i].name == username)
+                {
+                  playerIndex = i;
+                  break;
+                }
+              }
+
               SDL_Texture *GameBG;
 
               if (theme == 0)
