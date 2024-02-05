@@ -65,7 +65,7 @@ vector<vector<ball>> balls;
 bool is_crash_ball_moved = false;
 bool is_crash_ball_crashed = false;
 
-vector<ball> crashed, fallingBall;
+vector<ball> crashed, fallingBall, explode;
 
 ball crash_balls[2];
 bool crash_ball_color[4] = {1, 1, 1, 1};

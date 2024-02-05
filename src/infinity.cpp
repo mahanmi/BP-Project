@@ -41,7 +41,7 @@ vector<vector<ball>> balls;
 bool is_crash_ball_moved = false;
 bool is_crash_ball_crashed = false;
 
-vector<ball> crashed;
+vector<ball> crashed, fallingBall, explode;
 
 ball crash_balls[2];
 bool crash_ball_color[4] = {1, 1, 1, 1};
@@ -93,7 +93,10 @@ int main(int argv, char **args)
 
     if (rand() % 10 == 0)
     {
-        crash_balls[1].color = 11;
+        if (rand() % 2 == 0)
+            crash_balls[1].color = 11;
+        else
+            crash_balls[1].color = 13;
     }
     else
     {
