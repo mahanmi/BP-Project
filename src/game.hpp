@@ -1161,10 +1161,14 @@ void crashed_ball(SDL_Renderer *Renderer)
                         if (sqrt((crash_balls[0].x - balls[i][j].x) * (crash_balls[0].x - balls[i][j].x) + (crash_balls[0].y - balls[i][j].y) * (crash_balls[0].y - balls[i][j].y)) < 1.5 * ballRadius || crash_balls[0].y < balls[0][0].y)
                         {
 
-                            if (balls[0][0].y > 0)
-                                iStick = ceil((crash_balls[0].y - balls[0][0].y) / (sqrt(3) * ballRadius));
-                            else
-                                iStick = floor((crash_balls[0].y - balls[0][0].y) / (sqrt(3) * ballRadius));
+                            bool run = true;
+                            for (int i = 0; i < lines + stick && run; i++)
+                                if (balls[i][0].y > 0)
+                                {
+                                    iStick = ceil((crash_balls[0].y - balls[i][0].y) / sqrt(3) / ballRadius);
+                                    iStick += i;
+                                    run = false;
+                                }
 
                             if (iStick % 2 == 0)
                             {
