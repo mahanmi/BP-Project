@@ -34,8 +34,49 @@ bool sameColor(ball ball1, ball ball2)
 
 bool areConnected(ball ball1, ball ball2)
 {
-    if (pow(ball1.x - ball2.x, 2) + pow(ball1.y - ball2.y, 2) <= pow(2 * ballRadius, 2))
+    if ((ball1.x - ball2.x) * (ball1.x - ball2.x) + (ball1.y - ball2.y) * (ball1.y - ball2.y) <= 4 * ballRadius * ballRadius)
         return true;
+    return false;
+}
+
+bool areConnectedVE(ball ball1, ball ball2)
+{
+    if (ball1.i % 2 == 0)
+    {
+        if (ball1.i == ball2.i)
+        {
+            if (abs(ball1.j - ball2.j) == 1)
+                return true;
+        }
+        else if (ball1.i == ball2.i + 1)
+        {
+            if (ball1.j == ball2.j || ball1.j == ball2.j + 1)
+                return true;
+        }
+        else if (ball1.i == ball2.i - 1)
+        {
+            if (ball1.j == ball2.j || ball1.j == ball2.j + 1)
+                return true;
+        }
+    }
+    else
+    {
+        if (ball1.i == ball2.i)
+        {
+            if (abs(ball1.j - ball2.j) == 1)
+                return true;
+        }
+        else if (ball1.i == ball2.i + 1)
+        {
+            if (ball1.j == ball2.j || ball1.j == ball2.j - 1)
+                return true;
+        }
+        else if (ball1.i == ball2.i - 1)
+        {
+            if (ball1.j == ball2.j || ball1.j == ball2.j - 1)
+                return true;
+        }
+    }
     return false;
 }
 
@@ -75,49 +116,6 @@ void draw_aimLine(SDL_Renderer *renderer)
     }
 }
 
-bool areConnectedBallsVector(ball ball1, ball ball2)
-{
-    int i1 = ball1.i, j1 = ball1.j, i2 = ball2.i, j2 = ball2.j;
-
-    if (i1 % 2 == 0)
-    {
-        if (i1 == i2)
-        {
-            if (abs(j1 - j2) == 1)
-                return true;
-        }
-        else if (i1 == i2 + 1)
-        {
-            if (j1 == j2 || j1 == j2 - 1)
-                return true;
-        }
-        else if (i1 == i2 - 1)
-        {
-            if (j1 == j2 || j1 == j2 - 1)
-                return true;
-        }
-    }
-    else
-    {
-        if (i1 == i2)
-        {
-            if (j1 == j2 + 1 || j1 == j2 - 1)
-                return true;
-        }
-        else if (i1 == i2 + 1)
-        {
-            if (j1 == j2 || j1 == j2 + 1)
-                return true;
-        }
-        else if (i1 == i2 - 1)
-        {
-            if (j1 == j2 || j1 == j2 + 1)
-                return true;
-        }
-    }
-    return false;
-}
-
 int distance(ball ball1, ball ball2)
 {
     return sqrt(pow(ball1.x - ball2.x, 2) + pow(ball1.y - ball2.y, 2));
@@ -125,14 +123,14 @@ int distance(ball ball1, ball ball2)
 
 bool shouldStick(int iBall, int jBall)
 {
+    if (balls[iBall][jBall].y <= -1 * ballRadius || iBall == 0)
+    {
+        balls[iBall][jBall].stickCheck = 1;
+        return true;
+    }
+
     if (balls[iBall][jBall].isEmpty)
         return false;
-
-    if (lines < 50 && iBall == 0)
-        return true;
-
-    if (lines > 50 && abs(balls[iBall][jBall].y) <= ballRadius)
-        return true;
 
     if (balls[iBall][jBall].stickCheck == -1)
         return false;
@@ -205,7 +203,6 @@ bool shouldStick(int iBall, int jBall)
         if (iBall > 0 && jBall > 0 && !balls[iBall - 1][jBall - 1].isEmpty && balls[iBall - 1][jBall - 1].stickCheck != -1)
         {
             if (shouldStick(iBall - 1, jBall - 1)) // North West *
-
             {
                 balls[iBall][jBall].stickCheck = 1;
                 return true;
@@ -224,7 +221,6 @@ bool shouldStick(int iBall, int jBall)
         if (iBall < lines - 1 && jBall > 0 && !balls[iBall + 1][jBall - 1].isEmpty && balls[iBall + 1][jBall - 1].stickCheck != -1)
         {
             if (shouldStick(iBall + 1, jBall - 1)) // South West *
-
             {
                 balls[iBall][jBall].stickCheck = 1;
                 return true;
@@ -242,7 +238,6 @@ bool shouldStick(int iBall, int jBall)
         if (iBall < lines - 1 && !balls[iBall + 1][jBall].isEmpty && balls[iBall + 1][jBall].stickCheck != -1)
         {
             if (shouldStick(iBall + 1, jBall)) // South *
-
             {
                 balls[iBall][jBall].stickCheck = 1;
                 return true;
@@ -256,7 +251,6 @@ bool shouldStick(int iBall, int jBall)
         if (iBall > 0 && !balls[iBall - 1][jBall].isEmpty)
         {
             if (balls[iBall - 1][jBall].stickCheck == 1) // North *
-
             {
                 balls[iBall][jBall].stickCheck = balls[iBall - 1][jBall].stickCheck;
                 return true;
@@ -266,7 +260,6 @@ bool shouldStick(int iBall, int jBall)
         if (iBall > 0 && jBall < columns - 1 && !balls[iBall - 1][jBall + 1].isEmpty)
         {
             if (balls[iBall - 1][jBall + 1].stickCheck == 1) // North East *
-
             {
                 balls[iBall][jBall].stickCheck = balls[iBall - 1][jBall - 1].stickCheck;
                 return true;
@@ -285,7 +278,6 @@ bool shouldStick(int iBall, int jBall)
         if (jBall > 0 && !balls[iBall][jBall - 1].isEmpty)
         {
             if (balls[iBall][jBall - 1].stickCheck == 1) // West *
-
             {
                 balls[iBall][jBall].stickCheck = balls[iBall][jBall - 1].stickCheck;
                 return true;
@@ -654,65 +646,77 @@ void draw_ball(SDL_Renderer *Renderer)
                 switch (balls[i][j].color)
                 {
                 case 1:
-                    SDL_RenderCopy(Renderer, ball1, NULL, &Ball);
+                    if (balls[i][j].y > -1 * ballRadius)
+                        SDL_RenderCopy(Renderer, ball1, NULL, &Ball);
                     crash_ball_color[0] = true;
                     break;
 
                 case 2:
-                    SDL_RenderCopy(Renderer, ball2, NULL, &Ball);
+                    if (balls[i][j].y > -1 * ballRadius)
+                        SDL_RenderCopy(Renderer, ball2, NULL, &Ball);
                     crash_ball_color[1] = true;
                     break;
 
                 case 3:
-                    SDL_RenderCopy(Renderer, ball3, NULL, &Ball);
+                    if (balls[i][j].y > -1 * ballRadius)
+                        SDL_RenderCopy(Renderer, ball3, NULL, &Ball);
                     crash_ball_color[0] = true;
                     crash_ball_color[1] = true;
                     break;
 
                 case 4:
-                    SDL_RenderCopy(Renderer, ball4, NULL, &Ball);
+                    if (balls[i][j].y > -1 * ballRadius)
+                        SDL_RenderCopy(Renderer, ball4, NULL, &Ball);
                     crash_ball_color[2] = true;
                     break;
 
                 case 5:
-                    SDL_RenderCopy(Renderer, ball5, NULL, &Ball);
+                    if (balls[i][j].y > -1 * ballRadius)
+                        SDL_RenderCopy(Renderer, ball5, NULL, &Ball);
                     crash_ball_color[0] = true;
                     crash_ball_color[2] = true;
                     break;
 
                 case 6:
-                    SDL_RenderCopy(Renderer, ball6, NULL, &Ball);
+                    if (balls[i][j].y > -1 * ballRadius)
+                        SDL_RenderCopy(Renderer, ball6, NULL, &Ball);
                     crash_ball_color[1] = true;
                     crash_ball_color[2] = true;
                     break;
 
                 case 7:
-                    SDL_RenderCopy(Renderer, ball7, NULL, &Ball);
+                    if (balls[i][j].y > -1 * ballRadius)
+                        SDL_RenderCopy(Renderer, ball7, NULL, &Ball);
                     break;
 
                 case 8:
-                    SDL_RenderCopy(Renderer, ball8, NULL, &Ball);
+                    if (balls[i][j].y > -1 * ballRadius)
+                        SDL_RenderCopy(Renderer, ball8, NULL, &Ball);
                     crash_ball_color[3] = true;
                     break;
 
                 case 9:
-                    SDL_RenderCopy(Renderer, ball9, NULL, &Ball);
+                    if (balls[i][j].y > -1 * ballRadius)
+                        SDL_RenderCopy(Renderer, ball9, NULL, &Ball);
                     crash_ball_color[0] = true;
                     crash_ball_color[3] = true;
                     break;
 
                 case 10:
-                    SDL_RenderCopy(Renderer, ball10, NULL, &Ball);
+                    if (balls[i][j].y > -1 * ballRadius)
+                        SDL_RenderCopy(Renderer, ball10, NULL, &Ball);
                     crash_ball_color[1] = true;
                     crash_ball_color[3] = true;
                     break;
 
                 case 11:
-                    SDL_RenderCopy(Renderer, ball11, NULL, &Ball);
+                    if (balls[i][j].y > -1 * ballRadius)
+                        SDL_RenderCopy(Renderer, ball11, NULL, &Ball);
                     break;
 
                 case 12:
-                    SDL_RenderCopy(Renderer, ball12, NULL, &Ball);
+                    if (balls[i][j].y > -1 * ballRadius)
+                        SDL_RenderCopy(Renderer, ball12, NULL, &Ball);
                     crash_ball_color[2] = true;
                     crash_ball_color[3] = true;
                     break;
@@ -803,6 +807,55 @@ void initial_crash_ball(SDL_Renderer *Renderer)
         }
     }
 
+    if ((crash_balls[1].color == 1 && crash_ball_color[0] == false) || (crash_balls[1].color == 2 && crash_ball_color[1] == false) || (crash_balls[1].color == 4 && crash_ball_color[2] == false) || (crash_balls[1].color == 8 && crash_ball_color[3] == false))
+        regenerate = true;
+    if (regenerate)
+    {
+        bool isColorSelected = true;
+        while (isColorSelected)
+        {
+            switch (rand() % 4)
+            {
+            case 0:
+            {
+                if (crash_ball_color[0])
+                {
+                    crash_balls[1].color = 1;
+                    isColorSelected = false;
+                }
+                break;
+            }
+            case 1:
+            {
+                if (crash_ball_color[1])
+                {
+                    crash_balls[1].color = 2;
+                    isColorSelected = false;
+                }
+                break;
+            }
+            case 2:
+            {
+                if (crash_ball_color[2])
+                {
+                    crash_balls[1].color = 4;
+                    isColorSelected = false;
+                }
+                break;
+            }
+            case 3:
+            {
+                if (crash_ball_color[3])
+                {
+                    crash_balls[1].color = 8;
+                    isColorSelected = false;
+                }
+                break;
+            }
+            }
+        }
+    }
+
     if (rand() % 17 == 0)
     {
         crash_balls[1].color = 11;
@@ -860,14 +913,14 @@ void initial_crash_ball(SDL_Renderer *Renderer)
         while (repeat)
         {
             repeat = false;
-            for (int i = 1; i < lines + stick; i++)
+            for (int i = 0; i < lines + stick; i++)
             {
                 for (int j = 0; j < columns; j++)
                 {
                     balls[i][j].stickCheck = 0;
                 }
             }
-            for (int i = 1; i < lines; i++)
+            for (int i = 0; i < lines; i++)
             {
                 for (int j = 0; j < columns; j++)
                 {
@@ -900,7 +953,7 @@ void isConnected(ball theBall)
             {
                 if (!balls[i][j].isEmpty && (theBall.i != i || theBall.j != j))
                 {
-                    if (sameColor(theBall, balls[i][j]) && areConnected(theBall, balls[i][j]))
+                    if (sameColor(theBall, balls[i][j]) && areConnectedVE(theBall, balls[i][j]))
                     {
                         crashed.push_back(balls[i][j]);
                         balls[i][j].isEmpty = true;
@@ -917,7 +970,7 @@ void isConnected(ball theBall)
             {
                 if (!balls[i][j].isEmpty && (theBall.i != i || theBall.j != j))
                 {
-                    if (sameColor(theBall, balls[i][j]) && areConnected(theBall, balls[i][j]))
+                    if (sameColor(theBall, balls[i][j]) && areConnectedVE(theBall, balls[i][j]))
                     {
                         crashed.push_back(balls[i][j]);
                         balls[i][j].isEmpty = true;
@@ -934,7 +987,7 @@ void isConnected(ball theBall)
             {
                 if (!balls[i][j].isEmpty && (theBall.i != i || theBall.j != j))
                 {
-                    if (sameColor(theBall, balls[i][j]) && areConnected(theBall, balls[i][j]))
+                    if (sameColor(theBall, balls[i][j]) && areConnectedVE(theBall, balls[i][j]))
                     {
                         crashed.push_back(balls[i][j]);
                         balls[i][j].isEmpty = true;
@@ -951,7 +1004,7 @@ void isConnected(ball theBall)
             {
                 if (!balls[i][j].isEmpty && (theBall.i != i || theBall.j != j))
                 {
-                    if (sameColor(theBall, balls[i][j]) && areConnected(theBall, balls[i][j]))
+                    if (sameColor(theBall, balls[i][j]) && areConnectedVE(theBall, balls[i][j]))
                     {
                         crashed.push_back(balls[i][j]);
                         balls[i][j].isEmpty = true;
@@ -968,7 +1021,7 @@ void isConnected(ball theBall)
             {
                 if (!balls[i][j].isEmpty && (theBall.i != i || theBall.j != j))
                 {
-                    if (sameColor(theBall, balls[i][j]) && areConnected(theBall, balls[i][j]))
+                    if (sameColor(theBall, balls[i][j]) && areConnectedVE(theBall, balls[i][j]))
                     {
                         crashed.push_back(balls[i][j]);
                         balls[i][j].isEmpty = true;
@@ -985,7 +1038,7 @@ void isConnected(ball theBall)
             {
                 if (!balls[i][j].isEmpty && (theBall.i != i || theBall.j != j))
                 {
-                    if (sameColor(theBall, balls[i][j]) && areConnected(theBall, balls[i][j]))
+                    if (sameColor(theBall, balls[i][j]) && areConnectedVE(theBall, balls[i][j]))
                     {
                         crashed.push_back(balls[i][j]);
                         balls[i][j].isEmpty = true;
@@ -1002,7 +1055,7 @@ void isConnected(ball theBall)
             {
                 if (!balls[i][j].isEmpty && (theBall.i != i || theBall.j != j))
                 {
-                    if (sameColor(theBall, balls[i][j]) && areConnected(theBall, balls[i][j]))
+                    if (sameColor(theBall, balls[i][j]) && areConnectedVE(theBall, balls[i][j]))
                     {
                         crashed.push_back(balls[i][j]);
                         balls[i][j].isEmpty = true;
@@ -1019,7 +1072,7 @@ void isConnected(ball theBall)
             {
                 if (!balls[i][j].isEmpty && (theBall.i != i || theBall.j != j))
                 {
-                    if (sameColor(theBall, balls[i][j]) && areConnected(theBall, balls[i][j]))
+                    if (sameColor(theBall, balls[i][j]) && areConnectedVE(theBall, balls[i][j]))
                     {
                         crashed.push_back(balls[i][j]);
                         balls[i][j].isEmpty = true;
@@ -1036,7 +1089,7 @@ void isConnected(ball theBall)
             {
                 if (!balls[i][j].isEmpty && (theBall.i != i || theBall.j != j))
                 {
-                    if (sameColor(theBall, balls[i][j]) && areConnected(theBall, balls[i][j]))
+                    if (sameColor(theBall, balls[i][j]) && areConnectedVE(theBall, balls[i][j]))
                     {
                         crashed.push_back(balls[i][j]);
                         balls[i][j].isEmpty = true;
@@ -1098,7 +1151,8 @@ void crashed_ball(SDL_Renderer *Renderer)
             }
 
             int jStick, iStick;
-            for (int i = lines + stick - 1; i >= 0 && !is_crash_ball_crashed; i--)
+
+            for (int i = lines + stick - 1; i >= 0 && !is_crash_ball_crashed && balls[i][0].y > -1 * ballRadius; i--)
             {
                 for (int j = 0; j < columns && !is_crash_ball_crashed; j++)
                 {
@@ -1107,7 +1161,10 @@ void crashed_ball(SDL_Renderer *Renderer)
                         if (sqrt((crash_balls[0].x - balls[i][j].x) * (crash_balls[0].x - balls[i][j].x) + (crash_balls[0].y - balls[i][j].y) * (crash_balls[0].y - balls[i][j].y)) < 1.5 * ballRadius || crash_balls[0].y < balls[0][0].y)
                         {
 
-                            iStick = ceil((crash_balls[0].y - balls[0][0].y) / (sqrt(3) * ballRadius));
+                            if (balls[0][0].y > 0)
+                                iStick = ceil((crash_balls[0].y - balls[0][0].y) / (sqrt(3) * ballRadius));
+                            else
+                                iStick = floor((crash_balls[0].y - balls[0][0].y) / (sqrt(3) * ballRadius));
 
                             if (iStick % 2 == 0)
                             {
@@ -1128,7 +1185,7 @@ void crashed_ball(SDL_Renderer *Renderer)
 
                             is_crash_ball_crashed = true;
                             cout << "ball x = " << balls[i][j].x << " ball y = " << balls[i][j].y << " i=" << i << " j=" << j << endl
-                                 << "crash x = " << crash_balls[0].x << " crash y = " << crash_balls[0].y << endl;
+                                 << "crash x = " << crash_balls[0].x << " crash y = " << crash_balls[0].y << " i=" << iStick << " j=" << jStick << endl;
                         }
                     }
                 }
@@ -1142,12 +1199,46 @@ void crashed_ball(SDL_Renderer *Renderer)
                 if (jStick > columns - 1)
                     jStick = columns - 1;
 
+                /* if (iStick % 2 == 0 && balls[iStick - 1][jStick].isEmpty && balls[iStick - 1][jStick - 1].isEmpty && balls[iStick][jStick - 1].isEmpty && balls[iStick][jStick + 1].isEmpty && balls[iStick + 1][jStick - 1].isEmpty && balls[iStick + 1][jStick].isEmpty)
+                {
+                    iStick--;
+                }
+                else if (iStick % 2 == 1 && balls[iStick - 1][jStick].isEmpty && balls[iStick - 1][jStick + 1].isEmpty && balls[iStick][jStick - 1].isEmpty && balls[iStick][jStick + 1].isEmpty && balls[iStick + 1][jStick].isEmpty && balls[iStick + 1][jStick + 1].isEmpty)
+                {
+                    iStick--;
+                } */
+
+                if (!balls[iStick][jStick].isEmpty)
+                {
+                    if (dx > 0)
+                        jStick--;
+                    else
+                        jStick++;
+                }
+                if (!balls[iStick][jStick].isEmpty)
+                {
+                    if (dx > 0)
+                        jStick++;
+                    else
+                        jStick--;
+                    iStick++;
+                }
+                if (!balls[iStick][jStick].isEmpty)
+                {
+                    if (dx > 0)
+                        jStick--;
+                    else
+                        jStick++;
+                }
+
                 balls[iStick][jStick].color = crash_balls[0].color;
                 balls[iStick][jStick].isEmpty = false;
 
                 crashed.clear();
 
                 isConnected(balls[iStick][jStick]);
+
+                cout << "crashed size = " << crashed.size() << endl;
 
                 if (crashed.size() < 3)
                 {
