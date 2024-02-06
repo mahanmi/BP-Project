@@ -45,7 +45,7 @@ bool areConnectedVE(ball ball1, ball ball2)
     {
         if (ball1.i == ball2.i)
         {
-            if (abs(ball1.j - ball2.j) == 1)
+            if (abs(ball1.j - ball2.j) == 1 && ball1.j >= 0 && ball2.j >= 0)
                 return true;
         }
         else if (ball1.i == ball2.i + 1)
@@ -63,7 +63,7 @@ bool areConnectedVE(ball ball1, ball ball2)
     {
         if (ball1.i == ball2.i)
         {
-            if (abs(ball1.j - ball2.j) == 1)
+            if (abs(ball1.j - ball2.j) == 1 && ball1.j >= 0 && ball2.j >= 0)
                 return true;
         }
         else if (ball1.i == ball2.i + 1)
@@ -1132,7 +1132,7 @@ void boomConnected(ball theBall)
         for (int i = theBall.i; i <= theBall.i + 1; i++)
             for (int j = theBall.j - 1; j <= theBall.j + 1; j++)
             {
-                if (!balls[i][j].isEmpty && (theBall.i != i || theBall.j != j))
+                if (!balls[i][j].isEmpty)
                 {
                     if (areConnectedVE(theBall, balls[i][j]))
                     {
@@ -1148,7 +1148,7 @@ void boomConnected(ball theBall)
         for (int i = theBall.i; i <= theBall.i + 1; i++)
             for (int j = theBall.j; j <= theBall.j + 1; j++)
             {
-                if (!balls[i][j].isEmpty && (theBall.i != i || theBall.j != j))
+                if (!balls[i][j].isEmpty)
                 {
                     if (areConnectedVE(theBall, balls[i][j]))
                     {
@@ -1164,7 +1164,7 @@ void boomConnected(ball theBall)
         for (int i = theBall.i; i <= theBall.i + 1; i++)
             for (int j = theBall.j - 1; j <= theBall.j; j++)
             {
-                if (!balls[i][j].isEmpty && (theBall.i != i || theBall.j != j))
+                if (!balls[i][j].isEmpty)
                 {
                     if (areConnectedVE(theBall, balls[i][j]))
                     {
@@ -1180,7 +1180,7 @@ void boomConnected(ball theBall)
         for (int i = theBall.i - 1; i <= theBall.i + 1; i++)
             for (int j = theBall.j; j <= theBall.j + 1; j++)
             {
-                if (!balls[i][j].isEmpty && (theBall.i != i || theBall.j != j))
+                if (!balls[i][j].isEmpty)
                 {
                     if (areConnectedVE(theBall, balls[i][j]))
                     {
@@ -1196,7 +1196,7 @@ void boomConnected(ball theBall)
         for (int i = theBall.i - 1; i <= theBall.i + 1; i++)
             for (int j = theBall.j - 1; j <= theBall.j; j++)
             {
-                if (!balls[i][j].isEmpty && (theBall.i != i || theBall.j != j))
+                if (!balls[i][j].isEmpty)
                 {
                     if (areConnectedVE(theBall, balls[i][j]))
                     {
@@ -1212,7 +1212,7 @@ void boomConnected(ball theBall)
         for (int i = theBall.i - 1; i <= theBall.i; i++)
             for (int j = theBall.j - 1; j <= theBall.j + 1; j++)
             {
-                if (!balls[i][j].isEmpty && (theBall.i != i || theBall.j != j))
+                if (!balls[i][j].isEmpty)
                 {
                     if (areConnectedVE(theBall, balls[i][j]))
                     {
@@ -1228,7 +1228,7 @@ void boomConnected(ball theBall)
         for (int i = theBall.i - 1; i <= theBall.i; i++)
             for (int j = theBall.j; j <= theBall.j + 1; j++)
             {
-                if (!balls[i][j].isEmpty && (theBall.i != i || theBall.j != j))
+                if (!balls[i][j].isEmpty)
                 {
                     if (areConnectedVE(theBall, balls[i][j]))
                     {
@@ -1244,7 +1244,7 @@ void boomConnected(ball theBall)
         for (int i = theBall.i - 1; i <= theBall.i; i++)
             for (int j = theBall.j - 1; j <= theBall.j; j++)
             {
-                if (!balls[i][j].isEmpty && (theBall.i != i || theBall.j != j))
+                if (!balls[i][j].isEmpty)
                 {
                     if (areConnectedVE(theBall, balls[i][j]))
                     {
@@ -1399,7 +1399,9 @@ void crashed_ball(SDL_Renderer *Renderer)
 
                 if (balls[iStick][jStick].color == 13)
                 {
+                    Mix_PlayChannel(-1, crash, 0);
                     boomConnected(balls[iStick][jStick]);
+                    initial_crash_ball(Renderer);
                 }
                 else
                 {
@@ -1513,6 +1515,10 @@ void crashed_ball(SDL_Renderer *Renderer)
     {
         SDL_RenderCopy(Renderer, ball11, NULL, &Ball2);
         break;
+    }
+    case 13:
+    {
+        SDL_RenderCopy(Renderer, ball13, NULL, &Ball2);
     }
     }
 }
