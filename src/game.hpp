@@ -589,11 +589,6 @@ void draw_ball(SDL_Renderer *Renderer)
             fallingBall[i].y += dy_fallingBall;
         }
 
-    /* for (int i = 0; i < explode.size(); i++)
-    {
-        // explosion GIF
-    } */
-
     for (int i = 0; i < crashed.size(); i++)
         if (crashed[i].r > 1)
         {
@@ -636,8 +631,11 @@ void draw_ball(SDL_Renderer *Renderer)
             case 12:
                 SDL_RenderCopy(Renderer, ball12, NULL, &crashedBall);
                 break;
+            case 13:
+                SDL_RenderCopy(Renderer, ball13, NULL, &crashedBall);
+                break;
             }
-            crashed[i].r /= 1.3;
+            crashed[i].r /= 1.1;
         }
 
     for (int i = 0; i < lines + stick; i++)
@@ -1123,7 +1121,8 @@ void boomConnected(ball theBall)
                 {
                     if (!balls[i][j].isEmpty)
                     {
-                        explode.push_back(balls[i][j]);
+                        balls[i][j].color = 13;
+                        crashed.push_back(balls[i][j]);
                         balls[i][j].isEmpty = true;
                         crashed_score++;
                     }
@@ -1276,7 +1275,11 @@ void crashed_ball(SDL_Renderer *Renderer)
                 if (balls[iStick][jStick].color == 13)
                 {
                     Mix_PlayChannel(-1, crash, 0);
+
+                    crashed.clear();
+
                     boomConnected(balls[iStick][jStick]);
+
                     initial_crash_ball(Renderer);
                 }
                 else
