@@ -1408,18 +1408,14 @@ int gameScore()
 
 int timeScore(Uint32 elapsed_time)
 {
-    if (win)
-    {
-        return score + (end_time - elapsed_time) / 1000;
-    }
-    else
+    if (lose)
     {
         for (int i = 0; i < lines + stick; i++)
             for (int j = 0; j < columns; j++)
                 if (!balls[i][j].isEmpty && balls[i][j].color != 7)
-                    score -= 2;
-        return score;
+                    score --;
     }
+    return score;
 }
 
 int infinityScore()
