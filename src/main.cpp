@@ -928,7 +928,6 @@ int main(int argv, char **args)
                           break;
                         }
                         SDL_RenderCopy(renderer, GameBG, 0, 0);
-                        SDL_Texture *winText = IMG_LoadTexture(renderer, "assets/Game/win.png");
                         SDL_Rect winRect = {112, 250, 401, 513};
                         SDL_RenderCopy(renderer, winText, 0, &winRect);
                         showUserScore(renderer, name, score, 250, 495);
@@ -980,7 +979,6 @@ int main(int argv, char **args)
                           break;
                         }
                         SDL_RenderCopy(renderer, GameBG, 0, 0);
-                        SDL_Texture *loseText = IMG_LoadTexture(renderer, "assets/Game/lose.png");
                         SDL_Rect loseRect = {112, 250, 401, 513};
                         SDL_RenderCopy(renderer, loseText, 0, &loseRect);
                         showUserScore(renderer, name, score, 250, 495);
@@ -1227,7 +1225,7 @@ int main(int argv, char **args)
                   win = true;
 
                   SDL_RenderCopy(renderer, GameBG, 0, 0);
-                  SDL_Texture *winText = IMG_LoadTexture(renderer, "assets/Game/win.png");
+                  SDL_Texture *winText = IMG_LoadTexture(renderer, "assets/Game/GameOver.png");
                   SDL_Rect winRect = {112, 250, 401, 513};
                   SDL_RenderCopy(renderer, winText, 0, &winRect);
                   showUserScore(renderer, name, score, 250, 495);
@@ -1253,7 +1251,6 @@ int main(int argv, char **args)
                         break;
                       }
                       SDL_RenderCopy(renderer, GameBG, 0, 0);
-                      SDL_Texture *winText = IMG_LoadTexture(renderer, "assets/Game/win.png");
                       SDL_Rect winRect = {112, 250, 401, 513};
                       SDL_RenderCopy(renderer, winText, 0, &winRect);
                       showUserScore(renderer, name, score, 250, 495);
