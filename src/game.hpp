@@ -1111,149 +1111,20 @@ void isConnected(ball theBall)
 
 void boomConnected(ball theBall)
 {
-    if (theBall.j > 0 && theBall.j < columns - 1 && theBall.i > 0 && theBall.i < lines + stick - 1)
-    {
-        for (int i = theBall.i - 1; i <= theBall.i + 1; i++)
-            for (int j = theBall.j - 1; j <= theBall.j + 1; j++)
-            {
-                if (!balls[i][j].isEmpty)
-                {
-                    if (areConnectedVE(theBall, balls[i][j]))
-                    {
-                        explode.push_back(balls[i][j]);
-                        balls[i][j].isEmpty = true;
-                        crashed_score++;
+    int explosionRange = 2; 
+
+    for (int i = theBall.i - explosionRange; i <= theBall.i + explosionRange; i++) {
+        for (int j = theBall.j - explosionRange; j <= theBall.j + explosionRange; j++) {
+            if (i >= 0 && i < lines && j >= 0 && j < columns) {
+                if (i != theBall.i || j != theBall.j) {
+                    if (!balls[i][j].isEmpty) {
+                            explode.push_back(balls[i][j]);
+                            balls[i][j].isEmpty = true;
+                            crashed_score++;
+                        }
                     }
-                }
             }
-    }
-    else if (theBall.i == 0 && theBall.j > 0 && theBall.j < columns - 1)
-    {
-        for (int i = theBall.i; i <= theBall.i + 1; i++)
-            for (int j = theBall.j - 1; j <= theBall.j + 1; j++)
-            {
-                if (!balls[i][j].isEmpty)
-                {
-                    if (areConnectedVE(theBall, balls[i][j]))
-                    {
-                        explode.push_back(balls[i][j]);
-                        balls[i][j].isEmpty = true;
-                        crashed_score++;
-                    }
-                }
-            }
-    }
-    else if (theBall.i == 0 && theBall.j == 0)
-    {
-        for (int i = theBall.i; i <= theBall.i + 1; i++)
-            for (int j = theBall.j; j <= theBall.j + 1; j++)
-            {
-                if (!balls[i][j].isEmpty)
-                {
-                    if (areConnectedVE(theBall, balls[i][j]))
-                    {
-                        explode.push_back(balls[i][j]);
-                        balls[i][j].isEmpty = true;
-                        crashed_score++;
-                    }
-                }
-            }
-    }
-    else if (theBall.i == 0 && theBall.j == columns - 1)
-    {
-        for (int i = theBall.i; i <= theBall.i + 1; i++)
-            for (int j = theBall.j - 1; j <= theBall.j; j++)
-            {
-                if (!balls[i][j].isEmpty)
-                {
-                    if (areConnectedVE(theBall, balls[i][j]))
-                    {
-                        explode.push_back(balls[i][j]);
-                        balls[i][j].isEmpty = true;
-                        crashed_score++;
-                    }
-                }
-            }
-    }
-    else if (theBall.i > 0 && theBall.i < lines + stick - 1 && theBall.j == 0)
-    {
-        for (int i = theBall.i - 1; i <= theBall.i + 1; i++)
-            for (int j = theBall.j; j <= theBall.j + 1; j++)
-            {
-                if (!balls[i][j].isEmpty)
-                {
-                    if (areConnectedVE(theBall, balls[i][j]))
-                    {
-                        explode.push_back(balls[i][j]);
-                        balls[i][j].isEmpty = true;
-                        crashed_score++;
-                    }
-                }
-            }
-    }
-    else if (theBall.i > 0 && theBall.i < lines + stick - 1 && theBall.j == columns - 1)
-    {
-        for (int i = theBall.i - 1; i <= theBall.i + 1; i++)
-            for (int j = theBall.j - 1; j <= theBall.j; j++)
-            {
-                if (!balls[i][j].isEmpty)
-                {
-                    if (areConnectedVE(theBall, balls[i][j]))
-                    {
-                        explode.push_back(balls[i][j]);
-                        balls[i][j].isEmpty = true;
-                        crashed_score++;
-                    }
-                }
-            }
-    }
-    else if (theBall.i == lines + stick - 1 && theBall.j > 0 && theBall.j < columns - 1)
-    {
-        for (int i = theBall.i - 1; i <= theBall.i; i++)
-            for (int j = theBall.j - 1; j <= theBall.j + 1; j++)
-            {
-                if (!balls[i][j].isEmpty)
-                {
-                    if (areConnectedVE(theBall, balls[i][j]))
-                    {
-                        explode.push_back(balls[i][j]);
-                        balls[i][j].isEmpty = true;
-                        crashed_score++;
-                    }
-                }
-            }
-    }
-    else if (theBall.i == lines + stick - 1 && theBall.j == 0)
-    {
-        for (int i = theBall.i - 1; i <= theBall.i; i++)
-            for (int j = theBall.j; j <= theBall.j + 1; j++)
-            {
-                if (!balls[i][j].isEmpty)
-                {
-                    if (areConnectedVE(theBall, balls[i][j]))
-                    {
-                        explode.push_back(balls[i][j]);
-                        balls[i][j].isEmpty = true;
-                        crashed_score++;
-                    }
-                }
-            }
-    }
-    else if (theBall.i == lines + stick - 1 && theBall.j == columns - 1)
-    {
-        for (int i = theBall.i - 1; i <= theBall.i; i++)
-            for (int j = theBall.j - 1; j <= theBall.j; j++)
-            {
-                if (!balls[i][j].isEmpty)
-                {
-                    if (areConnectedVE(theBall, balls[i][j]))
-                    {
-                        explode.push_back(balls[i][j]);
-                        balls[i][j].isEmpty = true;
-                        crashed_score++;
-                    }
-                }
-            }
+        }
     }
 }
 
@@ -1537,18 +1408,14 @@ int gameScore()
 
 int timeScore(Uint32 elapsed_time)
 {
-    if (win)
-    {
-        return score + (end_time - elapsed_time) / 1000;
-    }
-    else
+    if (lose)
     {
         for (int i = 0; i < lines + stick; i++)
             for (int j = 0; j < columns; j++)
                 if (!balls[i][j].isEmpty && balls[i][j].color != 7)
-                    score -= 2;
-        return score;
+                    score --;
     }
+    return score;
 }
 
 int infinityScore()
