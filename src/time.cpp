@@ -74,6 +74,7 @@ SDL_Texture *cannon13 = IMG_LoadTexture(renderer, "assets/Game/cannon/cannon13.p
 SDL_Texture *scoreBox = IMG_LoadTexture(renderer, "assets/Game/score.png");
 SDL_Texture *timeBox = IMG_LoadTexture(renderer, "assets/Game/time.png");
 
+Mix_Chunk *explosion = Mix_LoadWAV("assets/Sounds/explosion.mp3");
 Mix_Chunk *crash = Mix_LoadWAV("assets/Sounds/crash.wav");
 Mix_Chunk *movement_swipe = Mix_LoadWAV("assets/Sounds/movement_swipe.mp3");
 

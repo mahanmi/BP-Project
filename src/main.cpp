@@ -109,18 +109,21 @@ vector<SDL_Texture *> soundBar = {IMG_LoadTexture(renderer, "assets/Settings/sou
 int musicIndex = 1;
 bool sfx = true;
 
-vector<music> musicList = {{"Off", ""}, {"Piano", "assets/Sounds/pianoMusic.mp3"}, {"Bache Nane", "assets/Sounds/MohsenLorestani-BacheNane.mp3"}};
+vector<music> musicList = {{"Off", ""}, {"Piano", "assets/Sounds/pianoMusic.mp3"}, {"Bache Nane", "assets/Sounds/MohsenLorestani-BacheNane.mp3"}, {"FE!N", "assets/Sounds/fein.mp3"}, {"Tehrono LA KON", "assets/Sounds/Tehrano_LA_Kon.mp3"}};
 
 Mix_Music *musicSound = Mix_LoadMUS(musicList[musicIndex].path.c_str());
 Mix_Chunk *click = Mix_LoadWAV("assets/Sounds/click.mp3");
 Mix_Chunk *hover = Mix_LoadWAV("assets/Sounds/hover.mp3");
 Mix_Chunk *crash = Mix_LoadWAV("assets/Sounds/crash.wav");
+Mix_Chunk *explosion = Mix_LoadWAV("assets/Sounds/explosion.mp3");
 Mix_Chunk *movement_swipe = Mix_LoadWAV("assets/Sounds/movement_swipe.mp3");
 
 TTF_Font *Leaderboard = TTF_OpenFont("assets/Fonts/Poppins-Bold.ttf", 45);
 TTF_Font *Settings = TTF_OpenFont("assets/Fonts/Digitalt.ttf", 38);
 TTF_Font *name = TTF_OpenFont("assets/Fonts/Digitalt.ttf", 28);
 TTF_Font *scoreTexture = TTF_OpenFont("assets/Fonts/Digitalt.ttf", 25);
+
+button setting = {40, 43, 20, 20, 0, 0, 0, 0, 0, false, false, IMG_LoadTexture(renderer, "assets/Game/settingsButton.png"), IMG_LoadTexture(renderer, "assets/Game/settingsButtonHovered.png"), IMG_LoadTexture(renderer, "assets/Game/settingsButtonHoveredClicked.png"), hover, click};
 
 #include "game.hpp"
 
@@ -157,7 +160,6 @@ int main(int argv, char **args)
   button timer = {151, 54, 63, 291, 0, 0, 0, 0, 0, false, false, IMG_LoadTexture(renderer, "assets/Leaderboard/LeaderboardTimer.png"), 0, 0, 0, click};
   button classic = {151, 54, 234, 291, 0, 0, 0, 0, 0, true, false, IMG_LoadTexture(renderer, "assets/Leaderboard/LeaderboardClassic.png"), 0, 0, 0, click};
   button infinite = {151, 54, 405, 291, 0, 0, 0, 0, 0, false, false, IMG_LoadTexture(renderer, "assets/Leaderboard/LeaderboardInfinite.png"), 0, 0, 0, click};
-  button setting = {40, 43, 20, 20, 0, 0, 0, 0, 0, false, false, IMG_LoadTexture(renderer, "assets/Game/settingsButton.png"), IMG_LoadTexture(renderer, "assets/Game/settingsButtonHovered.png"), IMG_LoadTexture(renderer, "assets/Game/settingsButtonHoveredClicked.png"), hover, click};
   button home = {55, 58, 95, 20, 0, 0, 0, 0, 0, false, false, IMG_LoadTexture(renderer, "assets/Game/home.png"), IMG_LoadTexture(renderer, "assets/Game/homeHovered.png"), IMG_LoadTexture(renderer, "assets/Game/homeClicked.png"), hover, click};
 
   SDL_Delay(1000);

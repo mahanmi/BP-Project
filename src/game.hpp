@@ -17,7 +17,6 @@ bool check_win()
         {
             if (balls[i][j].isEmpty == false && balls[i][j].color != 7)
             {
-                cout << i << " " << j << " " << balls[i][j].isEmpty << endl;
                 return false;
             }
         }
@@ -1192,7 +1191,7 @@ void crashed_ball(SDL_Renderer *Renderer)
             {
                 for (int j = 0; j < columns && !is_crash_ball_crashed; j++)
                 {
-                    if (!balls[i][j].isEmpty)
+                    if (!balls[i][j].isEmpty && crash_balls[0].y + ballRadius >= 0)
                     {
                         if (sqrt((crash_balls[0].x - balls[i][j].x) * (crash_balls[0].x - balls[i][j].x) + (crash_balls[0].y - balls[i][j].y) * (crash_balls[0].y - balls[i][j].y)) < 1.5 * ballRadius || crash_balls[0].y < balls[0][0].y)
                         {
@@ -1227,6 +1226,10 @@ void crashed_ball(SDL_Renderer *Renderer)
                             cout << "ball x = " << balls[i][j].x << " ball y = " << balls[i][j].y << " i=" << i << " j=" << j << endl
                                  << "crash x = " << crash_balls[0].x << " crash y = " << crash_balls[0].y << " i=" << iStick << " j=" << jStick << endl;
                         }
+                    }
+                    else if (crash_balls[0].y + ballRadius < 0)
+                    {
+                        initial_crash_ball(renderer);
                     }
                 }
             }
@@ -1274,7 +1277,7 @@ void crashed_ball(SDL_Renderer *Renderer)
 
                 if (balls[iStick][jStick].color == 13)
                 {
-                    Mix_PlayChannel(-1, crash, 0);
+                    Mix_PlayChannel(-1, explosion, 0);
 
                     crashed.clear();
 
