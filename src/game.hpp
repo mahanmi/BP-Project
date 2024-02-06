@@ -1114,34 +1114,151 @@ void isConnected(ball theBall)
     }
 }
 
-void boomConnected(int i, int j, int n, int rows, int cols)
+void boomConnected(ball theBall)
 {
-    if (n <= 0 || i < 0 || i >= rows || j < 0 || j >= cols || balls[i][j].isEmpty)
+    if (theBall.j > 0 && theBall.j < columns - 1 && theBall.i > 0 && theBall.i < lines + stick - 1)
     {
-        return;
-    }
-    else
-    {
-        balls[i][j].isEmpty = true;
-        explode.push_back(balls[i][j]);
-
-        int offsets[6][2] = {{-1, 0}, {-1, 1}, {0, -1}, {0, 1}, {1, -1}, {1, 0}};
-        if (i % 2 == 0)
-        {
-            offsets[0][1] = -1;
-            offsets[4][1] = 0;
-        }
-
-        for (int k = 0; k < 6; ++k)
-        {
-            int newI = i + offsets[k][0];
-            int newJ = j + offsets[k][1];
-            if (newI >= 0 && newI < rows && newJ >= 0 && newJ < cols)
+        for (int i = theBall.i - 1; i <= theBall.i + 1; i++)
+            for (int j = theBall.j - 1; j <= theBall.j + 1; j++)
             {
-                explode.push_back(balls[newI][newJ]);
-                boomConnected(newI, newJ, n - 1, rows, cols);
+                if (!balls[i][j].isEmpty)
+                {
+                    if (areConnectedVE(theBall, balls[i][j]))
+                    {
+                        explode.push_back(balls[i][j]);
+                        balls[i][j].isEmpty = true;
+                        crashed_score++;
+                    }
+                }
             }
-        }
+    }
+    else if (theBall.i == 0 && theBall.j > 0 && theBall.j < columns - 1)
+    {
+        for (int i = theBall.i; i <= theBall.i + 1; i++)
+            for (int j = theBall.j - 1; j <= theBall.j + 1; j++)
+            {
+                if (!balls[i][j].isEmpty && (theBall.i != i || theBall.j != j))
+                {
+                    if (areConnectedVE(theBall, balls[i][j]))
+                    {
+                        explode.push_back(balls[i][j]);
+                        balls[i][j].isEmpty = true;
+                        crashed_score++;
+                    }
+                }
+            }
+    }
+    else if (theBall.i == 0 && theBall.j == 0)
+    {
+        for (int i = theBall.i; i <= theBall.i + 1; i++)
+            for (int j = theBall.j; j <= theBall.j + 1; j++)
+            {
+                if (!balls[i][j].isEmpty && (theBall.i != i || theBall.j != j))
+                {
+                    if (areConnectedVE(theBall, balls[i][j]))
+                    {
+                        explode.push_back(balls[i][j]);
+                        balls[i][j].isEmpty = true;
+                        crashed_score++;
+                    }
+                }
+            }
+    }
+    else if (theBall.i == 0 && theBall.j == columns - 1)
+    {
+        for (int i = theBall.i; i <= theBall.i + 1; i++)
+            for (int j = theBall.j - 1; j <= theBall.j; j++)
+            {
+                if (!balls[i][j].isEmpty && (theBall.i != i || theBall.j != j))
+                {
+                    if (areConnectedVE(theBall, balls[i][j]))
+                    {
+                        explode.push_back(balls[i][j]);
+                        balls[i][j].isEmpty = true;
+                        crashed_score++;
+                    }
+                }
+            }
+    }
+    else if (theBall.i > 0 && theBall.i < lines + stick - 1 && theBall.j == 0)
+    {
+        for (int i = theBall.i - 1; i <= theBall.i + 1; i++)
+            for (int j = theBall.j; j <= theBall.j + 1; j++)
+            {
+                if (!balls[i][j].isEmpty && (theBall.i != i || theBall.j != j))
+                {
+                    if (areConnectedVE(theBall, balls[i][j]))
+                    {
+                        explode.push_back(balls[i][j]);
+                        balls[i][j].isEmpty = true;
+                        crashed_score++;
+                    }
+                }
+            }
+    }
+    else if (theBall.i > 0 && theBall.i < lines + stick - 1 && theBall.j == columns - 1)
+    {
+        for (int i = theBall.i - 1; i <= theBall.i + 1; i++)
+            for (int j = theBall.j - 1; j <= theBall.j; j++)
+            {
+                if (!balls[i][j].isEmpty && (theBall.i != i || theBall.j != j))
+                {
+                    if (areConnectedVE(theBall, balls[i][j]))
+                    {
+                        explode.push_back(balls[i][j]);
+                        balls[i][j].isEmpty = true;
+                        crashed_score++;
+                    }
+                }
+            }
+    }
+    else if (theBall.i == lines + stick - 1 && theBall.j > 0 && theBall.j < columns - 1)
+    {
+        for (int i = theBall.i - 1; i <= theBall.i; i++)
+            for (int j = theBall.j - 1; j <= theBall.j + 1; j++)
+            {
+                if (!balls[i][j].isEmpty && (theBall.i != i || theBall.j != j))
+                {
+                    if (areConnectedVE(theBall, balls[i][j]))
+                    {
+                        explode.push_back(balls[i][j]);
+                        balls[i][j].isEmpty = true;
+                        crashed_score++;
+                    }
+                }
+            }
+    }
+    else if (theBall.i == lines + stick - 1 && theBall.j == 0)
+    {
+        for (int i = theBall.i - 1; i <= theBall.i; i++)
+            for (int j = theBall.j; j <= theBall.j + 1; j++)
+            {
+                if (!balls[i][j].isEmpty && (theBall.i != i || theBall.j != j))
+                {
+                    if (areConnectedVE(theBall, balls[i][j]))
+                    {
+                        explode.push_back(balls[i][j]);
+                        balls[i][j].isEmpty = true;
+                        crashed_score++;
+                    }
+                }
+            }
+    }
+    else if (theBall.i == lines + stick - 1 && theBall.j == columns - 1)
+    {
+        for (int i = theBall.i - 1; i <= theBall.i; i++)
+            for (int j = theBall.j - 1; j <= theBall.j; j++)
+            {
+                if (!balls[i][j].isEmpty && (theBall.i != i || theBall.j != j))
+                {
+                    if (areConnectedVE(theBall, balls[i][j]))
+                    {
+                        explode.push_back(balls[i][j]);
+                        balls[i][j].isEmpty = true;
+                        crashed_score++;
+                    }
+                }
+            }
     }
 }
 
@@ -1287,7 +1404,7 @@ void crashed_ball(SDL_Renderer *Renderer)
 
                 if (balls[iStick][jStick].color == 13)
                 {
-                    boomConnected(iStick, jStick, 2, lines, columns);
+                    boomConnected(balls[iStick][jStick]);
                 }
                 else
                 {
