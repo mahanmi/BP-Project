@@ -92,6 +92,13 @@ SDL_Texture *ball11 = IMG_LoadTexture(renderer, "assets/Game/Balls/11.png");
 SDL_Texture *ball12 = IMG_LoadTexture(renderer, "assets/Game/Balls/12.png");
 SDL_Texture *ball13 = IMG_LoadTexture(renderer, "assets/Game/Balls/13.png");
 
+SDL_Texture *cannon1 = IMG_LoadTexture(renderer, "assets/Game/cannon/cannon1.png");
+SDL_Texture *cannon2 = IMG_LoadTexture(renderer, "assets/Game/cannon/cannon2.png");
+SDL_Texture *cannon4 = IMG_LoadTexture(renderer, "assets/Game/cannon/cannon4.png");
+SDL_Texture *cannon8 = IMG_LoadTexture(renderer, "assets/Game/cannon/cannon8.png");
+SDL_Texture *cannon11 = IMG_LoadTexture(renderer, "assets/Game/cannon/cannon11.png");
+SDL_Texture *cannon13 = IMG_LoadTexture(renderer, "assets/Game/cannon/cannon13.png");
+
 SDL_Texture *pauseMenu = IMG_LoadTexture(renderer, "assets/Game/pauseMenu.png");
 
 vector<SDL_Texture *> soundBar = {IMG_LoadTexture(renderer, "assets/Settings/sound0.png"), IMG_LoadTexture(renderer, "assets/Settings/sound20.png"), IMG_LoadTexture(renderer, "assets/Settings/sound40.png"), IMG_LoadTexture(renderer, "assets/Settings/sound60.png"), IMG_LoadTexture(renderer, "assets/Settings/sound80.png"), IMG_LoadTexture(renderer, "assets/Settings/sound100.png")};
