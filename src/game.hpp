@@ -589,6 +589,16 @@ void draw_ball(SDL_Renderer *Renderer)
             fallingBall[i].y += dy_fallingBall;
         }
 
+    for (int i = 0; i < explode.size(); i++)
+    {
+        // explosion GIF
+    }
+
+    for (int i = 0; i < explode.size(); i++)
+    {
+        // explosion GIF
+    }
+
     for (int i = 0; i < crashed.size(); i++)
         if (crashed[i].r > 1)
         {
@@ -858,7 +868,10 @@ void initial_crash_ball(SDL_Renderer *Renderer)
 
     if (rand() % 17 == 0)
     {
-        crash_balls[1].color = 11;
+        if (rand() % 2 == 0)
+            crash_balls[1].color = 11;
+        if (rand() % 2 == 1)
+            crash_balls[1].color = 13;
     }
     else
     {
@@ -1101,6 +1114,37 @@ void isConnected(ball theBall)
     }
 }
 
+void boomConnected(int i, int j, int n, int rows, int cols)
+{
+    if (n <= 0 || i < 0 || i >= rows || j < 0 || j >= cols || balls[i][j].isEmpty)
+    {
+        return;
+    }
+    else
+    {
+        balls[i][j].isEmpty = true;
+        explode.push_back(balls[i][j]);
+
+        int offsets[6][2] = {{-1, 0}, {-1, 1}, {0, -1}, {0, 1}, {1, -1}, {1, 0}};
+        if (i % 2 == 0)
+        {
+            offsets[0][1] = -1;
+            offsets[4][1] = 0;
+        }
+
+        for (int k = 0; k < 6; ++k)
+        {
+            int newI = i + offsets[k][0];
+            int newJ = j + offsets[k][1];
+            if (newI >= 0 && newI < rows && newJ >= 0 && newJ < cols)
+            {
+                explode.push_back(balls[newI][newJ]);
+                boomConnected(newI, newJ, n - 1, rows, cols);
+            }
+        }
+    }
+}
+
 void crashed_ball(SDL_Renderer *Renderer)
 {
     SDL_Rect Ball = {int(crash_balls[0].x - ballRadius), int(crash_balls[0].y - ballRadius), 2 * ballRadius, 2 * ballRadius};
@@ -1144,6 +1188,11 @@ void crashed_ball(SDL_Renderer *Renderer)
                 break;
             }
             case 11:
+            {
+                SDL_RenderCopy(Renderer, ball11, NULL, &Ball);
+                break;
+            }
+            case 13:
             {
                 SDL_RenderCopy(Renderer, ball11, NULL, &Ball);
                 break;
@@ -1196,8 +1245,6 @@ void crashed_ball(SDL_Renderer *Renderer)
             }
             if (is_crash_ball_crashed)
             {
-                Mix_PlayChannel(-1, crash, 0);
-
                 if (jStick < 0)
                     jStick = 0;
                 if (jStick > columns - 1)
@@ -1238,21 +1285,30 @@ void crashed_ball(SDL_Renderer *Renderer)
                 balls[iStick][jStick].color = crash_balls[0].color;
                 balls[iStick][jStick].isEmpty = false;
 
-                crashed.clear();
+                if (balls[iStick][jStick].color == 13)
+                {
+                    boomConnected(iStick, jStick, 2, lines, columns);
+                }
+                else
+                {
+                    Mix_PlayChannel(-1, crash, 0);
+
+                    crashed.clear();
 
                 isConnected(balls[iStick][jStick]);
 
                 cout << "crashed size = " << crashed.size() << endl;
 
-                if (crashed.size() < 3)
-                {
-                    for (int i = 0; i < crashed.size(); i++)
+                    if (crashed.size() < 3)
                     {
-                        balls[crashed[i].i][crashed[i].j].isEmpty = false;
-                        crashed_score--;
+                        for (int i = 0; i < crashed.size(); i++)
+                        {
+                            balls[crashed[i].i][crashed[i].j].isEmpty = false;
+                            crashed_score--;
+                        }
                     }
+                    initial_crash_ball(Renderer);
                 }
-                initial_crash_ball(Renderer);
             }
         }
 
