@@ -62,6 +62,14 @@ SDL_Texture *ball9 = IMG_LoadTexture(renderer, "assets/Game/Balls/9.png");
 SDL_Texture *ball10 = IMG_LoadTexture(renderer, "assets/Game/Balls/10.png");
 SDL_Texture *ball11 = IMG_LoadTexture(renderer, "assets/Game/Balls/11.png");
 SDL_Texture *ball12 = IMG_LoadTexture(renderer, "assets/Game/Balls/12.png");
+SDL_Texture *ball13 = IMG_LoadTexture(renderer, "assets/Game/Balls/13.png");
+
+SDL_Texture *cannon1 = IMG_LoadTexture(renderer, "assets/Game/cannon/cannon1.png");
+SDL_Texture *cannon2 = IMG_LoadTexture(renderer, "assets/Game/cannon/cannon2.png");
+SDL_Texture *cannon4 = IMG_LoadTexture(renderer, "assets/Game/cannon/cannon4.png");
+SDL_Texture *cannon8 = IMG_LoadTexture(renderer, "assets/Game/cannon/cannon8.png");
+SDL_Texture *cannon11 = IMG_LoadTexture(renderer, "assets/Game/cannon/cannon11.png");
+SDL_Texture *cannon13 = IMG_LoadTexture(renderer, "assets/Game/cannon/cannon13.png");
 
 Mix_Chunk *crash = Mix_LoadWAV("assets/Sounds/crash.wav");
 Mix_Chunk *movement_swipe = Mix_LoadWAV("assets/Sounds/movement_swipe.mp3");

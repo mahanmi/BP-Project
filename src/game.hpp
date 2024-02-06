@@ -45,7 +45,7 @@ bool areConnectedVE(ball ball1, ball ball2)
     {
         if (ball1.i == ball2.i)
         {
-            if (abs(ball1.j - ball2.j) == 1)
+            if (abs(ball1.j - ball2.j) == 1 && ball1.j >= 0 && ball2.j >= 0)
                 return true;
         }
         else if (ball1.i == ball2.i + 1)
@@ -63,7 +63,7 @@ bool areConnectedVE(ball ball1, ball ball2)
     {
         if (ball1.i == ball2.i)
         {
-            if (abs(ball1.j - ball2.j) == 1)
+            if (abs(ball1.j - ball2.j) == 1 && ball1.j >= 0 && ball2.j >= 0)
                 return true;
         }
         else if (ball1.i == ball2.i + 1)
@@ -589,15 +589,10 @@ void draw_ball(SDL_Renderer *Renderer)
             fallingBall[i].y += dy_fallingBall;
         }
 
-    for (int i = 0; i < explode.size(); i++)
+    /* for (int i = 0; i < explode.size(); i++)
     {
         // explosion GIF
-    }
-
-    for (int i = 0; i < explode.size(); i++)
-    {
-        // explosion GIF
-    }
+    } */
 
     for (int i = 0; i < crashed.size(); i++)
         if (crashed[i].r > 1)
@@ -1182,7 +1177,7 @@ void crashed_ball(SDL_Renderer *Renderer)
             }
             case 13:
             {
-                SDL_RenderCopy(Renderer, ball11, NULL, &Ball);
+                SDL_RenderCopy(Renderer, ball13, NULL, &Ball);
                 break;
             }
             }
@@ -1275,6 +1270,7 @@ void crashed_ball(SDL_Renderer *Renderer)
 
                 if (balls[iStick][jStick].color == 13)
                 {
+                    Mix_PlayChannel(-1, crash, 0);
                     boomConnected(balls[iStick][jStick]);
                     initial_crash_ball(Renderer);
                 }
@@ -1284,9 +1280,9 @@ void crashed_ball(SDL_Renderer *Renderer)
 
                     crashed.clear();
 
-                isConnected(balls[iStick][jStick]);
+                    isConnected(balls[iStick][jStick]);
 
-                cout << "crashed size = " << crashed.size() << endl;
+                    cout << "crashed size = " << crashed.size() << endl;
 
                     if (crashed.size() < 3)
                     {
@@ -1327,32 +1323,32 @@ void crashed_ball(SDL_Renderer *Renderer)
         {
         case 1:
         {
-            SDL_Texture *cannon1 = IMG_LoadTexture(Renderer, "assets/Game/cannon/cannon1.png");
             rotateCannonWithMouse(Renderer, cannon1);
             break;
         }
         case 2:
         {
-            SDL_Texture *cannon2 = IMG_LoadTexture(Renderer, "assets/Game/cannon/cannon2.png");
             rotateCannonWithMouse(Renderer, cannon2);
             break;
         }
         case 4:
         {
-            SDL_Texture *cannon4 = IMG_LoadTexture(Renderer, "assets/Game/cannon/cannon4.png");
             rotateCannonWithMouse(Renderer, cannon4);
             break;
         }
         case 8:
         {
-            SDL_Texture *cannon8 = IMG_LoadTexture(Renderer, "assets/Game/cannon/cannon8.png");
             rotateCannonWithMouse(Renderer, cannon8);
             break;
         }
         case 11:
         {
-            SDL_Texture *cannon11 = IMG_LoadTexture(Renderer, "assets/Game/cannon/cannon11.png");
             rotateCannonWithMouse(Renderer, cannon11);
+            break;
+        }
+        case 13:
+        {
+            rotateCannonWithMouse(Renderer, cannon13);
             break;
         }
         }
@@ -1390,6 +1386,10 @@ void crashed_ball(SDL_Renderer *Renderer)
     {
         SDL_RenderCopy(Renderer, ball11, NULL, &Ball2);
         break;
+    }
+    case 13:
+    {
+        SDL_RenderCopy(Renderer, ball13, NULL, &Ball2);
     }
     }
 }
