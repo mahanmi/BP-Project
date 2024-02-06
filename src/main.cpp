@@ -29,7 +29,7 @@ int d = 20;
 float dx, dy;
 float dy_initial = 0.25, dy_fallingBall = 10;
 int ballRadius = 25;
-int lines = 11;
+int lines, realLines;
 int columns = WIDTH / (2 * ballRadius);
 int stick = 0;
 int score = 100;
@@ -308,6 +308,15 @@ int main(int argv, char **args)
             if (start.wasClicked && playerIndex != -1) // this should run the game
             {
               start.wasClicked = false;
+
+              for (int i = 0; i < players.size(); i++)
+              {
+                if (players[i].name == username)
+                {
+                  playerIndex = i;
+                  break;
+                }
+              }
 
               SDL_Texture *GameBG;
 
@@ -935,9 +944,65 @@ int main(int argv, char **args)
               }
               else if (infiniteGM.isSelected)
               {
+                balls.clear();
+                crashed.clear();
+                fallingBall.clear();
+
+                lines = 150, realLines = 135;
+                score = 100;
+                win = false, lose = false;
+                pause = false, slowMotion = false;
+
+                initial_ball();
+                for (int j = 0; j < columns; j++)
+                  balls[0][j].isEmpty = false, balls[0][j].shouldStick = true, balls[0][j].stickCheck = 1;
+
+                for (int i = 1; i < lines; i++)
+                  for (int j = 0; j < columns; j++)
+                    balls[i][j].isEmpty = false, balls[i][j].shouldStick = false, balls[i][j].stickCheck = 0;
+
+                for (int i = realLines; i < lines; i++)
+                {
+                  for (int j = 0; j < columns; j++)
+                    balls[i][j].isEmpty = true;
+                }
+
+                if (rand() % 17 == 0)
+                {
+                  crash_balls[1].color = 11;
+                }
+                else
+                {
+                  switch (rand() % 4)
+                  {
+                  case 0:
+                  {
+                    crash_balls[1].color = 1;
+                    break;
+                  }
+                  case 1:
+                  {
+                    crash_balls[1].color = 2;
+                    break;
+                  }
+                  case 2:
+                  {
+                    crash_balls[1].color = 4;
+                    break;
+                  }
+                  case 3:
+                  {
+                    crash_balls[1].color = 8;
+                    break;
+                  }
+                  }
+                }
+                initial_crash_ball(renderer);
+                draw_ball(renderer);
+
                 while (infiniteGM.isSelected)
                 {
-                  while (SDL_PollEvent(&event) && infiniteGM.isSelected)
+                  while (!win && !lose)
                   {
                     if (quitGame(event))
                     {
@@ -945,16 +1010,196 @@ int main(int argv, char **args)
                       quit(running);
                       break;
                     }
-                    if (goBack(event) || back.wasClicked)
+                    if (goBack(event) || back.wasClicked || home.wasClicked)
                     {
                       infiniteGM.isSelected = false;
+                      home.wasClicked = false;
+                      back.wasClicked = false;
                       break;
                     }
-                    SDL_RenderCopy(renderer, Background, 0, 0);
-                    drawButton(renderer, back, event);
+
+                    if (setting.wasClicked)
+                    {
+                      vector<button> adjustButtons2 = {
+                          {39, 46, 218, 414, 0, 0, 0, 0, 0, false, false, IMG_LoadTexture(renderer, "assets/Settings/L-VOLUME.png"), IMG_LoadTexture(renderer, "assets/Settings/L-VOLUMEHovered.png"), 0, hover, click},
+                          {39, 46, 530, 414, 0, 0, 0, 0, 0, false, false, IMG_LoadTexture(renderer, "assets/Settings/R-VOLUME.png"), IMG_LoadTexture(renderer, "assets/Settings/R-VOLUMEHovered.png"), 0, hover, click},
+                          {39, 46, 218, 538, 0, 0, 0, 0, 0, false, false, IMG_LoadTexture(renderer, "assets/Settings/L-Music.png"), IMG_LoadTexture(renderer, "assets/Settings/L-MusicHovered.png"), 0, hover, click},
+                          {39, 46, 530, 538, 0, 0, 0, 0, 0, false, false, IMG_LoadTexture(renderer, "assets/Settings/R-Music.png"), IMG_LoadTexture(renderer, "assets/Settings/R-MusicHovered.png"), 0, hover, click},
+                          {39, 46, 218, 475, 0, 0, 0, 0, 0, false, false, IMG_LoadTexture(renderer, "assets/Settings/L-SFX.png"), IMG_LoadTexture(renderer, "assets/Settings/L-SFXHovered.png"), IMG_LoadTexture(renderer, "assets/Settings/L-SFXHovered.png"), hover, click},
+                          {39, 46, 530, 475, 0, 0, 0, 0, 0, false, false, IMG_LoadTexture(renderer, "assets/Settings/R-SFX.png"), IMG_LoadTexture(renderer, "assets/Settings/R-SFXHovered.png"), IMG_LoadTexture(renderer, "assets/Settings/R-SFXHovered.png"), hover, click}};
+                      while (setting.wasClicked)
+                      {
+                        while (SDL_PollEvent(&event) && setting.wasClicked)
+                        {
+                          if (quitGame(event))
+                          {
+                            setting.wasClicked = false;
+                            quit(running);
+                            break;
+                          }
+                          if (goBack(event) || back.wasClicked || home.wasClicked)
+                          {
+                            setting.wasClicked = false;
+                            back.wasClicked = false;
+                            break;
+                          }
+                          SDL_RenderCopy(renderer, GameBG, 0, 0);
+
+                          SDL_Rect pauseRect = {33, 363, 562, 275};
+
+                          SDL_RenderCopy(renderer, pauseMenu, 0, &pauseRect);
+
+                          drawButton(renderer, adjustButtons2[0], event);
+                          drawButton(renderer, adjustButtons2[1], event);
+                          drawButton(renderer, adjustButtons2[2], event);
+                          drawButton(renderer, adjustButtons2[3], event);
+                          drawButton(renderer, adjustButtons2[4], event);
+                          drawButton(renderer, adjustButtons2[5], event);
+
+                          if (adjustButtons2[1].wasClicked && volume < 100)
+                          {
+                            volume += 20;
+                            if (sfx)
+                              Mix_Volume(-1, volume);
+
+                            Mix_VolumeMusic(MIX_MAX_VOLUME * volume / 100);
+                            adjustButtons2[1].wasClicked = false;
+                          }
+                          else if (adjustButtons2[0].wasClicked && volume > 0)
+                          {
+                            volume -= 20;
+                            if (sfx)
+                              Mix_Volume(-1, volume);
+                            Mix_VolumeMusic(MIX_MAX_VOLUME * volume / 100);
+                            adjustButtons2[0].wasClicked = false;
+                          }
+
+                          if (adjustButtons2[4].wasClicked || adjustButtons2[5].wasClicked)
+                          {
+                            sfx = !sfx;
+                            adjustButtons2[4].wasClicked = false, adjustButtons2[5].wasClicked = false;
+                            if (sfx)
+                              Mix_Volume(-1, volume);
+                            else
+                              Mix_Volume(-1, 0);
+                          }
+                          if (sfx)
+                          {
+                            SDL_Rect sfxRect = {363, 475, 42, 22};
+                            SDL_RenderCopy(renderer, on, 0, &sfxRect);
+                          }
+                          else
+                          {
+                            SDL_Rect sfxRect = {349, 475, 55, 22};
+                            SDL_RenderCopy(renderer, off, 0, &sfxRect);
+                          }
+
+                          SDL_Rect volumeBar = {285, 405, 222, 43};
+                          SDL_RenderCopy(renderer, soundBar[volume / 20], 0, &volumeBar);
+
+                          setMusic(renderer, adjustButtons2[3].wasClicked, adjustButtons2[2].wasClicked, musicList, musicIndex, musicSound, Settings, 285, 535);
+
+                          if (adjustButtons2[3].wasClicked || adjustButtons2[2].wasClicked)
+                          {
+                            Mix_PlayMusic(musicSound, -1);
+                            adjustButtons2[3].wasClicked = false;
+                            adjustButtons2[2].wasClicked = false;
+                          }
+
+                          drawButton(renderer, home, event);
+                          drawButton(renderer, back, event);
+                          render(renderer);
+                        }
+                      }
+                    }
+
+                    SDL_RenderCopy(renderer, GameBG, NULL, NULL);
+
+                    if (slowMotion)
+                      dy_initial = 0.1;
+                    else
+                      dy_initial = 0.25;
+
+                    if (!pause && !is_crash_ball_moved)
+                      for (int i = 0; i < lines + stick; i++)
+                        for (int j = 0; j < columns; j++)
+                          balls[i][j].y += dy_initial;
+
+                    crashed_ball(renderer);
+                    draw_ball(renderer);
+
+                    if (event.type == SDL_KEYDOWN)
+                    {
+                      switch (event.key.keysym.sym)
+                      {
+                      case SDLK_p:
+                        pause = !pause;
+
+                      case SDLK_s:
+                        slowMotion = !slowMotion;
+                        swap(crash_balls[0].color, crash_balls[1].color);
+
+                      case SDLK_SPACE:
+                        if (!is_crash_ball_moved)
+                          swap(crash_balls[0].color, crash_balls[1].color);
+                      }
+                    }
+                    if (event.button.x > 0 && event.button.x < WIDTH && event.button.y > 0 && event.button.y < HIGHT)
+                    {
+                      x_mouse = event.button.x;
+                      y_mouse = event.button.y;
+                    }
+                    drawButton(renderer, setting, event);
                     render(renderer);
                   }
+
+                  score = infinityScore();
+                  cout << "infinity Score =" << score << endl;
+
+                  if (players[playerIndex].infiniteScore < score)
+                  {
+                    cout << "New High Score" << endl;
+                    players[playerIndex].infiniteScore = score;
+                    updateLeaderboard(players);
+                  }
+                  balls.clear();
+                  crashed.clear();
+                  fallingBall.clear();
+                  button OK = {150, 68, 242, 657, 0, 0, 0, 0, 0, false, false, IMG_LoadTexture(renderer, "assets/Game/OKButton.png"), IMG_LoadTexture(renderer, "assets/Game/OKButtonHover.png"), IMG_LoadTexture(renderer, "assets/Game/OKButtonClicked.png"), hover, click};
+
+                  cout << "Game Over" << endl;
+
+                  win = true;
+
+                  while (win)
+                  {
+                    while (SDL_PollEvent(&event) && win)
+                    {
+                      if (quitGame(event))
+                      {
+                        infiniteGM.isSelected = false;
+                        win = false;
+                        quit(running);
+                        break;
+                      }
+                      if (goBack(event) || OK.wasClicked)
+                      {
+                        infiniteGM.isSelected = false;
+                        win = false;
+                        break;
+                      }
+                      SDL_RenderCopy(renderer, GameBG, 0, 0);
+                      SDL_Texture *winText = IMG_LoadTexture(renderer, "assets/Game/win.png");
+                      SDL_Rect winRect = {112, 250, 401, 513};
+                      SDL_RenderCopy(renderer, winText, 0, &winRect);
+                      showUserScore(renderer, name, score, 250, 495);
+                      showUserScore(renderer, name, players[playerIndex].infiniteScore, 250, 595);
+                      drawButton(renderer, OK, event);
+                      render(renderer);
+                    }
+                  }
                 }
+
                 infiniteGM.isSelected = true;
               }
 
