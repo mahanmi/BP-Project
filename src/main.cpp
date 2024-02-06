@@ -99,6 +99,9 @@ SDL_Texture *cannon8 = IMG_LoadTexture(renderer, "assets/Game/cannon/cannon8.png
 SDL_Texture *cannon11 = IMG_LoadTexture(renderer, "assets/Game/cannon/cannon11.png");
 SDL_Texture *cannon13 = IMG_LoadTexture(renderer, "assets/Game/cannon/cannon13.png");
 
+SDL_Texture *scoreBox = IMG_LoadTexture(renderer, "assets/Game/score.png");
+SDL_Texture *timeBox = IMG_LoadTexture(renderer, "assets/Game/time.png");
+
 SDL_Texture *pauseMenu = IMG_LoadTexture(renderer, "assets/Game/pauseMenu.png");
 
 vector<SDL_Texture *> soundBar = {IMG_LoadTexture(renderer, "assets/Settings/sound0.png"), IMG_LoadTexture(renderer, "assets/Settings/sound20.png"), IMG_LoadTexture(renderer, "assets/Settings/sound40.png"), IMG_LoadTexture(renderer, "assets/Settings/sound60.png"), IMG_LoadTexture(renderer, "assets/Settings/sound80.png"), IMG_LoadTexture(renderer, "assets/Settings/sound100.png")};
@@ -117,7 +120,7 @@ Mix_Chunk *movement_swipe = Mix_LoadWAV("assets/Sounds/movement_swipe.mp3");
 TTF_Font *Leaderboard = TTF_OpenFont("assets/Fonts/Poppins-Bold.ttf", 45);
 TTF_Font *Settings = TTF_OpenFont("assets/Fonts/Digitalt.ttf", 38);
 TTF_Font *name = TTF_OpenFont("assets/Fonts/Digitalt.ttf", 28);
-TTF_Font *scoreTexture = TTF_OpenFont("assets/Fonts/Digitalt.ttf", 20);
+TTF_Font *scoreTexture = TTF_OpenFont("assets/Fonts/Digitalt.ttf", 25);
 
 #include "game.hpp"
 
@@ -574,6 +577,10 @@ int main(int argv, char **args)
                       y_mouse = event.button.y;
                     }
 
+                    showScore(timeScore(elapsed_time), 145, 930, scoreTexture);
+
+                    showTime((end_time - elapsed_time) / 1000, 528, 930, scoreTexture);
+
                     drawButton(renderer, setting, event);
 
                     render(renderer);
@@ -880,7 +887,7 @@ int main(int argv, char **args)
                       y_mouse = event.button.y;
                     }
                     drawButton(renderer, setting, event);
-                    showScore(score, 50, 750, scoreTexture);
+                    showScore(score, 145, 930, scoreTexture);
                     render(renderer);
                   }
                   if (win)
@@ -1194,6 +1201,9 @@ int main(int argv, char **args)
                       x_mouse = event.button.x;
                       y_mouse = event.button.y;
                     }
+
+                    showScore(infinityScore(), 145, 930, scoreTexture);
+
                     drawButton(renderer, setting, event);
                     render(renderer);
                   }

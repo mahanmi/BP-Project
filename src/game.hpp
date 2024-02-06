@@ -1569,8 +1569,25 @@ void showUserScore(SDL_Renderer *renderer, TTF_Font *font, int score, int x, int
 
 void showScore(int score, int x, int y, TTF_Font *font)
 {
-    SDL_Color color = {0, 0, 0, 255};
+    SDL_Rect scoreBoxRect = {30, 914, 204, 56};
+    SDL_RenderCopy(renderer, scoreBox, NULL, &scoreBoxRect);
+
+    SDL_Color color = {255, 255, 255, 255};
     SDL_Surface *surface = TTF_RenderText_Solid(font, to_string(score).c_str(), color);
+    SDL_Texture *texture = SDL_CreateTextureFromSurface(renderer, surface);
+    SDL_Rect rect = {x, y, surface->w, surface->h};
+    SDL_RenderCopy(renderer, texture, NULL, &rect);
+    SDL_FreeSurface(surface);
+    SDL_DestroyTexture(texture);
+}
+
+void showTime(int time, int x, int y, TTF_Font *font)
+{
+    SDL_Rect scoreBoxRect = {391, 914, 204, 56};
+    SDL_RenderCopy(renderer, timeBox, NULL, &scoreBoxRect);
+
+    SDL_Color color = {255, 255, 255, 255};
+    SDL_Surface *surface = TTF_RenderText_Solid(font, to_string(time).c_str(), color);
     SDL_Texture *texture = SDL_CreateTextureFromSurface(renderer, surface);
     SDL_Rect rect = {x, y, surface->w, surface->h};
     SDL_RenderCopy(renderer, texture, NULL, &rect);
