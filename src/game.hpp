@@ -1056,6 +1056,37 @@ void isConnected(ball theBall)
     }
 }
 
+void boomConnected(int i, int j, int n, int rows, int cols)
+{
+    if (n <= 0 || i < 0 || i >= rows || j < 0 || j >= cols || balls[i][j].isEmpty)
+    {
+        return;
+    }
+    else
+    {
+        balls[i][j].isEmpty = true;
+        explode.push_back(balls[i][j]);
+
+        int offsets[6][2] = {{-1, 0}, {-1, 1}, {0, -1}, {0, 1}, {1, -1}, {1, 0}};
+        if (i % 2 == 0)
+        {
+            offsets[0][1] = -1;
+            offsets[4][1] = 0;
+        }
+
+        for (int k = 0; k < 6; ++k)
+        {
+            int newI = i + offsets[k][0];
+            int newJ = j + offsets[k][1];
+            if (newI >= 0 && newI < rows && newJ >= 0 && newJ < cols)
+            {
+                explode.push_back(balls[newI][newJ]);
+                boomConnected(newI, newJ, n - 1, rows, cols);
+            }
+        }
+    }
+}
+
 void crashed_ball(SDL_Renderer *Renderer)
 {
     SDL_Rect Ball = {int(crash_balls[0].x - ballRadius), int(crash_balls[0].y - ballRadius), 2 * ballRadius, 2 * ballRadius};
@@ -1105,7 +1136,7 @@ void crashed_ball(SDL_Renderer *Renderer)
             }
             case 13:
             {
-                SDL_RenderCopy(Renderer, ball13, NULL, &Ball);
+                SDL_RenderCopy(Renderer, ball11, NULL, &Ball);
                 break;
             }
             }
@@ -1271,37 +1302,6 @@ void crashed_ball(SDL_Renderer *Renderer)
         SDL_RenderCopy(Renderer, ball11, NULL, &Ball2);
         break;
     }
-    }
-}
-
-void boomConnected(int i, int j, int n, int rows, int cols)
-{
-    if (n <= 0 || i < 0 || i >= rows || j < 0 || j >= cols || balls[i][j].isEmpty)
-    {
-        return;
-    }
-    else
-    {
-        balls[i][j].isEmpty = true;
-        explode.push_back(balls[i][j]);
-
-        int offsets[6][2] = {{-1, 0}, {-1, 1}, {0, -1}, {0, 1}, {1, -1}, {1, 0}};
-        if (i % 2 == 0)
-        {
-            offsets[0][1] = -1;
-            offsets[4][1] = 0;
-        }
-
-        for (int k = 0; k < 6; ++k)
-        {
-            int newI = i + offsets[k][0];
-            int newJ = j + offsets[k][1];
-            if (newI >= 0 && newI < rows && newJ >= 0 && newJ < cols)
-            {
-                explode.push_back(balls[newI][newJ]);
-                boomConnected(newI, newJ, n - 1, rows, cols);
-            }
-        }
     }
 }
 
