@@ -589,11 +589,6 @@ void draw_ball(SDL_Renderer *Renderer)
             fallingBall[i].y += dy_fallingBall;
         }
 
-    /* for (int i = 0; i < explode.size(); i++)
-    {
-        // explosion GIF
-    } */
-
     for (int i = 0; i < crashed.size(); i++)
         if (crashed[i].r > 1)
         {
@@ -636,8 +631,11 @@ void draw_ball(SDL_Renderer *Renderer)
             case 12:
                 SDL_RenderCopy(Renderer, ball12, NULL, &crashedBall);
                 break;
+            case 13:
+                SDL_RenderCopy(Renderer, ball13, NULL, &crashedBall);
+                break;
             }
-            crashed[i].r /= 1.3;
+            crashed[i].r /= 1.1;
         }
 
     for (int i = 0; i < lines + stick; i++)
@@ -1111,18 +1109,24 @@ void isConnected(ball theBall)
 
 void boomConnected(ball theBall)
 {
-    int explosionRange = 2; 
+    int explosionRange = 2;
 
-    for (int i = theBall.i - explosionRange; i <= theBall.i + explosionRange; i++) {
-        for (int j = theBall.j - explosionRange; j <= theBall.j + explosionRange; j++) {
-            if (i >= 0 && i < lines && j >= 0 && j < columns) {
-                if (i != theBall.i || j != theBall.j) {
-                    if (!balls[i][j].isEmpty) {
-                            explode.push_back(balls[i][j]);
-                            balls[i][j].isEmpty = true;
-                            crashed_score++;
-                        }
+    for (int i = theBall.i - explosionRange; i <= theBall.i + explosionRange; i++)
+    {
+        for (int j = theBall.j - explosionRange; j <= theBall.j + explosionRange; j++)
+        {
+            if (i >= 0 && i < lines && j >= 0 && j < columns)
+            {
+                if (i != theBall.i || j != theBall.j)
+                {
+                    if (!balls[i][j].isEmpty)
+                    {
+                        balls[i][j].color = 13;
+                        crashed.push_back(balls[i][j]);
+                        balls[i][j].isEmpty = true;
+                        crashed_score++;
                     }
+                }
             }
         }
     }
@@ -1271,7 +1275,11 @@ void crashed_ball(SDL_Renderer *Renderer)
                 if (balls[iStick][jStick].color == 13)
                 {
                     Mix_PlayChannel(-1, crash, 0);
+
+                    crashed.clear();
+
                     boomConnected(balls[iStick][jStick]);
+
                     initial_crash_ball(Renderer);
                 }
                 else
@@ -1413,9 +1421,9 @@ int timeScore(Uint32 elapsed_time)
         for (int i = 0; i < lines + stick; i++)
             for (int j = 0; j < columns; j++)
                 if (!balls[i][j].isEmpty && balls[i][j].color != 7)
-                    score --;
+                    score--;
     }
-    return score;
+    return score + (end_time - elapsed_time) / 1000;
 }
 
 int infinityScore()
