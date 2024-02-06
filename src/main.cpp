@@ -90,6 +90,7 @@ SDL_Texture *ball9 = IMG_LoadTexture(renderer, "assets/Game/Balls/9.png");
 SDL_Texture *ball10 = IMG_LoadTexture(renderer, "assets/Game/Balls/10.png");
 SDL_Texture *ball11 = IMG_LoadTexture(renderer, "assets/Game/Balls/11.png");
 SDL_Texture *ball12 = IMG_LoadTexture(renderer, "assets/Game/Balls/12.png");
+SDL_Texture *ball13 = IMG_LoadTexture(renderer, "assets/Game/Balls/13.png");
 
 SDL_Texture *pauseMenu = IMG_LoadTexture(renderer, "assets/Game/pauseMenu.png");
 
@@ -109,6 +110,7 @@ Mix_Chunk *movement_swipe = Mix_LoadWAV("assets/Sounds/movement_swipe.mp3");
 TTF_Font *Leaderboard = TTF_OpenFont("assets/Fonts/Poppins-Bold.ttf", 45);
 TTF_Font *Settings = TTF_OpenFont("assets/Fonts/Digitalt.ttf", 38);
 TTF_Font *name = TTF_OpenFont("assets/Fonts/Digitalt.ttf", 28);
+TTF_Font *scoreTexture = TTF_OpenFont("assets/Fonts/Digitalt.ttf", 20);
 
 #include "game.hpp"
 
@@ -350,6 +352,7 @@ int main(int argv, char **args)
 
                 lines = 20;
                 score = 100;
+                crashed_score = 0;
                 win = false, lose = false;
                 pause = false, slowMotion = false;
 
@@ -578,6 +581,14 @@ int main(int argv, char **args)
                     }
                     button OK = {150, 68, 242, 657, 0, 0, 0, 0, 0, false, false, IMG_LoadTexture(renderer, "assets/Game/OKButton.png"), IMG_LoadTexture(renderer, "assets/Game/OKButtonHover.png"), IMG_LoadTexture(renderer, "assets/Game/OKButtonClicked.png"), hover, click};
                     cout << "You win" << endl;
+                    SDL_RenderCopy(renderer, GameBG, 0, 0);
+                    SDL_Texture *winText = IMG_LoadTexture(renderer, "assets/Game/win.png");
+                    SDL_Rect winRect = {112, 250, 401, 513};
+                    SDL_RenderCopy(renderer, winText, 0, &winRect);
+                    showUserScore(renderer, name, score, 250, 495);
+                    showUserScore(renderer, name, players[playerIndex].classicScore, 250, 595);
+                    drawButton(renderer, OK, event);
+                    render(renderer);
                     while (win)
                     {
                       while (SDL_PollEvent(&event) && win)
@@ -616,6 +627,14 @@ int main(int argv, char **args)
                     }
                     button OK = {150, 68, 242, 657, 0, 0, 0, 0, 0, false, false, IMG_LoadTexture(renderer, "assets/Game/OKButton.png"), IMG_LoadTexture(renderer, "assets/Game/OKButtonHover.png"), IMG_LoadTexture(renderer, "assets/Game/OKButtonClicked.png"), hover, click};
                     cout << "You lose" << endl;
+                    SDL_RenderCopy(renderer, GameBG, 0, 0);
+                    SDL_Texture *loseText = IMG_LoadTexture(renderer, "assets/Game/lose.png");
+                    SDL_Rect loseRect = {112, 250, 401, 513};
+                    SDL_RenderCopy(renderer, loseText, 0, &loseRect);
+                    showUserScore(renderer, name, score, 250, 495);
+                    showUserScore(renderer, name, players[playerIndex].timerScore, 250, 595);
+                    drawButton(renderer, OK, event);
+                    render(renderer);
                     while (lose)
                     {
                       while (SDL_PollEvent(&event) && lose)
@@ -654,6 +673,7 @@ int main(int argv, char **args)
 
                 lines = 20;
                 score = 100;
+                crashed_score = 0;
                 win = false, lose = false;
                 pause = false, slowMotion = false;
 
@@ -853,6 +873,7 @@ int main(int argv, char **args)
                       y_mouse = event.button.y;
                     }
                     drawButton(renderer, setting, event);
+                    showScore(score, 50, 750, scoreTexture);
                     render(renderer);
                   }
                   if (win)
@@ -868,6 +889,14 @@ int main(int argv, char **args)
                     fallingBall.clear();
                     button OK = {150, 68, 242, 657, 0, 0, 0, 0, 0, false, false, IMG_LoadTexture(renderer, "assets/Game/OKButton.png"), IMG_LoadTexture(renderer, "assets/Game/OKButtonHover.png"), IMG_LoadTexture(renderer, "assets/Game/OKButtonClicked.png"), hover, click};
                     cout << "You win" << endl;
+                    SDL_RenderCopy(renderer, GameBG, 0, 0);
+                    SDL_Texture *winText = IMG_LoadTexture(renderer, "assets/Game/win.png");
+                    SDL_Rect winRect = {112, 250, 401, 513};
+                    SDL_RenderCopy(renderer, winText, 0, &winRect);
+                    showUserScore(renderer, name, score, 250, 495);
+                    showUserScore(renderer, name, players[playerIndex].classicScore, 250, 595);
+                    drawButton(renderer, OK, event);
+                    render(renderer);
                     while (win)
                     {
                       while (SDL_PollEvent(&event) && win)
@@ -912,6 +941,14 @@ int main(int argv, char **args)
                     fallingBall.clear();
                     button OK = {150, 68, 242, 657, 0, 0, 0, 0, 0, false, false, IMG_LoadTexture(renderer, "assets/Game/OKButton.png"), IMG_LoadTexture(renderer, "assets/Game/OKButtonHover.png"), IMG_LoadTexture(renderer, "assets/Game/OKButtonClicked.png"), hover, click};
                     cout << "You lose" << endl;
+                    SDL_RenderCopy(renderer, GameBG, 0, 0);
+                    SDL_Texture *loseText = IMG_LoadTexture(renderer, "assets/Game/lose.png");
+                    SDL_Rect loseRect = {112, 250, 401, 513};
+                    SDL_RenderCopy(renderer, loseText, 0, &loseRect);
+                    showUserScore(renderer, name, score, 250, 495);
+                    showUserScore(renderer, name, players[playerIndex].classicScore, 250, 595);
+                    drawButton(renderer, OK, event);
+                    render(renderer);
                     while (lose)
                     {
                       while (SDL_PollEvent(&event) && lose)
@@ -950,6 +987,7 @@ int main(int argv, char **args)
 
                 lines = 150, realLines = 135;
                 score = 100;
+                crashed_score = 0;
                 win = false, lose = false;
                 pause = false, slowMotion = false;
 
@@ -1170,6 +1208,15 @@ int main(int argv, char **args)
                   cout << "Game Over" << endl;
 
                   win = true;
+
+                  SDL_RenderCopy(renderer, GameBG, 0, 0);
+                  SDL_Texture *winText = IMG_LoadTexture(renderer, "assets/Game/win.png");
+                  SDL_Rect winRect = {112, 250, 401, 513};
+                  SDL_RenderCopy(renderer, winText, 0, &winRect);
+                  showUserScore(renderer, name, score, 250, 495);
+                  showUserScore(renderer, name, players[playerIndex].infiniteScore, 250, 595);
+                  drawButton(renderer, OK, event);
+                  render(renderer);
 
                   while (win)
                   {
