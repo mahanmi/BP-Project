@@ -1111,18 +1111,23 @@ void isConnected(ball theBall)
 
 void boomConnected(ball theBall)
 {
-    int explosionRange = 2; 
+    int explosionRange = 2;
 
-    for (int i = theBall.i - explosionRange; i <= theBall.i + explosionRange; i++) {
-        for (int j = theBall.j - explosionRange; j <= theBall.j + explosionRange; j++) {
-            if (i >= 0 && i < lines && j >= 0 && j < columns) {
-                if (i != theBall.i || j != theBall.j) {
-                    if (!balls[i][j].isEmpty) {
-                            explode.push_back(balls[i][j]);
-                            balls[i][j].isEmpty = true;
-                            crashed_score++;
-                        }
+    for (int i = theBall.i - explosionRange; i <= theBall.i + explosionRange; i++)
+    {
+        for (int j = theBall.j - explosionRange; j <= theBall.j + explosionRange; j++)
+        {
+            if (i >= 0 && i < lines && j >= 0 && j < columns)
+            {
+                if (i != theBall.i || j != theBall.j)
+                {
+                    if (!balls[i][j].isEmpty)
+                    {
+                        explode.push_back(balls[i][j]);
+                        balls[i][j].isEmpty = true;
+                        crashed_score++;
                     }
+                }
             }
         }
     }
@@ -1413,9 +1418,9 @@ int timeScore(Uint32 elapsed_time)
         for (int i = 0; i < lines + stick; i++)
             for (int j = 0; j < columns; j++)
                 if (!balls[i][j].isEmpty && balls[i][j].color != 7)
-                    score --;
+                    score--;
     }
-    return score;
+    return score + (end_time - elapsed_time) / 1000;
 }
 
 int infinityScore()
